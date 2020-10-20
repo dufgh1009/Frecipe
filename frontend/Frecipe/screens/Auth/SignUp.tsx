@@ -11,7 +11,15 @@ import { Button, Input } from 'react-native-elements';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-interface Props {}
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../../navigation/Auth';
+import { RouteProp } from '@react-navigation/native';
+
+interface Props {
+  navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
+  route: RouteProp<AuthStackParamList, 'SignUp'>;
+}
+
 interface State {
   email: string;
   password: string;
@@ -82,6 +90,7 @@ export default class SingIn extends Component<Props, State> {
   };
 
   render() {
+    const { navigation } = this.props;
     const { email, password, passwordConfirm, nickName } = this.state;
     return (
       <KeyboardAvoidingView
@@ -155,7 +164,7 @@ export default class SingIn extends Component<Props, State> {
                 buttonStyle={styles.backButton}
                 containerStyle={styles.backButtonContainer}
                 titleStyle={styles.backTitle}
-                onPress={() => {}}
+                onPress={() => navigation.goBack()}
               />
             </View>
           </View>

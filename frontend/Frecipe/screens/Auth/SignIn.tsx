@@ -12,7 +12,15 @@ import { Text, Button, Input } from 'react-native-elements';
 
 import { MaterialIcons } from '@expo/vector-icons';
 
-interface Props {}
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../../navigation/Auth';
+import { RouteProp } from '@react-navigation/native';
+
+interface Props {
+  navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
+  route: RouteProp<AuthStackParamList, 'SignIn'>;
+}
+
 interface State {
   email: string;
   password: string;
@@ -51,6 +59,7 @@ export default class SingIn extends Component<Props, State> {
 
   render() {
     const { email, password } = this.state;
+    const { navigation } = this.props;
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -90,7 +99,7 @@ export default class SingIn extends Component<Props, State> {
             <TouchableOpacity onPress={() => {}}>
               <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
               <Text style={styles.text}>회원가입</Text>
             </TouchableOpacity>
           </View>
