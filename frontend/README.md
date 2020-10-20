@@ -50,9 +50,9 @@ Frecipe
    1. bottom navigation 이용한 화면 연결
 
 3. Gate
-   1. token 유,무에 따라 출력되는 화면 변경
+   1. login 유,무에 따라 출력되는 화면 변경
 4. Refregerator
-   1. Refregerator.tsx 화면
+   1. Refregerator.tsx
       1. 화면 구성
       2. 식품 등록 Modal 구현
       3. 식품 리스트 구현
@@ -65,7 +65,7 @@ Frecipe
       10. 캘린더 화면 구현
    2. stack navigation 이용한 화면 연결
 5. RecipeRecommend
-   1. RecipeRecommend.tsx 화면
+   1. RecipeRecommend.tsx
       1. 화면 구성
       2. 추천 레시피 리스트 구현
       3. 유튜브 검색 연동
