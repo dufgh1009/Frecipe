@@ -19,5 +19,4 @@ public class UserServiceImpl implements UserService{
 		userRepo.save(user);
 		return user;
 	}
-	
 }
