@@ -3,9 +3,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import SignIn from './screens/Auth/SignIn';
+import SignUp from './screens/Auth/SignUp';
 
 export default function App() {
-  return <SignIn />;
+  return <SignUp />;
 }
 
 const styles = StyleSheet.create({
