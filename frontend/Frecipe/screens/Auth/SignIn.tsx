@@ -96,7 +96,7 @@ export default class SingIn extends Component<Props, State> {
               titleStyle={styles.title}
               onPress={this.doSignIn}
             />
-            <TouchableOpacity onPress={() => {}}>
+            <TouchableOpacity onPress={() => navigation.navigate('Find')}>
               <Text style={styles.text}>이메일 / 비밀번호 찾기</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
