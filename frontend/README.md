@@ -9,21 +9,21 @@ Frecipe
     ├── .expo-shared/
     ├── asset/
     ├── navigation/
-    		├── Auth.tsx
+    	├── Auth.tsx
         └── Main.tsx
     ├── node_modules/
     ├── redux/
-    		├── communitySlice.tsx
+    	├── communitySlice.tsx
         ├── recipeRecommendSlice.tsx
         ├── rootReducer.tsx
         ├── store.tsx
         └── usersSlice.tsx
     ├── screens/
-    		├── Auth/
+    	├── Auth/
             ├── Find.tsx
             ├── SignIn.tsx
             └── SignUp.tsx
-        ├── Main/
+        └── Main/
             ├── refrigerator
             ├── recipeRecommend
             ├── community
