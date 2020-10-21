@@ -52,11 +52,15 @@
 1. git commit 작성 규칙
 
    추가 : S03P31D204-00 [+] add login / 부가설명(필요시)
+
    수정 : S03P31D204-00 [+] Edit login / 부가설명(필요시)
+
    삭제 : S03P31D204-00 [-] Del login / 부가설명(필요시)
 
 2. git branch 이름
 
    develop -> frontend -> feature/S03P31D204-00/login
-                   -> backend -> feature/S03P31D204-00/login
-                   ->       AI       -> feature/S03P31D204-00/temp
+   
+   ​                -> backend -> feature/S03P31D204-00/login
+   
+   ​                ->       AI       -> feature/S03P31D204-00/temp
