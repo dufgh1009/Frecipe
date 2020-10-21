@@ -1,5 +1,11 @@
 # Frecipe
 
+### 사용 라이브러리
+
+- [Expo](https://expo.io/)
+- [React Navigation](https://reactnavigation.org/)
+- [React Native Elements](https://reactnativeelements.com/)
+
 
 
 ### 폴더구조
@@ -105,3 +111,4 @@ Frecipe
    5. Setting
       1. logout
       2. 회원 탈퇴
+
