@@ -25,6 +25,7 @@ interface State {
   password: string;
   passwordConfirm: string;
   nickName: string;
+  phone: string;
 }
 
 export default class SingIn extends Component<Props, State> {
@@ -36,6 +37,7 @@ export default class SingIn extends Component<Props, State> {
       password: '',
       passwordConfirm: '',
       nickName: '',
+      phone: '',
     };
   }
 
@@ -91,7 +93,7 @@ export default class SingIn extends Component<Props, State> {
 
   render() {
     const { navigation } = this.props;
-    const { email, password, passwordConfirm, nickName } = this.state;
+    const { email, password, passwordConfirm, nickName, phone } = this.state;
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -146,9 +148,21 @@ export default class SingIn extends Component<Props, State> {
               placeholder="홍길동"
               returnKeyType="next"
               ref={(input) => (this.userNameInput = input)}
-              onSubmitEditing={this.doSignup}
+              onSubmitEditing={() => this.phoneInput.focus()}
               leftIcon={
                 <MaterialIcons name="person" size={24} color="#00BD75" />
+              }
+            />
+            <Input
+              value={phone}
+              onChangeText={(phone) => this.setState({ phone })}
+              containerStyle={styles.inputContainer}
+              placeholder="0101234567"
+              keyboardType="number-pad"
+              ref={(input) => (this.phoneInput = input)}
+              onSubmitEditing={this.doSignup}
+              leftIcon={
+                <MaterialIcons name="smartphone" size={24} color="#00BD75" />
               }
             />
             <View style={styles.buttonsContainer}>
