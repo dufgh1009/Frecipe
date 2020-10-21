@@ -3,11 +3,14 @@
 ##  기술 스택
 
 Framework
-- Spring Boot
+- [Spring Boot](https://spring.io/projects/spring-boot)
 
 DB
-- MariaDB
-- MongoDB
+- [MariaDB](https://mariadb.org/)
+- [MongoDB](https://www.mongodb.com/)
+
+Library
+- [JPA](https://spring.io/projects/spring-data-jpa)
 
 > ## SQL vs NoSQL  
 > ### SQL (관계형 데이터베이스, 구조화된 쿼리 언어, Structured Query Language)  
@@ -45,38 +48,45 @@ DB
 - GraphQL API  
 
 ### User 
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|로그인|/user/signIn|
-|회원가입|/user/signUp|POST|
-|회원정보조회|/user/detail|GET|
-|회원정보수정|/user/update|PUT|
-|회원탈퇴|/user/delete/userNo|DELETE| 
+|Operation|Path|Method|Implement|
+|:---:|:----:|:---:|:---:|
+|로그인|/user/signIn||[]|
+|회원가입|/user/signUp|POST|[x]|
+|회원정보조회|/user/detail|GET|[]|
+|회원정보수정|/user/update|PUT|[]|
+|회원탈퇴|/user/delete/userNo|DELETE|[]|
+<br>
+
+### User Find
+|Operation|Path|Method|Implement|
+|:---:|:----:|:---:|:---:|
+|아이디찾기|/find/id|POST|[x]|
+|비밀번호찾기|/find/pw|POST|[]|
 <br>
 
 ### Refrigerator
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|냉장고생성|/ref/create|POST|
-|식품등록|/ref/insert|POST|
-|냉장고내용조회|/ref/retrieve|GET|
-|냉장고이름수정|/ref/update|PUT|
-|냉장고삭제|/ref/delete/refNo|DELETE|
+|Operation|Path|Method|Implement|
+|:---:|:----:|:---:|:---:|
+|냉장고생성|/ref/create|POST|[]|
+|식품등록|/ref/insert|POST|[]|
+|냉장고내용조회|/ref/retrieve|GET|[]|
+|냉장고이름수정|/ref/update|PUT|[]|
+|냉장고삭제|/ref/delete/refNo|DELETE|[]|
 <br>
 
 ### Recipe
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|레시피등록|/recipe/regist|POST|
-|레시피조회|/recipe/list|GET|
-|레시피상세조회|/recipe/detail|GET|
-|레시피내용수정|/recipe/update|PUT|
-|레시피삭제|/recipe/delete/recipeNo|DELETE|
+|Operation|Path|Method|Implement|
+|:---:|:----:|:---:|:---:|
+|레시피등록|/recipe/regist|POST|[]|
+|레시피조회|/recipe/list|GET|[]|
+|레시피상세조회|/recipe/detail|GET|[]|
+|레시피내용수정|/recipe/update|PUT|[]|
+|레시피삭제|/recipe/delete/recipeNo|DELETE|[]|
 <br>
 
 ### Ingredient
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|재료등록|/ing/regist|POST|
-|재료정보수정|/ing/update|PUT|
-|재료삭제|/ing/delete/ingNo|DELETE|
+|Operation|Path|Method|Implement|
+|:---:|:----:|:---:|:---:|
+|재료등록|/ing/regist|POST|[]|
+|재료정보수정|/ing/update|PUT|[]|
+|재료삭제|/ing/delete/ingNo|DELETE|[]|

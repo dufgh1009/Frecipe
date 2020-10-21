@@ -19,4 +19,11 @@ public class UserServiceImpl implements UserService{
 		userRepo.save(user);
 		return user;
 	}
+	
+	// 아이디 찾기
+	@Override
+	public User findId(String nickname, String phone) {
+		return userRepo.findByNicknameAndPhone(nickname, phone)
+				.orElseThrow(() -> new IllegalArgumentException("이름 또는 전화번호가 일치하지 않습니다!"));
+	}
 }
