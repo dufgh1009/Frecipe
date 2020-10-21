@@ -50,7 +50,7 @@ Library
 ### User 
 |Operation|Path|Method|Implement|
 |:---:|:----:|:---:|:---:|
-|로그인|/user/signIn||[]|
+|로그인|/user/signIn||:check:|
 |회원가입|/user/signUp|POST|[x]|
 |회원정보조회|/user/detail|GET|[]|
 |회원정보수정|/user/update|PUT|[]|
