@@ -25,7 +25,7 @@ TPS-VGG-BiLSTM-Attn
 1. grayscale 변환
 
    	2. 히스토그램 정규화
-   	3. 이진화
+      	3. 이진화
 
 
 
@@ -40,5 +40,5 @@ tesseract 4.0 설치
 
 conda install -c conda-forge tesseract
 
-
+.
 
