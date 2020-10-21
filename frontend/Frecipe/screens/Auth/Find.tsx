@@ -203,8 +203,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logo: {
-    width: 150,
-    height: 88,
+    width: 120,
+    height: 120,
     marginBottom: 40,
   },
   rowSelector: {
@@ -242,9 +242,8 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     textAlign: 'center',
-    color: '#03bcdb',
+    color: '#00BD75',
     fontSize: 24,
-    fontFamily: 'BMHANNA',
     backgroundColor: 'transparent',
     opacity: 0.54,
   },
@@ -255,9 +254,9 @@ const styles = StyleSheet.create({
     width: 350,
   },
   findButton: {
-    backgroundColor: '#03bcdb',
+    backgroundColor: '#00BD75',
     borderWidth: 2,
-    borderColor: '#03bcdb',
+    borderColor: '#00BD75',
     borderRadius: 6,
   },
   backButton: {
