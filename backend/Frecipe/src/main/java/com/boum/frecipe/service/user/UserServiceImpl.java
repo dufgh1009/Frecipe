@@ -26,4 +26,6 @@ public class UserServiceImpl implements UserService{
 		return userRepo.findByNicknameAndPhone(nickname, phone)
 				.orElseThrow(() -> new IllegalArgumentException("이름 또는 전화번호가 일치하지 않습니다!"));
 	}
+
+	
 }
