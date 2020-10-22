@@ -116,3 +116,6 @@ Frecipe
 
 ### 개발 규칙
 
+- React Native
+  1. 클래스형 컴포넌트 사용
+  2. render 함수에서 state 호출한 후 사용
