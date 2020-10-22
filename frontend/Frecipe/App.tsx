@@ -1,28 +1,7 @@
-import React from "react";
-import { createStore, applyMiddleware } from "redux";
-import thunk from "redux-thunk";
-import { Provider } from 'react-redux';
-import Main from "./navigation/Main";
-// import rootReducer from "./redux";
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
-
-// const store = createStore(rootReducer, applyMiddleware(thunk));
-
-// const App = () => {
-//   return (
-//     // <Provider store={store}>
-//     //   <Main />
-//     // </Provider>
-//     <Main></Main>
-//   );
-// };
-
-// export default App;
-
-// import React from 'react';
-// import { StyleSheet, Text, View } from 'react-native';
-
-// import Gate from './screens/Gate';
+import Gate from './screens/Gate';
 
 export default function App() {
   return <Gate />;
