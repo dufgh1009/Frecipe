@@ -33,6 +33,9 @@ public class User {
 	// 이름
 	private String nickname;
 	
+	// 전화번호
+	private String phone;
+	
 	// 프로필 사진 url
 	private String img;
 	

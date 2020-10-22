@@ -1,13 +1,16 @@
-# Back-End
+# :computer: Back-End
 
-##  기술 스택
+## 기술 스택
 
 Framework
-- Spring Boot
+- [Spring Boot](https://spring.io/projects/spring-boot)
 
 DB
-- MariaDB
-- MongoDB
+- [MariaDB](https://mariadb.org/)
+- [MongoDB](https://www.mongodb.com/)
+
+Library
+- [JPA](https://spring.io/projects/spring-data-jpa)
 
 > ## SQL vs NoSQL  
 > ### SQL (관계형 데이터베이스, 구조화된 쿼리 언어, Structured Query Language)  
@@ -45,38 +48,35 @@ DB
 - GraphQL API  
 
 ### User 
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|로그인|/user/signIn|
-|회원가입|/user/signUp|POST|
-|회원정보조회|/user/detail|GET|
-|회원정보수정|/user/update|PUT|
-|회원탈퇴|/user/delete/userNo|DELETE| 
+methods|POST|GET|PUT|DELETE
+:---:|:----:|:---:|:---:|:---:
+/users|회원 가입 :heavy_check_mark:|회원 전체 조회|회원 수정|회원 전체 삭제
+/users/1||회원 '1' 조회|회원 '1' 수정|회원 '1' 삭제
+/users/login|로그인|
+<br>
+
+### Find
+methods|POST|GET|PUT|DELETE
+:---:|:----:|:---:|:---:|:---:
+/finds/id|아이디 찾기 :heavy_check_mark:
+/finds/pw|비밀번호 찾기
 <br>
 
 ### Refrigerator
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|냉장고생성|/ref/create|POST|
-|식품등록|/ref/insert|POST|
-|냉장고내용조회|/ref/retrieve|GET|
-|냉장고이름수정|/ref/update|PUT|
-|냉장고삭제|/ref/delete/refNo|DELETE|
+methods|POST|GET|PUT|DELETE||
+:---:|:----:|:---:|:---:|:---:|:---:
+/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정|냉장고 삭제|:
 <br>
 
 ### Recipe
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|레시피등록|/recipe/regist|POST|
-|레시피조회|/recipe/list|GET|
-|레시피상세조회|/recipe/detail|GET|
-|레시피내용수정|/recipe/update|PUT|
-|레시피삭제|/recipe/delete/recipeNo|DELETE|
+methods|POST|GET|PUT|DELETE
+:---:|:----:|:---:|:---:|:---:
+/recipes|레시피 등록|레시피 전체 조회|레시피 수정|레시피 삭제
+/recipes/1||레시피 '1' 조회|레시피 '1' 수정|레시피 '1'삭제
 <br>
 
 ### Ingredient
-|Operation|Path|Method|
-|:---:|:----:|:---:|
-|재료등록|/ing/regist|POST|
-|재료정보수정|/ing/update|PUT|
-|재료삭제|/ing/delete/ingNo|DELETE|
+methods|POST|GET|PUT|DELETE
+:---:|:----:|:---:|:---:|:---:
+/ingredients|재료 등록|재료 전체 조회|재료 수정|재료 삭제
+/ingredients/1||재료 '1' 조회|재료 '1' 수정|재료 '1'삭제
