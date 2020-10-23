@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import com.sun.net.httpserver.HttpServer;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
@@ -68,6 +69,16 @@ public class JwtTokenProvider { // JWT 토큰 생성 및 검증 모듈
 	// Request의 Header에서 token 파싱 : "X-AUTH-TOKEN: jwt token"
 	public String resolveToken(HttpServletRequest req) {
 		return req.getHeader("X-AUTH-TOKEN");
+	}
+	
+	// JWT 토큰의 유효성 및 만료일자 확인
+	public boolean validateToken(String jwtToken) {
+		try {
+			Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(jwtToken);
+			return !claims.getBody().getExpiration().before(new Date());
+		} catch(Exception e) {
+			return false;
+		}
 	}
 	
 }
