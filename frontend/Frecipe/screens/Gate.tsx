@@ -7,9 +7,9 @@ export default class Gate extends Component {
   render() {
     return (
       <NavigationContainer>
-        {/* <Auth/> */}
-        <Main />
-      </NavigationContainer >
+        <Auth />
+        {/* <Main /> */}
+      </NavigationContainer>
     );
   }
 }

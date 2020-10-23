@@ -15,6 +15,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
 
+import axios from 'axios';
+
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
   route: RouteProp<AuthStackParamList, 'SignUp'>;
@@ -68,27 +70,24 @@ export default class SingIn extends Component<Props, State> {
   };
 
   doSignUp = async () => {
-    const { email, password, nickName } = this.state;
+    const { email, password, nickName, phone } = this.state;
+    const url = 'http://k3d204.p.ssafy.io:9999/user/signUp/';
 
     if (!this.isFormValid()) {
       return;
     }
 
-    // try {
-    //     const { status } = await api.createAccount({
-    //         username: email,
-    //         email,
-    //         password,
-    //         nickname: username,
-    //         phone_number: phoneNumber,
-    //     });
-    //     if (status === 201) {
-    //         alert("회원가입완료");
-    //     }
-    // } catch (event) {
-    //     console.error(event);
-    //     alert("이미 존재하는 이메일입니다.");
-    // }
+    await axios['post'](url, {
+      email,
+      password,
+      nickName,
+      phone,
+    })
+      .then(() => {
+        alert('회원가입을 축하합니다.');
+        this.props.navigation.navigate('SignIn');
+      })
+      .catch((error: any) => console.log(error));
   };
 
   render() {
