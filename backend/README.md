@@ -1,4 +1,4 @@
-# :computer: Back-End!~ss
+# :computer: Back-End!~s
 
 ## 기술 스택
 
