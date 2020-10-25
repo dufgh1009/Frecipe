@@ -1,5 +1,7 @@
 package com.boum.frecipe.service.user;
 
+import java.util.List;
+
 import com.boum.frecipe.domain.user.User;
 
 public interface UserService {
@@ -7,6 +9,9 @@ public interface UserService {
 	// 회원가입
 	public User signUp(User user);
 	
-	// 아이디 찾기
-	public User findId(String nickname, String phone);
+	// 로그인
+	public String signIn(String email, String password);
+	
+	// 전체 회원 조회
+	public List<User> retrieveAllUser();
 }

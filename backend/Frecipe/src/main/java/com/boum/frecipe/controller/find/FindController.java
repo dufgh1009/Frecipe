@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.user.UserDTO;
-import com.boum.frecipe.service.user.UserService;
+import com.boum.frecipe.service.find.FindService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,16 +19,16 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" })
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "FIND")
+@Api(tags = "Find")
 @RequestMapping("/find")
 public class FindController {
 	
-	private final UserService userService;
+	private final FindService service;
 	
 	@ApiOperation(value = "아이디 찾기", response = String.class)
 	@PostMapping("/Id")
-	public ResponseEntity<User> findId (@RequestBody UserDTO userDto){
-		return new ResponseEntity<User> (userService.findId(userDto.getNickname(), userDto.getPhone()), HttpStatus.OK);
+	public ResponseEntity<User> findId (@RequestBody User user){
+		return new ResponseEntity<User> (service.findId(user.getNickname(), user.getPhone()), HttpStatus.OK);
 		
 	}
 }

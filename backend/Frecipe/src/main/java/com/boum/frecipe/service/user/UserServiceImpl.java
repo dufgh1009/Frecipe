@@ -1,31 +1,55 @@
 package com.boum.frecipe.service.user;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.boum.frecipe.config.security.JwtTokenProvider;
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.repository.user.UserRepository;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 	
-	private final UserRepository userRepo;
+	private final UserRepository repo;
+	private final JwtTokenProvider jwtTokenProvider;
+	private final PasswordEncoder passwordEncoder;
 	
 	// 회원가입
 	@Override
 	public User signUp(User user) {
-		userRepo.save(user);
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setRoles(Collections.singletonList("ROLE_USER"));
+		repo.save(user);
 		return user;
 	}
 	
-	// 아이디 찾기
+	// 로그인
 	@Override
-	public User findId(String nickname, String phone) {
-		return userRepo.findByNicknameAndPhone(nickname, phone)
-				.orElseThrow(() -> new IllegalArgumentException("이름 또는 전화번호가 일치하지 않습니다!"));
+	public String signIn(String email, String password) {
+		User user = repo.findByEmail(email)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		if(!passwordEncoder.matches(password, user.getPassword())) {
+			throw new IllegalArgumentException("비밀번호를 확인 해주세요.");
+		}
+		
+		System.out.println("생성된 JWT 토큰 : " + jwtTokenProvider.createToken(String.valueOf(user.getEmail()), user.getRoles()));
+		
+		return jwtTokenProvider.createToken(String.valueOf(user.getEmail()), user.getRoles());
 	}
 
+	// 전체 회원 조회
+	@Override
+	public List<User> retrieveAllUser() {
+		return repo.findAll();
+	}
 	
 }
