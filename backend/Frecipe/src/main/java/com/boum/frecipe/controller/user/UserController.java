@@ -25,7 +25,7 @@ public class UserController {
 	private final UserService service;
 	
 	@ApiOperation(value = "회원가입")
-	@PostMapping(value = "signUp")
+	@PostMapping
 	public ResponseEntity<User> signUp(@RequestBody User user){
 		return new ResponseEntity<User>(service.signUp(user), HttpStatus.OK);
 	}
