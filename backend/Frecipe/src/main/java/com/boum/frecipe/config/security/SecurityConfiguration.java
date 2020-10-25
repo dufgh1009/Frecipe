@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsUtils;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰으로 인증하므로 세션은 필요없어 사용하지 않음.
 			.and()
 				.authorizeRequests() // 다음 요청들에 대한 사용 권한 체크
-					.antMatchers("/users/*").permitAll() // 특정 주소 접근 허용
+					.antMatchers("/users/**", "/find/**").permitAll() // 특정 주소 접근 허용
 					.antMatchers(HttpMethod.GET, "/**").permitAll() // 모든 GET 요청 접근 허용
 					.anyRequest().hasRole("USER") // 'role'이 'USER'인 데이터만 접근 허용	
 			.and()
