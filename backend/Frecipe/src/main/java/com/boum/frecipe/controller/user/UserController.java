@@ -36,7 +36,7 @@ public class UserController {
 	}
 	
 	@ApiOperation(value = "로그인")
-	@PostMapping(value = "/signin")
+	@PostMapping(value = "/login")
 	public ResponseEntity<String> signIn(@RequestBody User user){
 		return new ResponseEntity<String>(service.signIn(user.getEmail(), user.getPassword()), HttpStatus.OK);
 	}
