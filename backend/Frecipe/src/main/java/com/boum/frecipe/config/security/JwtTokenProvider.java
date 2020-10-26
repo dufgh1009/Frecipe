@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JwtTokenProvider { // JWT 토큰 생성 및 검증 모듈
 	
-	@Value("spring.jwt.secret")
+	@Value("${spring.jwt.secret}")
 	private String secretKey; // 토큰 생성에 사용되는 비밀키
 	
 	private long tokenValidMilisecond = 1000L * 60 * 60; // 토큰 유효 시간 설정

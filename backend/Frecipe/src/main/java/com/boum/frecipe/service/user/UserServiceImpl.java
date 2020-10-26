@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.boum.frecipe.config.security.JwtTokenProvider;
 import com.boum.frecipe.domain.user.User;
+import com.boum.frecipe.dto.user.UserDTO;
 import com.boum.frecipe.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -22,9 +23,16 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원가입
 	@Override
-	public User signUp(User user) {
-		user.setPassword(passwordEncoder.encode(user.getPassword()));
-		user.setRoles(Collections.singletonList("ROLE_USER"));
+	public User signUp(UserDTO userDto) {
+		
+		User user = User.builder()
+				.email(userDto.getEmail())
+				.password(passwordEncoder.encode(userDto.getPassword()))
+				.nickname(userDto.getNickname())
+				.phone(userDto.getPhone())
+				.roles(Collections.singletonList("ROLE_USER"))
+				.build();
+		
 		repo.save(user);
 		return user;
 	}
@@ -39,6 +47,7 @@ public class UserServiceImpl implements UserService{
 			throw new IllegalArgumentException("비밀번호를 확인 해주세요.");
 		}
 		
+		System.out.println("로그인 user : " + user);
 		return jwtTokenProvider.createToken(String.valueOf(user.getUserNo()), user.getRoles());
 	}
 
