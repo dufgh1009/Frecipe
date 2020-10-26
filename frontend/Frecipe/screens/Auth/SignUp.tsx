@@ -26,7 +26,7 @@ interface State {
   email: string;
   password: string;
   passwordConfirm: string;
-  nickName: string;
+  nickname: string;
   phone: string;
 }
 
@@ -38,7 +38,7 @@ export default class SingIn extends Component<Props, State> {
       email: '',
       password: '',
       passwordConfirm: '',
-      nickName: '',
+      nickname: '',
       phone: '',
     };
   }
@@ -49,12 +49,12 @@ export default class SingIn extends Component<Props, State> {
   };
 
   isFormValid = () => {
-    const { email, password, passwordConfirm, nickName } = this.state;
+    const { email, password, passwordConfirm, nickname } = this.state;
     if (
       email === '' ||
       password === '' ||
       passwordConfirm === '' ||
-      nickName === ''
+      nickname === ''
     ) {
       alert('모든 필드를 채워주세요.');
       return false;
@@ -70,8 +70,8 @@ export default class SingIn extends Component<Props, State> {
   };
 
   doSignUp = async () => {
-    const { email, password, nickName, phone } = this.state;
-    const url = 'http://k3d204.p.ssafy.io:9999/user/signUp/';
+    const { email, password, nickname, phone } = this.state;
+    const url = 'http://k3d204.p.ssafy.io:9999/users/';
 
     if (!this.isFormValid()) {
       return;
@@ -80,7 +80,7 @@ export default class SingIn extends Component<Props, State> {
     await axios['post'](url, {
       email,
       password,
-      nickName,
+      nickname,
       phone,
     })
       .then(() => {
@@ -92,7 +92,7 @@ export default class SingIn extends Component<Props, State> {
 
   render() {
     const { navigation } = this.props;
-    const { email, password, passwordConfirm, nickName, phone } = this.state;
+    const { email, password, passwordConfirm, nickname, phone } = this.state;
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -141,10 +141,10 @@ export default class SingIn extends Component<Props, State> {
               leftIcon={<MaterialIcons name="lock" size={24} color="#00BD75" />}
             />
             <Input
-              value={nickName}
-              onChangeText={(nickName) => this.setState({ nickName })}
+              value={nickname}
+              onChangeText={(nickname) => this.setState({ nickname })}
               containerStyle={styles.inputContainer}
-              placeholder="홍길동"
+              placeholder="홍길동(닉네임)"
               returnKeyType="next"
               ref={(input) => (this.userNameInput = input)}
               onSubmitEditing={() => this.phoneInput.focus()}
