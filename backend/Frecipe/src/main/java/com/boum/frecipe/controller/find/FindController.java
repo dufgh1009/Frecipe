@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.user.UserDTO;
 import com.boum.frecipe.service.find.FindService;
 
@@ -27,8 +26,8 @@ public class FindController {
 	
 	@ApiOperation(value = "아이디 찾기", response = String.class)
 	@PostMapping("/Id")
-	public ResponseEntity<String> findId (@RequestBody User user){
-		return new ResponseEntity<String> (service.findId(user.getNickname(), user.getPhone()), HttpStatus.OK);
+	public ResponseEntity<String> findId (@RequestBody UserDTO userDto){
+		return new ResponseEntity<String> (service.findId(userDto.getNickname(), userDto.getPhone()), HttpStatus.OK);
 		
 	}
 }

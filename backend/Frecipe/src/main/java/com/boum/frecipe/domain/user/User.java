@@ -69,31 +69,26 @@ public class User implements UserDetails{
 		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
 	}
 	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public String getUsername() { // Security에서 사용하는 회원 구분 ID
 		return this.email;
 	}
 	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isAccountNonExpired() { // 계정 만료 여부
 		return true;
 	}
 	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isAccountNonLocked() { // 계정 잠김 여부
 		return true;
 	}
 	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isCredentialsNonExpired() { // 패스워드 만료 여부
 		return true;
 	}
 	
-	@JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
 	@Override
 	public boolean isEnabled() { // 계정 사용가능 여부
 		return true;
