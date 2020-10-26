@@ -119,3 +119,31 @@ Frecipe
 - React Native
   1. 클래스형 컴포넌트 사용
   2. render 함수에서 state 호출한 후 사용
+
+- Redux
+
+  1. action : const `액션명` =` '사용하는컴포넌트/액션명'` as const;
+
+  2. action 함수 : export const `함수명` = (`인자`) => ({ type : `액션명`, payload : `인자` })
+
+  3. return 방법 : type `사용하는컴포넌트+Action` = | ReturnType<typeof `action함수`>
+
+  4. reducer :
+
+     ```typescript
+     function refrigerator(
+     	 state: RefrigeratorState = intialState,
+        action: RefrigeratorAction
+     ): RefrigeratorState {
+          switch (action.type) {
+            // state를 복제해서 새로운 state를 리턴 함
+            case action1: ~~
+            case action2: ~~
+            default:
+              return state;
+        }
+     }
+     ```
+
+     
+
