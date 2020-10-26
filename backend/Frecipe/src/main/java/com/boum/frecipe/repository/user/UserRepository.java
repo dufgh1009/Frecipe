@@ -9,7 +9,7 @@ import com.boum.frecipe.domain.user.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 	
-	// 가입된 아이디 찾기
+	// 이메일로 조회
 	Optional<User> findByEmail(String email);
 	
 	// 아이디 찾기

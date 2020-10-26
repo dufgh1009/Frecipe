@@ -25,10 +25,12 @@ public class JwtAuthenticationFilter extends GenericFilterBean{ // JWT가 유요
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain filterChain) throws IOException, ServletException {
 		String token = jwtTokenProvider.resolveToken((HttpServletRequest) req);
+		
 		if(token != null && jwtTokenProvider.validateToken(token)) {
 			Authentication auth = jwtTokenProvider.getAuthentication(token);
 			SecurityContextHolder.getContext().setAuthentication(auth);
 		}
+		
 		filterChain.doFilter(req, res);
 	} 
 

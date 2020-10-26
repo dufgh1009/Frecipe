@@ -31,6 +31,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User implements UserDetails{
 
+	private static final long serialVersionUID = 1L;
+
 	// 회원 번호
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

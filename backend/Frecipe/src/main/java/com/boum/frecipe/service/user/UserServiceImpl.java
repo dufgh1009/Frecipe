@@ -10,8 +10,6 @@ import com.boum.frecipe.config.security.JwtTokenProvider;
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.repository.user.UserRepository;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -41,15 +39,19 @@ public class UserServiceImpl implements UserService{
 			throw new IllegalArgumentException("비밀번호를 확인 해주세요.");
 		}
 		
-		System.out.println("생성된 JWT 토큰 : " + jwtTokenProvider.createToken(String.valueOf(user.getEmail()), user.getRoles()));
-		
-		return jwtTokenProvider.createToken(String.valueOf(user.getEmail()), user.getRoles());
+		return jwtTokenProvider.createToken(String.valueOf(user.getUserNo()), user.getRoles());
 	}
 
 	// 전체 회원 조회
 	@Override
 	public List<User> retrieveAllUser() {
 		return repo.findAll();
+	}
+	
+	// 회원 정보 조회
+	@Override
+	public User retrieveUser(String email) {
+		return repo.findByEmail(email).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 	}
 	
 }

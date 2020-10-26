@@ -14,8 +14,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
-import com.sun.net.httpserver.HttpServer;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -57,7 +55,12 @@ public class JwtTokenProvider { // JWT 토큰 생성 및 검증 모듈
 	
 	// JWT 토큰에서 회원 구분 데이터 추출
 	public String getUserPK(String token) {
-		return Jwts.parser().setSigningKey(secretKey).parseClaimsJwt(token).getBody().getSubject();
+		return Jwts
+				.parser()
+				.setSigningKey(secretKey)
+				.parseClaimsJwt(token)
+				.getBody()
+				.getSubject();
 	}
 	
 	// JWT 토큰으로 인증 정보 조회
