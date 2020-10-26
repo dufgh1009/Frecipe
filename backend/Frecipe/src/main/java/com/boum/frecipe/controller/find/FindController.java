@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @Api(tags = "Find")
-@RequestMapping("/find")
+@RequestMapping("/finds")
 public class FindController {
 	
 	private final FindService service;
