@@ -35,7 +35,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.and()
 				.authorizeRequests() // 다음 요청들에 대한 사용 권한 체크
 					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-					.antMatchers("/users/**", "/find/**").permitAll() // 특정 주소 접근 허용
+					.antMatchers("/users/**", "/finds/**").permitAll() // 특정 주소 접근 허용
 					.antMatchers(HttpMethod.GET, "/**").permitAll() // 모든 GET 요청 접근 허용
 					.anyRequest().hasRole("USER") // 'role'이 'USER'인 데이터만 접근 허용	
 					
