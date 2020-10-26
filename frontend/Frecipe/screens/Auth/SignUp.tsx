@@ -92,18 +92,6 @@ export default class SingIn extends Component<Props, State> {
       console.log(event);
       alert('이미 존재하는 이메일입니다.');
     }
-
-    // await axios['post'](url, {
-    //   email,
-    //   password,
-    //   nickname,
-    //   phone,
-    // })
-    //   .then(() => {
-    //     alert('회원가입을 축하합니다.');
-    //     this.props.navigation.navigate('SignIn');
-    //   })
-    //   .catch((error: any) => console.log(error));
   };
 
   render() {

@@ -16,9 +16,15 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
 
+import { connect, Dispatch } from 'react-redux';
+import { login } from '../../redux/usersSlice';
+
+import api from '../../api';
+
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
   route: RouteProp<AuthStackParamList, 'SignIn'>;
+  login: (token: string) => void;
 }
 
 interface State {
@@ -26,7 +32,7 @@ interface State {
   password: string;
 }
 
-export default class SingIn extends Component<Props, State> {
+class SignIn extends Component<Props, State> {
   constructor(props: any) {
     super(props);
 
@@ -55,7 +61,22 @@ export default class SingIn extends Component<Props, State> {
     return true;
   };
 
-  doSignIn = () => {};
+  doSignIn = async () => {
+    const { email, password } = this.state;
+
+    if (!this.isFormValid()) {
+      return;
+    }
+
+    try {
+      const { data } = await api.login({ email, password });
+      const { login } = this.props;
+      console.log(data);
+      login(data);
+    } catch (event) {
+      console.error(event);
+    }
+  };
 
   render() {
     const { email, password } = this.state;
@@ -108,6 +129,14 @@ export default class SingIn extends Component<Props, State> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    login: (token: string) => dispatch(login(token)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(SignIn);
 
 const styles = StyleSheet.create({
   container: {

@@ -3,7 +3,7 @@ import axios from 'axios';
 const callApi = async (
   method: string,
   path: string,
-  data: object,
+  data: object | null,
   jwt: string,
   params = {},
 ) => {
@@ -26,7 +26,8 @@ export default {
 
   createAccount: (form: object) => callApi('post', '/users/', form),
   findId: (form: object) => callApi('post', '/finds/id/', form),
-  //   login: (form) => callApi("post", "/accounts/login/", form),
+
+  login: (form: object) => callApi('post', '/users/login/', form),
 
   //   createSupplies: (id, token, form) =>
   //     callApi("post", `/checks/${id}/new/`, form, token),
