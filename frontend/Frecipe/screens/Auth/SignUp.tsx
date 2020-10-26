@@ -6,6 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
@@ -15,7 +16,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
 
-import axios from 'axios';
+import api from '../../api';
 
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
@@ -71,23 +72,38 @@ export default class SingIn extends Component<Props, State> {
 
   doSignUp = async () => {
     const { email, password, nickname, phone } = this.state;
-    const url = 'http://k3d204.p.ssafy.io:9999/users/';
+    const { navigation } = this.props;
 
     if (!this.isFormValid()) {
       return;
     }
+    try {
+      const { status } = await api.createAccount({
+        email,
+        password,
+        nickname,
+        phone,
+      });
+      if (status === 200) {
+        Alert.alert('회원가입 완료');
+        navigation.navigate('SignIn');
+      }
+    } catch (event) {
+      console.log(event);
+      alert('이미 존재하는 이메일입니다.');
+    }
 
-    await axios['post'](url, {
-      email,
-      password,
-      nickname,
-      phone,
-    })
-      .then(() => {
-        alert('회원가입을 축하합니다.');
-        this.props.navigation.navigate('SignIn');
-      })
-      .catch((error: any) => console.log(error));
+    // await axios['post'](url, {
+    //   email,
+    //   password,
+    //   nickname,
+    //   phone,
+    // })
+    //   .then(() => {
+    //     alert('회원가입을 축하합니다.');
+    //     this.props.navigation.navigate('SignIn');
+    //   })
+    //   .catch((error: any) => console.log(error));
   };
 
   render() {
