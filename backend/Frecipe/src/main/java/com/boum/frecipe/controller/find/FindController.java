@@ -25,7 +25,7 @@ public class FindController {
 	private final FindService service;
 	
 	@ApiOperation(value = "아이디 찾기", response = String.class)
-	@PostMapping("/Id")
+	@PostMapping("/id")
 	public ResponseEntity<String> findId (@RequestBody UserDTO userDto){
 		return new ResponseEntity<String> (service.findId(userDto.getNickname(), userDto.getPhone()), HttpStatus.OK);
 		
