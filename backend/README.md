@@ -50,9 +50,10 @@ Library
 ### User 
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/users|회원 가입 :heavy_check_mark:|회원 전체 조회|회원 수정|회원 전체 삭제
-/users/1||회원 '1' 조회|회원 '1' 수정|회원 '1' 삭제
-/users/login|로그인|
+/users|회원 가입 :heavy_check_mark:|회원 전체 조회 :heavy_check_mark:|회원 수정|회원 전체 삭제
+/users/1|||회원 '1' 수정|회원 '1' 삭제
+/users/login|로그인 :heavy_check_mark:|
+/users/details||회원 정보 조회
 <br>
 
 ### Find

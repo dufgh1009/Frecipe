@@ -27,8 +27,8 @@ public class FindController {
 	
 	@ApiOperation(value = "아이디 찾기", response = String.class)
 	@PostMapping("/Id")
-	public ResponseEntity<User> findId (@RequestBody User user){
-		return new ResponseEntity<User> (service.findId(user.getNickname(), user.getPhone()), HttpStatus.OK);
+	public ResponseEntity<String> findId (@RequestBody User user){
+		return new ResponseEntity<String> (service.findId(user.getNickname(), user.getPhone()), HttpStatus.OK);
 		
 	}
 }
