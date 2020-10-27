@@ -8,12 +8,14 @@ import { connect } from 'react-redux';
 import { RootState } from '../redux/rootReducer';
 
 interface Props {
-  isLogin: boolean;
+  user: { isLogin: string };
 }
 
 class Gate extends Component<Props> {
   render() {
-    const { isLogin } = this.props;
+    const {
+      user: { isLogin },
+    } = this.props;
     return (
       <NavigationContainer>{isLogin ? <Main /> : <Auth />}</NavigationContainer>
     );
@@ -21,7 +23,7 @@ class Gate extends Component<Props> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  return { isLogin: state.usersReducer };
+  return { user: state.usersReducer };
 };
 
 export default connect(mapStateToProps, null)(Gate);

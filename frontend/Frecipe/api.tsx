@@ -21,8 +21,7 @@ const callApi = async (
 };
 
 export default {
-  GOOGLE_PLACES_API_KEY: 'AIzaSyArYM2tY8P0JfCqG4IAgFXBHEKo7OsfZZg',
-  AWS_S3_SERVER: 'https://pack-man.s3.ap-northeast-2.amazonaws.com/',
+  AWS_S3_SERVER: 'https://frecipe.s3.ap-northeast-2.amazonaws.com/',
 
   createAccount: (form: object) => callApi('post', '/users/', form),
   findId: (form: object) => callApi('post', '/finds/id/', form),
