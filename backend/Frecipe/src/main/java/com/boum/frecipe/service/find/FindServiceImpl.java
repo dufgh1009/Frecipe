@@ -17,6 +17,6 @@ public class FindServiceImpl implements FindService{
 	public String findId(String nickname, String phone) {
 		User user = repo.findByNicknameAndPhone(nickname, phone)
 				.orElseThrow(() -> new IllegalArgumentException("이름 또는 전화번호가 일치하지 않습니다."));
-		return user.getEmail();
+		return user.getUsername();
 	}
 }

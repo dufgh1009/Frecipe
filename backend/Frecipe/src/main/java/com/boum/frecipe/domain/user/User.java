@@ -1,23 +1,18 @@
 package com.boum.frecipe.domain.user;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,13 +20,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @Entity
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements UserDetails{
-
-	private static final long serialVersionUID = 1L;
+@Table(name = "user")
+public class User{
 
 	// 회원 번호
 	@Id
@@ -39,9 +33,9 @@ public class User implements UserDetails{
 	@Column(name = "user_no")
 	private Long userNo;
 	
-	// 이메일
+	// 아이디
 	@Column(nullable = false, unique = true)
-	private String email;
+	private String username;
 	
 	@Column(nullable = false)
 	// 비밀번호
@@ -60,37 +54,10 @@ public class User implements UserDetails{
 	@Column(name = "ref_name")
 	private String refName;
 	
-	@ElementCollection(fetch = FetchType.EAGER)
 	@Builder.Default
-	private List<String> roles = new ArrayList<>();
-	
-	@Override
-	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-	}
-	
-	@Override
-	public String getUsername() { // Security에서 사용하는 회원 구분 ID
-		return this.email;
-	}
-	
-	@Override
-	public boolean isAccountNonExpired() { // 계정 만료 여부
-		return true;
-	}
-	
-	@Override
-	public boolean isAccountNonLocked() { // 계정 잠김 여부
-		return true;
-	}
-	
-	@Override
-	public boolean isCredentialsNonExpired() { // 패스워드 만료 여부
-		return true;
-	}
-	
-	@Override
-	public boolean isEnabled() { // 계정 사용가능 여부
-		return true;
-	}
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(	name = "user_roles", 
+				joinColumns = @JoinColumn(name = "user_id"), 
+				inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<>();
 }
