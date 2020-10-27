@@ -1,6 +1,9 @@
 package com.boum.frecipe.security;
 
+import java.util.Base64;
 import java.util.Date;
+
+import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +28,11 @@ public class JwtUtils { // JWT 토큰 생성 및 검증 모듈
 	private String jwtSecret; // 토큰 생성에 사용되는 비밀키
 	
 	private long jwtExpirationMs = 1000L * 60 * 60; // 토큰 유효 시간 설정
+	
+	@PostConstruct
+	protected void init() {
+		jwtSecret = Base64.getEncoder().encodeToString(jwtSecret.getBytes());
+	}
 	
 	public String generateJwtToken(Authentication authentication) {
 

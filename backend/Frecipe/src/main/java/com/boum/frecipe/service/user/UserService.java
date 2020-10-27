@@ -17,5 +17,5 @@ public interface UserService {
 	public List<User> retrieveAllUser();
 	
 	// 회원 정보 조회
-	public User retrieveUser(String email);
+	public User retrieveUser(String userNo);
 }
