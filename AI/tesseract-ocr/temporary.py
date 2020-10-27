@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import pytesseract
-#참고 사이트
+#참고 사이트#
 # https://bkshin.tistory.com/entry/OpenCV-10-%ED%9E%88%EC%8A%A4%ED%86%A0%EA%B7%B8%EB%9E%A8
 # https://jongwony.github.io/blog/posts/2017-04-26-ocr-training/
 # https://blog.naver.com/PostView.nhn?blogId=cjsal95&logNo=220915040360&parentCategoryNo=&categoryNo=22&viewDate=&isShowPopularPosts=true&from=search
