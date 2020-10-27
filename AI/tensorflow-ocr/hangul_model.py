@@ -23,7 +23,7 @@ MODEL_NAME = 'hangul_tensorflow'
 IMAGE_WIDTH = 64
 IMAGE_HEIGHT = 64
 
-DEFAULT_NUM_EPOCHS = 15
+DEFAULT_NUM_EPOCHS = 15 
 BATCH_SIZE = 100
 
 # This will be determined by the number of entries in the given label file.
