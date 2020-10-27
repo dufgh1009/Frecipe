@@ -28,7 +28,7 @@ public class SwaggerConfig {
 
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder().title("Frecipe API")
-				.description("SSAFY 3기 구미 2반 D208")
+				.description("SSAFY 3기 구미 2반 D204")
 				.termsOfServiceUrl("https://edu.ssafy.com")
 				.license("SSAFY License")
 				.licenseUrl("ssafy@ssafy.com").version("1.0").build();

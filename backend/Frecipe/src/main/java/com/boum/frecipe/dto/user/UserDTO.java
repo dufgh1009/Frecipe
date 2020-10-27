@@ -1,5 +1,6 @@
 package com.boum.frecipe.dto.user;
 
+
 import com.boum.frecipe.domain.user.User;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserDTO {
 	
-	private String email;
+	private String username;
 	private String password;
 	private String nickname;
 	private String phone;
@@ -21,8 +22,15 @@ public class UserDTO {
 	
 	@Builder
 	public UserDTO(User user) {
-		this.nickname = user.getNickname();
+		this.username = user.getUsername();
 		this.phone = user.getPhone();
 	}
 	
+	@Builder
+	public UserDTO(String username, String nickname, String password, String phone) {
+		this.username = username;
+		this.nickname = nickname;
+		this.password = password;
+		this.phone = phone;
+	}
 }
