@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { Text, View } from 'react-native';
 
 class RecipeRecommend extends Component {
@@ -12,3 +13,14 @@ class RecipeRecommend extends Component {
 }
 
 export default RecipeRecommend;
+=======
+import { Text } from 'react-native';
+
+export default class RecipeRecommend extends Component {
+  render() {
+    return (
+      <Text>recipe</Text>
+    )
+  }
+}
+>>>>>>> feature/S03P31D204-110/refrigerator_add_modal
