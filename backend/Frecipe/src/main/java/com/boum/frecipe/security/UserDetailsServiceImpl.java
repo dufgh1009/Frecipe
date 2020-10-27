@@ -11,11 +11,13 @@ import org.springframework.stereotype.Service;
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.repository.user.UserRepository;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService{
 
-	@Autowired
-	UserRepository repo;
+	private final UserRepository repo;
 	
 	// client가 입력하는 아이디 값을 받아온다.
 	// 'loadUserByUsername'이라고 해서 'username'이라는 변수만 받아오는 줄 알았는데 아니었다..

@@ -23,23 +23,17 @@ import com.boum.frecipe.repository.user.UserRepository;
 import com.boum.frecipe.security.JwtUtils;
 import com.boum.frecipe.security.UserDetailsImpl;
 
+import lombok.AllArgsConstructor;
+
 @Service
+@AllArgsConstructor
 public class UserServiceImpl implements UserService{
 	
-	@Autowired
-	AuthenticationManager authenticationManager;
-	
-	@Autowired
-	UserRepository userRepo;
-	
-	@Autowired
-	RoleRepository roleRepo;
-	
-	@Autowired
-	JwtUtils jwtUtils;
-	
-	@Autowired
-	PasswordEncoder encoder;
+	private final AuthenticationManager authenticationManager;
+	private final UserRepository userRepo;
+	private final RoleRepository roleRepo;
+	private final JwtUtils jwtUtils;
+	private final PasswordEncoder encoder;
 	
 	// 회원가입
 	@Override
@@ -93,8 +87,8 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원 정보 조회
 	@Override
-	public User retrieveUser(String username) {
-		return userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+	public User retrieveUser(String userNo) {
+		return userRepo.findByUserNo(Long.valueOf(userNo)).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 	}
 	
 }
