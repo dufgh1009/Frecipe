@@ -33,20 +33,10 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-39.0.3.tar.gz",
     "react-native-dropdown-picker": "^3.7.0",
-<<<<<<< HEAD
-    "react-native-dynamic-search-bar": "github:WrathChaos/react-native-dynamic-search-bar#expo",
-    "react-native-dynamic-vector-icons": "github:WrathChaos/react-native-dynamic-vector-icons#expo",
-    "react-native-elements": "^3.0.0-alpha.1",
-    "react-native-gesture-handler": "~1.7.0",
-    "react-native-keyboard-aware-scroll-view": "^0.9.3",
-    "react-native-material-dropdown": "^0.11.1",
-    "react-native-popup-menu": "^0.15.9",
-=======
     "react-native-dynamic-search-bar": "^2.0.0",
     "react-native-elements": "^3.0.0-alpha.1",
     "react-native-gesture-handler": "~1.7.0",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
->>>>>>> feature/S03P31D204-110/refrigerator_add_modal
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.4",
     "react-native-screens": "~2.10.1",
@@ -54,10 +44,7 @@
     "react-native-web": "~0.13.12",
     "react-navigation-stack": "^2.8.4",
     "react-redux": "^7.2.1",
-<<<<<<< HEAD
     "redux-persist": "^6.0.0",
-=======
->>>>>>> feature/S03P31D204-110/refrigerator_add_modal
     "tslib": "^2.0.3"
   },
   "devDependencies": {
