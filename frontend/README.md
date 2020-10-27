@@ -110,7 +110,9 @@ Frecipe
       2. comment
    5. Setting
       1. logout
-      2. 회원 탈퇴
+      2. 회원 수정
+      3. 회원 이미지 등록
+      4. 회원 탈퇴
 
 
 
