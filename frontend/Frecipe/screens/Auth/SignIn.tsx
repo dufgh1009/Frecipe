@@ -28,7 +28,7 @@ interface Props {
 }
 
 interface State {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -37,24 +37,24 @@ class SignIn extends Component<Props, State> {
     super(props);
 
     this.state = {
-      email: '',
+      username: '',
       password: '',
     };
   }
 
-  isEmail = (email: string) => {
+  isEmail = (username: string) => {
     const regEx = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    return regEx.test(email);
+    return regEx.test(username);
   };
 
   isFormValid = () => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
 
-    if (email === '' || password === '') {
+    if (username === '' || password === '') {
       alert('모든 필드를 채워주세요.');
       return false;
     }
-    if (!this.isEmail(email)) {
+    if (!this.isEmail(username)) {
       alert('올바른 이메일이 아닙니다.');
       return false;
     }
@@ -62,16 +62,15 @@ class SignIn extends Component<Props, State> {
   };
 
   doSignIn = async () => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
 
     if (!this.isFormValid()) {
       return;
     }
 
     try {
-      const { data } = await api.login({ email, password });
+      const { data } = await api.login({ username, password });
       const { login } = this.props;
-      console.log(data);
       login(data);
     } catch (event) {
       console.error(event);
@@ -79,7 +78,7 @@ class SignIn extends Component<Props, State> {
   };
 
   render() {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
     const { navigation } = this.props;
     return (
       <KeyboardAvoidingView
@@ -93,8 +92,8 @@ class SignIn extends Component<Props, State> {
               style={styles.logo}
             />
             <Input
-              value={email}
-              onChangeText={(email: string) => this.setState({ email })}
+              value={username}
+              onChangeText={(username: string) => this.setState({ username })}
               containerStyle={styles.inputContainer}
               placeholder="email@address.com"
               keyboardType="email-address"
