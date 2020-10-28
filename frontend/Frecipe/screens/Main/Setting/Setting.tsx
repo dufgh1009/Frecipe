@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import {
   Alert,
   Text,
@@ -314,14 +313,3 @@ const styles = StyleSheet.create({
     marginTop: 30,
   },
 });
-=======
-import { Text } from 'react-native';
-
-export default class Setting extends Component {
-  render() {
-    return (
-      <Text>setting</Text>
-    )
-  }
-}
->>>>>>> feature/S03P31D204-110/refrigerator_add_modal
