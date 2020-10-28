@@ -7,6 +7,7 @@ import sys
 
 import tensorflow as tf
 
+tf.compat.v1.disable_eager_execution()
 SCRIPT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 # Default paths.
@@ -14,13 +15,13 @@ DEFAULT_LABEL_FILE = os.path.join(
     SCRIPT_PATH, '../labels/2350-common-hangul.txt'
 )
 DEFAULT_GRAPH_FILE = os.path.join(
-    SCRIPT_PATH, '../saved-model/optimized_hangul_tensorflow.pb'
+    SCRIPT_PATH, '../saved-model/hangul_tensorflow.pb'
 )
 
 
 def read_image(file):
     """Read an image file and convert it into a 1-D floating point array."""
-    file_content = tf.read_file(file)
+    file_content = tf.io.read_file(file)
     image = tf.image.decode_jpeg(file_content, channels=1)
     image = tf.image.convert_image_dtype(image, dtype=tf.float32)
     image = tf.reshape(image, (1, 64*64))
@@ -42,8 +43,8 @@ def classify(args):
         sys.exit(1)
 
     # Load graph and parse file.
-    with tf.gfile.GFile(args.graph_file, "rb") as f:
-        graph_def = tf.GraphDef()
+    with tf.compat.v1.gfile.GFile(args.graph_file, "rb") as f:
+        graph_def = tf.compat.v1.GraphDef()
         graph_def.ParseFromString(f.read())
 
     with tf.Graph().as_default() as graph:
@@ -61,10 +62,12 @@ def classify(args):
     keep_prob = graph.get_tensor_by_name('hangul-model/keep_prob:0')
 
     image = read_image(args.image)
-    sess = tf.InteractiveSession()
+    print("--------------------------------------------------")
+    print(image)
+    sess = tf.compat.v1.InteractiveSession()
     image_array = sess.run(image)
     sess.close()
-    with tf.Session(graph=graph) as graph_sess:
+    with tf.compat.v1.Session(graph=graph) as graph_sess:
         predictions = graph_sess.run(y, feed_dict={x: image_array,
                                                    keep_prob: 1.0})
         prediction = predictions[0]
