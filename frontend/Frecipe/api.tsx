@@ -21,7 +21,7 @@ const callApi = async (
 };
 
 export default {
-  AWS_S3_SERVER: 'https://frecipe.s3.ap-northeast-2.amazonaws.com/',
+  AWS_S3_SERVER: 'https://frecipe-pjt.s3.ap-northeast-2.amazonaws.com/',
 
   createAccount: (form: object) => callApi('post', '/users/', form),
   findId: (form: object) => callApi('post', '/finds/id/', form),
