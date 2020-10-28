@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-<<<<<<< HEAD
 import { Text, View } from 'react-native';
 
 class Community extends Component {
@@ -13,14 +12,3 @@ class Community extends Component {
 }
 
 export default Community;
-=======
-import { Text } from 'react-native';
-
-export default class Commnunity extends Component {
-  render() {
-    return (
-      <Text>community</Text>
-    )
-  }
-}
->>>>>>> feature/S03P31D204-110/refrigerator_add_modal

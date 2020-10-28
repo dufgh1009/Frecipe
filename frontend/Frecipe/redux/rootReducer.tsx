@@ -5,7 +5,7 @@ import usersReducer from './usersSlice';
 
 const rootReducer = combineReducers({
   refrigerator: refrigeratorReducer,
-  usersReducer: usersReducer,
+  users: usersReducer,
 });
 
 export default rootReducer;
