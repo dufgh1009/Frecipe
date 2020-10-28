@@ -57,7 +57,7 @@ public class UserController {
 //	@ApiImplicitParams({
 //		@ApiImplicitParam(name = "로그인 후 발급된 JWT 토큰", required = true, dataType = "String", paramType = "header")
 //	})
-//	@ApiOperation(value = "회원 정보 조회")
+	@ApiOperation(value = "회원 정보 조회")
 	@GetMapping("/{userNo}")	
 	public ResponseEntity<User> retrieve(@PathVariable String userNo) {	
 		// SecurityContext에서 인증받은 회원의 정보를 얻어온다.	
