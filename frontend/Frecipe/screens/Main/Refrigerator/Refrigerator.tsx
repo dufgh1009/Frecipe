@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { Header, Overlay, Button, Input } from 'react-native-elements';
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import DropDownPicker from 'react-native-dropdown-picker';
-import SearchBar from 'react-native-dynamic-search-bar';
+import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ingredient, actions } from '../../../redux/refrigeratorSlice';
 import { RootState } from '../../../redux/rootReducer';
@@ -30,6 +30,8 @@ interface RefrigeratorState {
   addVisible: boolean;
   ingredients: Array<newIngredient>;
   maxId: number;
+  yellowFood: number;
+  redFood: number;
 }
 
 class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
@@ -40,6 +42,8 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       addVisible: false,
       ingredients: [],
       maxId: 0,
+      yellowFood: 0,
+      redFood: 0,
     };
   }
   addOverlay = () => {
@@ -69,9 +73,38 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   };
   scroll: any;
 
+  countYellowFood(ingredients: ingredient[]) {
+    var count = 0
+    ingredients.map(element => {
+      if (element.date <= 3 && element.date >= 1) {
+        count = count + 1
+      }
+    })
+    this.setState({
+      yellowFood: count
+    })
+  }
+
+  countRedFood(ingredients: ingredient[]) {
+    var count = 0
+    ingredients.map(element => {
+      if (element.date < 0) {
+        count = count + 1
+      }
+    })
+    this.setState({
+      redFood: count
+    })
+  }
+
   _scrollToInput(reactNode: any) {
     // Add a 'scroll' ref to your ScrollView
     this.scroll.props.scrollToFocusedInput(reactNode);
+  }
+
+  componentWillMount() {
+    this.countRedFood(this.props.ingredients)
+    this.countYellowFood(this.props.ingredients)
   }
 
   onChangeAddlist(id: number, data: any, type: string) {
@@ -186,11 +219,11 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
           <View style={styles.expirationBar}>
             <View style={styles.expirationsBarSub}>
               <Text style={styles.expirationsBarSubYellow}>유통기한 임박</Text>
-              <Text style={styles.expirationsBarSubBlack}>1개</Text>
+              <Text style={styles.expirationsBarSubBlack}>{this.state.yellowFood}개</Text>
             </View>
             <View style={styles.expirationsBarSub}>
               <Text style={styles.expirationsBarSubRed}>유통기한 만료</Text>
-              <Text style={styles.expirationsBarSubBlack}>2개</Text>
+              <Text style={styles.expirationsBarSubBlack}>{this.state.redFood}개</Text>
             </View>
           </View>
           <View style={{ flex: 10 }}>
