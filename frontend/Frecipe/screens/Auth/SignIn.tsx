@@ -21,10 +21,19 @@ import { login } from '../../redux/usersSlice';
 
 import api from '../../api';
 
+interface Login {
+  token: string;
+  userNo: number;
+  username: string;
+  nickname: string;
+  phone: string;
+  img: string | null;
+}
+
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
   route: RouteProp<AuthStackParamList, 'SignIn'>;
-  login: (token: string) => void;
+  login: ({ token, userNo, username, nickname, phone, img }: Login) => void;
 }
 
 interface State {
@@ -69,9 +78,22 @@ class SignIn extends Component<Props, State> {
     }
 
     try {
-      const { data } = await api.login({ username, password });
+      const { data: token } = await api.login({ username, password });
+
+      var jwtDecode = require('jwt-decode');
+      const userNo = jwtDecode(token).sub;
+
+      const { data: userDetail } = await api.getUser(userNo, token);
+
       const { login } = this.props;
-      login(data);
+      login({
+        token: token,
+        userNo: userNo,
+        username: username,
+        nickname: userDetail.nickname,
+        phone: userDetail.phone,
+        img: userDetail.img,
+      });
     } catch (event) {
       console.error(event);
     }
@@ -131,7 +153,7 @@ class SignIn extends Component<Props, State> {
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
-    login: (token: string) => dispatch(login(token)),
+    login: (form: Login) => dispatch(login(form)),
   };
 };
 

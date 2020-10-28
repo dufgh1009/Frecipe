@@ -28,6 +28,9 @@ export default {
 
   login: (form: object) => callApi('post', '/users/login/', form),
 
+  getUser: (userNo: number, token: string) =>
+    callApi('get', `/users/${userNo}`, null, token),
+
   //   createSupplies: (id, token, form) =>
   //     callApi("post", `/checks/${id}/new/`, form, token),
   //   myChecklist: (id, token) =>

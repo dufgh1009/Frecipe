@@ -44,12 +44,18 @@ var s3 = new AWS.S3({
 // type 설정
 interface Props {
   logout: () => void;
-  user: { token: string };
+  user: {
+    userNo: number;
+    username: string;
+    nickname: string;
+    phone: string;
+    img: string;
+  };
 }
 
 interface State {
   userNo: number | null;
-  email: string;
+  username: string;
   nickname: string;
   phone: string;
   img: string | null;
@@ -61,23 +67,16 @@ class Setting extends Component<Props, State> {
     super(props);
 
     this.state = {
-      userNo: null,
-      email: 'ee2e@naver.com',
-      nickname: '아잉으니야',
-      phone: '01087480328',
-      img: null,
+      userNo: this.props.user.userNo,
+      username: this.props.user.username,
+      nickname: this.props.user.nickname,
+      phone: this.props.user.phone,
+      img: this.props.user.img,
       rollGranted: false,
     };
   }
 
-  componentDidMount() {
-    var jwtDecode = require('jwt-decode');
-    const {
-      user: { token },
-    } = this.props;
-    const userNo = jwtDecode(token).sub;
-    this.setState({ userNo });
-  }
+  componentDidMount() {}
 
   // 회원정보 수정
   updateUser = () => {};
@@ -111,7 +110,7 @@ class Setting extends Component<Props, State> {
 
   // 앨범 내 사진 선택
   pickImage = async () => {
-    const { email, rollGranted } = this.state;
+    const { username, rollGranted } = this.state;
 
     // 앨범 접근 권한
     if (rollGranted === false) {
@@ -143,7 +142,7 @@ class Setting extends Component<Props, State> {
     const response = await fetch(result.uri);
     const blob = await response.blob();
     let _date = new Date();
-    let fileName = `${email.substring(0, 4)}${_date.getFullYear()}${
+    let fileName = `${username.substring(0, 4)}${_date.getFullYear()}${
       _date.getMonth() + 1
     }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
     console.log(albumBucketName);
@@ -177,7 +176,7 @@ class Setting extends Component<Props, State> {
   withdraw = () => {};
 
   render() {
-    const { email, nickname, phone, img } = this.state;
+    const { username, nickname, phone, img } = this.state;
     return (
       <View>
         <KeyboardAwareScrollView>
@@ -216,8 +215,8 @@ class Setting extends Component<Props, State> {
 
             <Input
               disabled
-              value={email}
-              onChangeText={(email: string) => this.setState({ email })}
+              value={username}
+              onChangeText={(username: string) => this.setState({ username })}
               containerStyle={styles.inputContainer}
               leftIcon={
                 <MaterialIcons name="email" size={24} color="#00BD75" />
