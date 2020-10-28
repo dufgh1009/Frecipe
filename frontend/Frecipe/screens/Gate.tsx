@@ -7,13 +7,8 @@ import Main from '../navigation/Main';
 import { connect } from 'react-redux';
 import { RootState } from '../redux/rootReducer';
 
-interface user {
-  isLogin: boolean,
-  token: string,
-}
-
 interface Props {
-  user: user;
+  user: { isLogin: string };
 }
 
 class Gate extends Component<Props> {
@@ -24,16 +19,11 @@ class Gate extends Component<Props> {
     return (
       <NavigationContainer>{isLogin ? <Main /> : <Auth />}</NavigationContainer>
     );
-    // return (
-    //   <NavigationContainer>
-    //     <Main />
-    //   </NavigationContainer>
-    // );
   }
 }
 
 const mapStateToProps = (state: RootState) => {
-  return { user: state.users };
+  return { user: state.usersReducer };
 };
 
 export default connect(mapStateToProps, null)(Gate);

@@ -4,7 +4,7 @@ import { StyleSheet } from 'react-native';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 
-import { persistor } from './redux/store';
+import store, { persistor } from './redux/store';
 
 import Gate from './screens/Gate';
 

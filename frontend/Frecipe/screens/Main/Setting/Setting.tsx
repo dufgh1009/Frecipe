@@ -80,7 +80,7 @@ class Setting extends Component<Props, State> {
   }
 
   // 회원정보 수정
-  updateUser = () => { };
+  updateUser = () => {};
 
   // 유저 프로필 사진 클릭시
   clickProfile = () => {
@@ -145,7 +145,7 @@ class Setting extends Component<Props, State> {
     let _date = new Date();
     let fileName = `${email.substring(0, 4)}${_date.getFullYear()}${
       _date.getMonth() + 1
-      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
     console.log(albumBucketName);
     // 업로드 속성 설정
     var params = {
@@ -174,7 +174,7 @@ class Setting extends Component<Props, State> {
   };
 
   // 회원 탈퇴
-  withdraw = () => { };
+  withdraw = () => {};
 
   render() {
     const { email, nickname, phone, img } = this.state;
@@ -204,15 +204,15 @@ class Setting extends Component<Props, State> {
                 <Image source={{ uri: img }} style={styles.profileImage} />
               </TouchableOpacity>
             ) : (
-                <TouchableOpacity onPress={this.clickProfile}>
-                  <FontAwesome5
-                    name="user-plus"
-                    size={80}
-                    color="#808080"
-                    style={{ marginBottom: 45 }}
-                  />
-                </TouchableOpacity>
-              )}
+              <TouchableOpacity onPress={this.clickProfile}>
+                <FontAwesome5
+                  name="user-plus"
+                  size={80}
+                  color="#808080"
+                  style={{ marginBottom: 45 }}
+                />
+              </TouchableOpacity>
+            )}
 
             <Input
               disabled
