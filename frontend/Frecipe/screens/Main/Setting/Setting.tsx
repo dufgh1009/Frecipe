@@ -25,9 +25,9 @@ import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 const screenHeight = Dimensions.get('screen').height;
 
 // 이미지 서버 업로드
-var albumBucketName = 'frecipe';
+var albumBucketName = 'frecipe-pjt';
 var bucketRegion = 'ap-northeast-2';
-var IdentityPoolId = 'ap-northeast-2:b572da3a-b812-44e8-b139-9ed88848ae4d';
+var IdentityPoolId = 'ap-northeast-2:43e4aae1-d94d-457e-96f2-69fc999cf72a';
 
 AWS.config.update({
   region: bucketRegion,
@@ -52,7 +52,7 @@ interface State {
   email: string;
   nickname: string;
   phone: string;
-  image: string | null;
+  img: string | null;
   rollGranted: boolean;
 }
 
@@ -65,7 +65,7 @@ class Setting extends Component<Props, State> {
       email: 'ee2e@naver.com',
       nickname: '아잉으니야',
       phone: '01087480328',
-      image: null,
+      img: null,
       rollGranted: false,
     };
   }
@@ -97,7 +97,7 @@ class Setting extends Component<Props, State> {
         {
           text: '사진 삭제',
           onPress: () => {
-            this.setState({ image: null });
+            this.setState({ img: null });
           },
         },
         {
@@ -137,7 +137,7 @@ class Setting extends Component<Props, State> {
       return;
     }
 
-    this.setState({ image: result.uri });
+    this.setState({ img: result.uri });
 
     // 이미지 업로드
     const response = await fetch(result.uri);
@@ -164,20 +164,7 @@ class Setting extends Component<Props, State> {
       if (err) {
         return alert('There was an error uploading your photo');
       }
-
-      Alert.alert(
-        '사진 업로드 완료',
-        '조금만 기다려주세요^ㅇ^',
-        [
-          {
-            text: '확인',
-          },
-        ],
-        { cancelable: true },
-      );
-      console.log('일');
     });
-    this.setState({ image: temp });
   };
 
   // 로그아웃
@@ -190,7 +177,7 @@ class Setting extends Component<Props, State> {
   withdraw = () => {};
 
   render() {
-    const { email, nickname, phone, image } = this.state;
+    const { email, nickname, phone, img } = this.state;
     return (
       <View>
         <KeyboardAwareScrollView>
@@ -212,9 +199,9 @@ class Setting extends Component<Props, State> {
             }
           />
           <View style={styles.contentContainer}>
-            {image ? (
+            {img ? (
               <TouchableOpacity onPress={this.clickProfile}>
-                <Image source={{ uri: image }} style={styles.profileImage} />
+                <Image source={{ uri: img }} style={styles.profileImage} />
               </TouchableOpacity>
             ) : (
               <TouchableOpacity onPress={this.clickProfile}>
