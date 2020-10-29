@@ -11,11 +11,14 @@ public interface UserService {
 	public User signUp(UserDTO userDto);
 	
 	// 로그인
-	public String signIn(String email, String password);
+	public String signIn(String username, String password);
 	
 	// 전체 회원 조회
 	public List<User> retrieveAllUser();
 	
 	// 회원 정보 조회
 	public User retrieveUser(String userNo);
+	
+	// 회원 정보 수정
+	public User updateUser(String username, UserDTO userDto);
 }

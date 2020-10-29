@@ -1,78 +1,55 @@
 package com.boum.frecipe.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import lombok.RequiredArgsConstructor;
 
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(
-		// securedEnabled = true,
-		// jsr250Enabled = true,
-		prePostEnabled = true)
+@RequiredArgsConstructor
 @Configuration
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
-	
-	@Autowired
-	UserDetailsServiceImpl userDetailsService;
-	
-	@Autowired
-	private AuthEntryPointJwt unauthorizedHandler;
-	
-	@Bean
-	public AuthTokenFilter authenticationJwtTokenFilter() {
-		return new AuthTokenFilter();
-	}
-	
-	@Override
-	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-	}
-	
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	@Override
-	public AuthenticationManager authenticationManagerBean() throws Exception {
-		return super.authenticationManagerBean();
-	}
-	
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		http.cors().and().csrf().disable()
-			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
-			.httpBasic().disable() // REST API 이므로 기본 설정을 사용하지 않음. 비인증시 로그인 화면으로 리다이렉트
-			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰으로 인증하므로 세션은 필요없어 사용하지 않음.
-			.and()
-				.authorizeRequests() // 다음 요청들에 대한 사용 권한 체크
-					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-					.antMatchers("/users/**", "/finds/**").permitAll() // 특정 주소 접근 허용
-					.antMatchers(HttpMethod.GET, "/**").permitAll() // api로 시작하는 GET 요청 리소스는 누구나 접근 가능
-					.anyRequest().hasRole("USER");
-		
-		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-		
-	}
-	
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
+    private final JwtTokenProvider jwtTokenProvider;
+
+    @Bean
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http
+        	.cors()
+        	.and()
+            .httpBasic().disable() // rest api 이므로 기본설정 사용안함. 기본설정은 비인증시 로그인폼 화면으로 리다이렉트 된다.
+            .csrf().disable() // rest api이므로 csrf 보안이 필요없으므로 disable처리.
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // jwt token으로 인증할것이므로 세션필요없으므로 생성안함.
+            .and()
+                .authorizeRequests() // 다음 리퀘스트에 대한 사용권한 체크
+//                    .antMatchers("/*/signin", "/*/signin/**", "/*/signup", "/*/signup/**", "/social/**").permitAll() // 가입 및 인증 주소는 누구나 접근가능
+//                    .antMatchers(HttpMethod.GET, "/exception/**","/helloworld/**", "/actuator/health").permitAll() // 등록된 GET요청 리소스는 누구나 접근가능
+//                    .anyRequest().hasRole("USER") // 그외 나머지 요청은 모두 인증된 회원만 접근 가능
+                	.anyRequest().permitAll()
+            .and()
+                .exceptionHandling().accessDeniedHandler(new CustomAccessDeniedHandler())
+            .and()
+                .exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+            .and()
+                .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class); // jwt token 필터를 id/password 인증 필터 전에 넣어라.
+
+    }
+    
 	@Override
 	public void configure(WebSecurity web) { // Swagger에 접근하기 위한 예외 처리
 		web.ignoring().antMatchers(
@@ -84,17 +61,4 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 		);
 	}
 	
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		CorsConfiguration configuration = new CorsConfiguration();
-
-		configuration.addAllowedOrigin("*");
-		configuration.addAllowedHeader("*");
-		configuration.addAllowedMethod("*");
-		configuration.setAllowCredentials(true);
-
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", configuration);
-		return source;
-	}
 }
