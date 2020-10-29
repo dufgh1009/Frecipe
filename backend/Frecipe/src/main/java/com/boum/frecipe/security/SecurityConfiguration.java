@@ -64,10 +64,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
 			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) // JWT 토큰으로 인증하므로 세션은 필요없어 사용하지 않음.
 			.and()
 				.authorizeRequests() // 다음 요청들에 대한 사용 권한 체크
-					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
-					.antMatchers("/users/**", "/finds/**").permitAll() // 특정 주소 접근 허용
-					.antMatchers(HttpMethod.GET, "/**").permitAll() // api로 시작하는 GET 요청 리소스는 누구나 접근 가능
-					.anyRequest().hasRole("USER");
+//					.requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+//					.antMatchers("/users/**", "/finds/**").permitAll() // 특정 주소 접근 허용
+//					.antMatchers(HttpMethod.GET, "/**").permitAll() // api로 시작하는 GET 요청 리소스는 누구나 접근 가능
+//					.anyRequest().hasRole("USER");
+					.anyRequest().permitAll();
 		
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 		

@@ -40,6 +40,7 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
 
 				SecurityContextHolder.getContext().setAuthentication(authentication);
+				System.out.println("doFilter Context : " + SecurityContextHolder.getContext().getAuthentication());
 			}
 		} catch (Exception e) {
 			logger.error("Cannot set user authentication: {}", e);
@@ -50,7 +51,6 @@ public class AuthTokenFilter extends OncePerRequestFilter{
 	
 	private String parseJwt(HttpServletRequest req) {
 		String headerAuth = req.getHeader("Authorization");
-
 		if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
 			return headerAuth.substring(7, headerAuth.length());
 		}

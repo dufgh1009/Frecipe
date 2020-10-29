@@ -27,12 +27,13 @@ public class JwtUtils { // JWT 토큰 생성 및 검증 모듈
 	private long jwtExpirationMs = 1000L * 60 * 60; // 토큰 유효 시간 설정
 	
 	public String generateJwtToken(Authentication authentication) {
-
+		
 		UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
 		Claims claims = Jwts.claims().setSubject(String.valueOf((userPrincipal.getUserNo())));
 		claims.put("username", userPrincipal.getUsername());
 		
+		System.out.println("JwtUtils : " + authentication);
 		return Jwts.builder()
 				.setClaims(claims)
 				.setIssuedAt(new Date())
