@@ -21,4 +21,7 @@ public interface UserRepository extends JpaRepository<User, Long>{
 	
 	// 중복 체크
 	Boolean existsByUsername(String username);
+	
+	// 회원 탈퇴
+	void deleteByUsername(String username);
 }

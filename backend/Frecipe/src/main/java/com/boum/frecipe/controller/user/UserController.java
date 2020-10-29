@@ -53,7 +53,7 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 발급된 토큰", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 정보 조회")
 	@GetMapping("/details")	
@@ -67,7 +67,7 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 발급된 토큰", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN",required = false, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 정보 수정")
 	@PutMapping
@@ -77,14 +77,15 @@ public class UserController {
 		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
 	}
 	
-//	@ApiImplicitParams({
-//        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 발급된 토큰", required = false, dataType = "String", paramType = "header")
-//	})
-//	@ApiOperation(value = "회원 탈퇴")
-//	@DeleteMapping
-//	public ResponseEntity<User> delete() {	
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        String id = authentication.getName();
-//		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
-//	}
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "회원 탈퇴")
+	@DeleteMapping
+	public ResponseEntity<Void> delete() {	
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String id = authentication.getName();
+        service.deleteUser(id);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }
