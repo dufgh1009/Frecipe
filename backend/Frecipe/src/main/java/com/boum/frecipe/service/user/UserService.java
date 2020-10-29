@@ -18,4 +18,7 @@ public interface UserService {
 	
 	// 회원 정보 조회
 	public User retrieveUser(String userNo);
+	
+	// 회원 정보 수정
+	public User updateUser(UserDTO userDto);
 }

@@ -56,8 +56,17 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원 정보 조회
 	@Override
-	public User retrieveUser(String username) {
-		return userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+	public User retrieveUser(String userNo) {
+		System.out.println("service userNo : " + userNo);
+		return userRepo.findByUsername(userNo).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+	}
+	
+	// 회원 정보 수정
+	@Override
+	public User updateUser(UserDTO userDto) {
+		User user = userRepo.findByUsername(userDto.getUsername()).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		return user;
 	}
 	
 }

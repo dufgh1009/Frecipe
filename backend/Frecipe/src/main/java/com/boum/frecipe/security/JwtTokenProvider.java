@@ -37,12 +37,13 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
     }
 
     // Jwt 토큰 생성
-    public String createToken(String userPk, List<String> roles) {
-        Claims claims = Jwts.claims().setSubject(userPk);
+    public String createToken(String userNo, List<String> roles) {
+    	System.out.println("JWT Token Provider userNo : " + userNo);
+        Claims claims = Jwts.claims().setSubject(userNo);
         claims.put("roles", roles);
         Date now = new Date();
         return Jwts.builder()
-                .setClaims(claims) // 데이터
+                .setClaims(claims) // 데이터	
                 .setIssuedAt(now) // 토큰 발행일자
                 .setExpiration(new Date(now.getTime() + tokenValidMilisecond)) // set Expire Time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret값 세팅
