@@ -3,6 +3,8 @@ package com.boum.frecipe.service.user;
 import java.util.Collections;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -63,9 +65,10 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원 정보 수정
 	@Override
-	public User updateUser(UserDTO userDto) {
-		User user = userRepo.findByUsername(userDto.getUsername()).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
-		
+	@Transactional
+	public User updateUser(String username, UserDTO userDto) {
+		User user = userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		user.update(userDto.getNickname(), userDto.getPhone(), userDto.getImg());
 		return user;
 	}
 	

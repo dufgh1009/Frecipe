@@ -19,9 +19,5 @@ public class UserDTO {
 	private String img;
 	private String refName;
 	
-	public void update(String nickname, String phone, String img) {
-		this.nickname = nickname;
-		this.phone = phone;
-		this.img = img;
-	}
+	
 }

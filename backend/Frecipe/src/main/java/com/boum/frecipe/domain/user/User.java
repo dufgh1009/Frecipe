@@ -64,11 +64,19 @@ public class User implements UserDetails{
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+	// 회원 정보 수정
+	public void update(String nickname, String phone, String img) {
+		this.nickname = nickname;
+		this.phone = phone;
+		this.img = img;
+	}
+	
+	// UserDetiails Override
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return this.roles.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
-
+    
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Override
     public String getUsername() {

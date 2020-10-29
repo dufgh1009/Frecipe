@@ -38,6 +38,7 @@ public class JwtTokenProvider { // JWT 토큰을 생성 및 검증 모듈
 
     // Jwt 토큰 생성
     public String createToken(String userNo, List<String> roles) {
+    	// userNo로 토큰 정보 저장
     	System.out.println("JWT Token Provider userNo : " + userNo);
         Claims claims = Jwts.claims().setSubject(userNo);
         claims.put("roles", roles);

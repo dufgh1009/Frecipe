@@ -48,7 +48,6 @@ public class UserController {
 	@ApiOperation(value = "전체 회원 조회")
 	@GetMapping()
 	public ResponseEntity<List<User>> retrieveAll() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return new ResponseEntity<List<User>>(service.retrieveAllUser(), HttpStatus.OK);
 	}
 	
@@ -58,7 +57,7 @@ public class UserController {
 	@ApiOperation(value = "회원 정보 조회")
 	@GetMapping("/details")	
 	public ResponseEntity<User> retrieve() {	
-		// SecurityContext에서 인증받은 회원의 정보를 얻어온다.
+		// SecurityContext에서 인증된 회원의 아이디를 가져온다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
         // 결과데이터가 단일건인경우 getSingleResult를 이용해서 결과를 출력한다.
@@ -74,7 +73,6 @@ public class UserController {
 	public ResponseEntity<User> update(@RequestBody UserDTO userDTO) {	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String id = authentication.getName();
-
-		return new ResponseEntity<User>(service.retrieveUser(id), HttpStatus.OK);
+		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
 	}
 }
