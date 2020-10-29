@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -75,4 +76,15 @@ public class UserController {
         String id = authentication.getName();
 		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
 	}
+	
+//	@ApiImplicitParams({
+//        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 후 발급된 토큰", required = false, dataType = "String", paramType = "header")
+//	})
+//	@ApiOperation(value = "회원 탈퇴")
+//	@DeleteMapping
+//	public ResponseEntity<User> delete() {	
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        String id = authentication.getName();
+//		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
+//	}
 }
