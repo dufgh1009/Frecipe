@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 import pytesseract
-#참고 사이트#
+#참고 사이트
 # https://bkshin.tistory.com/entry/OpenCV-10-%ED%9E%88%EC%8A%A4%ED%86%A0%EA%B7%B8%EB%9E%A8
 # https://jongwony.github.io/blog/posts/2017-04-26-ocr-training/
 # https://blog.naver.com/PostView.nhn?blogId=cjsal95&logNo=220915040360&parentCategoryNo=&categoryNo=22&viewDate=&isShowPopularPosts=true&from=search
@@ -9,7 +9,8 @@ import pytesseract
 # https://github.com/parksunwoo/ocr_kor
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Users\multicampus\Desktop\2semester\Tesseract-ocr\tesseract.exe"
 
-img = cv2.imread("5.jpg")
+img = cv2.imread("7.jpg")
+# img = cv2.bitwise_not(img_1) #색반전
 # 너무 크거나 작은 jpg파일을 적절한 size로 변경해 준다. 
 img = cv2.resize(img, None, fx=1, fy=1)
  
@@ -26,11 +27,28 @@ adaptive_threshold = cv2.adaptiveThreshold(denoised, 255, cv2.ADAPTIVE_THRESH_GA
 
 # PageSegMode values(PSM)
 config = "--psm 3"
-# text = pytesseract.image_to_string(img, config=config, lang='kor+eng')
-text_1 = pytesseract.image_to_string(adaptive_threshold, config=config, lang='kor+eng')
+# text = pytesseract.image_to_string(gray, config=config, lang='kor')
+text = pytesseract.image_to_string(adaptive_threshold, config=config, lang='kor+eng')
 # print(text)
-print(text_1)
+text = text.replace(" ", "")
+temp_list = text.split("\n")
+text_list = []
+for i, line in enumerate(temp_list):
+    if len(line) == 0:
+        continue
+    text_list.append(line)
+text_list.pop()
+# for i, line in enumerate(text_list):
+#     print(i+1, ':', line)
 
+import re
+
+new_text = []
+for i, line in enumerate(text_list):
+    if line[-1].isdecimal():
+        temp = re.sub('[^가-힣]', '', line)
+        new_text.append(temp)
+print(new_text)
 # cv2.imshow("gray", gray)
-cv2.imshow("adaptive th", adaptive_threshold)
-cv2.waitKey(0)
+# cv2.imshow("adaptive th", adaptive_threshold)
+# cv2.waitKey(0)
