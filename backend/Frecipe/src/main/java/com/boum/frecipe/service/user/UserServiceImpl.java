@@ -3,13 +3,11 @@ package com.boum.frecipe.service.user;
 import java.util.Collections;
 import java.util.List;
 
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.user.UserDTO;
-import com.boum.frecipe.repository.user.RoleRepository;
 import com.boum.frecipe.repository.user.UserRepository;
 import com.boum.frecipe.security.JwtTokenProvider;
 
@@ -58,8 +56,8 @@ public class UserServiceImpl implements UserService{
 	
 	// 회원 정보 조회
 	@Override
-	public User retrieveUser(String userNo) {
-		return userRepo.findByUserNo(Long.valueOf(userNo)).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+	public User retrieveUser(String username) {
+		return userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 	}
 	
 }
