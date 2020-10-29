@@ -16,6 +16,6 @@ public class CustomUserDetailService implements UserDetailsService {
     private final UserRepository userJpaRepo;
 
     public UserDetails loadUserByUsername(String userPk) {
-        return userJpaRepo.findById(Long.valueOf(userPk)).orElseThrow(CUserNotFoundException::new);
+        return userJpaRepo.findByUsername(userPk).orElseThrow(CUserNotFoundException::new);
     }
 }

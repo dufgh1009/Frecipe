@@ -45,8 +45,8 @@ public class UserServiceImpl implements UserService{
 		if(!encoder.matches(password, user.getPassword())) {
 			throw new IllegalArgumentException("비밀번호를 확인 해주세요.");
 		}
-		System.out.println(jwtUtils.createToken(String.valueOf(user.getUserNo()), user.getRoles()));
-		return jwtUtils.createToken(String.valueOf(user.getUserNo()), user.getRoles());
+		System.out.println(jwtUtils.createToken(user.getUsername(), user.getRoles()));
+		return jwtUtils.createToken(user.getUsername(), user.getRoles());
 	}
 
 	// 전체 회원 조회
