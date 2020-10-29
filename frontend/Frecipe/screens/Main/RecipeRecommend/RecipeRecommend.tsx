@@ -29,12 +29,16 @@ interface Video {
 interface Recipe {
   recNo: number;
   title: string;
-  content: string;
   view: number;
+  rate: number;
+  mainImg: string;
+  comment: number;
+  writer: string;
 }
 
 interface State {
   ingredients: Array<string>;
+  selectIngredients: Array<string>;
   videos: Array<Video>;
   recipes: Array<Recipe>;
 }
@@ -43,20 +47,61 @@ class RecipeRecommend extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      ingredients: ['양파', '계란', '토마토'],
+      ingredients: ['양파', '계란', '토마토', '당근', '감자', '파', '콩나물'],
+      selectIngredients: [],
       videos: [],
-      recipes: [],
+      recipes: [
+        {
+          recNo: 1,
+          mainImg:
+            'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
+          title: '간장계란밥',
+          writer: 'kwonsky',
+          view: 9,
+          rate: 4.5,
+          comment: 5,
+        },
+      ],
     };
   }
 
   componentDidMount() {
-    const { ingredients } = this.state;
-    var searchStr = '';
-    ingredients.map((ingredient) => (searchStr += ingredient + ' '));
-    this.searchVideo(searchStr);
+    let temp = this.randomIngredients();
+
+    this.searchVideo(temp);
   }
 
-  searchVideo = (keyword: string) => {
+  refresh = () => {
+    let temp = this.randomIngredients();
+
+    this.searchVideo(temp);
+  };
+
+  randomIngredients = () => {
+    const { ingredients } = this.state;
+
+    // 재료 랜덤으로 3개 추출
+    let random: Array<number> = [];
+    let i = 0;
+    while (i < 3) {
+      let n = Math.floor(Math.random() * 7);
+      if (!random.includes(n)) {
+        random.push(n);
+        i++;
+      }
+    }
+    let temp: Array<string> = [];
+    random.map((n) => temp.push(ingredients[n]));
+    this.setState({ selectIngredients: temp });
+
+    return temp;
+  };
+
+  searchVideo = (temp: Array<string>) => {
+    var keyword = '';
+    temp.map((t) => (keyword += t + ' '));
+    keyword += '레시피';
+
     if (keyword.trim()) {
       axios
         .get(API_URL, {
@@ -94,7 +139,7 @@ class RecipeRecommend extends Component<Props, State> {
   };
 
   render() {
-    const { ingredients, videos } = this.state;
+    const { selectIngredients, recipes, videos } = this.state;
     return (
       <View>
         <Header
@@ -104,10 +149,17 @@ class RecipeRecommend extends Component<Props, State> {
             text: '레시피 추천',
             style: { color: '#fff', fontSize: 20, fontWeight: '500' },
           }}
-          rightComponent={<Feather name="refresh-cw" size={24} color="white" />}
+          rightComponent={
+            <Feather
+              name="refresh-cw"
+              size={24}
+              color="white"
+              onPress={this.refresh}
+            />
+          }
         />
         <View style={styles.buttonContainer}>
-          {ingredients.map((ingredient, i) => (
+          {selectIngredients.map((ingredient, i) => (
             <Button
               key={i}
               title={ingredient}
@@ -125,6 +177,29 @@ class RecipeRecommend extends Component<Props, State> {
             />
             <Text style={styles.title}>사용자 레시피</Text>
           </View>
+          <ScrollView style={styles.recipeList}>
+            {recipes.map((recipe) => (
+              <TouchableWithoutFeedback key={recipe.recNo}>
+                <ListItem bottomDivider>
+                  <Image
+                    source={{ uri: recipe.mainImg }}
+                    style={styles.thumbnailImage}
+                  />
+                  <ListItem.Content>
+                    <ListItem.Title>{recipe.title}</ListItem.Title>
+                    <ListItem.Subtitle style={styles.videoSubtitle}>
+                      {recipe.writer} {'\n'}
+                      조회수 : {recipe.view} | 평점 : {recipe.rate}
+                    </ListItem.Subtitle>
+                  </ListItem.Content>
+                  <Button
+                    title={recipe.comment}
+                    buttonStyle={styles.commentButton}
+                  />
+                </ListItem>
+              </TouchableWithoutFeedback>
+            ))}
+          </ScrollView>
         </View>
         <View style={styles.recipeContainer}>
           <View style={styles.titleContainer}>
@@ -195,6 +270,12 @@ const styles = StyleSheet.create({
   },
   recipeList: {
     marginTop: 10,
+  },
+  commentButton: {
+    backgroundColor: '#00BD75',
+    borderRadius: 20,
+    width: 30,
+    height: 30,
   },
   thumbnailImage: {
     width: 120,
