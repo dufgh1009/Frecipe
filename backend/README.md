@@ -69,7 +69,7 @@ methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
 /users|회원 가입 :heavy_check_mark:|전체 회원 조회 :heavy_check_mark:|현재 회원 정보 수정   :heavy_check_mark:|회원 탈퇴
 /users/login|로그인 :heavy_check_mark:|
-/users/details|현재 회원 정보  :heavy_check_mark:
+/users/details||현재 회원 정보  :heavy_check_mark:
 <br>
 
 ### Find

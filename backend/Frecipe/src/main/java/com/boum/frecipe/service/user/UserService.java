@@ -17,8 +17,11 @@ public interface UserService {
 	public List<User> retrieveAllUser();
 	
 	// 회원 정보 조회
-	public User retrieveUser(String userNo);
+	public User retrieveUser(String username);
 	
 	// 회원 정보 수정
 	public User updateUser(String username, UserDTO userDto);
+	
+	// 회원 탈퇴
+	public void deleteUser(String userNo);
 }
