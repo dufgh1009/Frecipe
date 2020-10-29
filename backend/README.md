@@ -9,8 +9,7 @@
         Nginx & Tomcat port 연동
         Jenkins 연동 
 ### To Do
-    - API  
-        회원 탈퇴
+    - API 
         냉장고 CRUD
     - Server
         SSL 적용 (letsencrypt, Certbot)
@@ -67,7 +66,7 @@ Library
 ### User 
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/users|회원 가입 :heavy_check_mark:|전체 회원 조회 :heavy_check_mark:|현재 회원 정보 수정   :heavy_check_mark:|회원 탈퇴
+/users|회원 가입 :heavy_check_mark:|전체 회원 조회 :heavy_check_mark:|현재 회원 정보 수정   :heavy_check_mark:|회원 탈퇴 :heavy_check_mark:
 /users/login|로그인 :heavy_check_mark:|
 /users/details||현재 회원 정보  :heavy_check_mark:
 <br>
