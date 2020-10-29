@@ -150,7 +150,7 @@ class Setting extends Component<Props, State> {
     let fileName = `${username.substring(0, 4)}${_date.getFullYear()}${
       _date.getMonth() + 1
     }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
-    console.log(albumBucketName);
+
     // 업로드 속성 설정
     var params = {
       Bucket: albumBucketName,
@@ -161,28 +161,27 @@ class Setting extends Component<Props, State> {
 
     const temp = api.AWS_S3_SERVER + params.Key;
     console.log('upload url : ' + temp);
+    this.setState({ img: temp });
 
     // 업로드
     s3.upload(params, function (err: any) {
-      console.log(err);
       if (err) {
         return alert('There was an error uploading your photo');
       }
     });
+
+    this.doUpdate();
   };
 
   // 회원정보 수정
   doUpdate = async () => {
-    const { token, userNo, nickname, phone, img } = this.state;
+    const { token, nickname, phone, img } = this.state;
 
     try {
-      const { data } = await api.updateUser(
-        { nickname, phone, img },
-        userNo,
-        token,
-      );
+      const { data } = await api.updateUser({ nickname, phone, img }, token);
 
       const { update } = this.props;
+
       update({
         nickname: data.nickname,
         phone: data.phone,
@@ -200,7 +199,14 @@ class Setting extends Component<Props, State> {
   };
 
   // 회원 탈퇴
-  withdraw = () => {};
+  doDelete = async () => {
+    const { token } = this.state;
+    const { data } = await api.deleteUser(token);
+    console.log(data);
+
+    const { logout } = this.props;
+    logout();
+  };
 
   render() {
     const { username, nickname, phone, img } = this.state;
@@ -269,7 +275,7 @@ class Setting extends Component<Props, State> {
             <TouchableOpacity onPress={this.doLogout}>
               <Text style={styles.text}>로그아웃</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.withdraw}>
+            <TouchableOpacity onPress={this.doDelete}>
               <Text style={styles.text}>회원탈퇴</Text>
             </TouchableOpacity>
           </View>

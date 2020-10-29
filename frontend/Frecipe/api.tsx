@@ -24,15 +24,17 @@ const callApi = async (
 export default {
   AWS_S3_SERVER: 'https://frecipe-pjt.s3.ap-northeast-2.amazonaws.com/',
 
-  createAccount: (form: object) => callApi('post', '/users/', form),
-  findId: (form: object) => callApi('post', '/finds/id/', form),
+  createAccount: (form: object) => callApi('post', '/users', form),
+  findId: (form: object) => callApi('post', '/finds/id', form),
 
-  login: (form: object) => callApi('post', '/users/login/', form),
+  login: (form: object) => callApi('post', '/users/login', form),
 
   getUser: (token: string) => callApi('get', '/users/details', null, token),
 
-  updateUser: (form: object, userNo: number, token: string) =>
-    callApi('put', '/users', form, token),
+  updateUser: (form: object, token: string) =>
+    callApi('put', '/users.', form, token),
+
+  deleteUser: (token: string) => callApi('delete', '/users', null, token),
 
   //   createSupplies: (id, token, form) =>
   //     callApi("post", `/checks/${id}/new/`, form, token),
