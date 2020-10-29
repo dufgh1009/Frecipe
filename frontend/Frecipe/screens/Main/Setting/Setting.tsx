@@ -15,7 +15,7 @@ import { FontAwesome5 } from '@expo/vector-icons';
 
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { logout } from '../../../redux/usersSlice';
+import { logout, update } from '../../../redux/usersSlice';
 
 import api from '../../../api';
 
@@ -42,9 +42,17 @@ var s3 = new AWS.S3({
 });
 
 // type 설정
+interface Update {
+  nickname: string;
+  phone: string;
+  img: string;
+}
+
 interface Props {
   logout: () => void;
+  update: ({ nickname, phone, img }: Update) => void;
   user: {
+    token: string;
     userNo: number;
     username: string;
     nickname: string;
@@ -54,7 +62,8 @@ interface Props {
 }
 
 interface State {
-  userNo: number | null;
+  token: string;
+  userNo: number;
   username: string;
   nickname: string;
   phone: string;
@@ -67,6 +76,7 @@ class Setting extends Component<Props, State> {
     super(props);
 
     this.state = {
+      token: this.props.user.token,
       userNo: this.props.user.userNo,
       username: this.props.user.username,
       nickname: this.props.user.nickname,
@@ -75,11 +85,6 @@ class Setting extends Component<Props, State> {
       rollGranted: false,
     };
   }
-
-  componentDidMount() {}
-
-  // 회원정보 수정
-  updateUser = () => {};
 
   // 유저 프로필 사진 클릭시
   clickProfile = () => {
@@ -166,6 +171,28 @@ class Setting extends Component<Props, State> {
     });
   };
 
+  // 회원정보 수정
+  doUpdate = async () => {
+    const { token, userNo, nickname, phone, img } = this.state;
+
+    try {
+      const { data } = await api.updateUser(
+        { nickname, phone, img },
+        userNo,
+        token,
+      );
+
+      const { update } = this.props;
+      update({
+        nickname: data.nickname,
+        phone: data.phone,
+        img: data.img,
+      });
+    } catch (event) {
+      console.log(event);
+    }
+  };
+
   // 로그아웃
   doLogout = () => {
     const { logout } = this.props;
@@ -193,7 +220,7 @@ class Setting extends Component<Props, State> {
                 type="outline"
                 buttonStyle={styles.modifyButton}
                 titleStyle={styles.titleButton}
-                onPress={this.updateUser}
+                onPress={this.doUpdate}
               />
             }
           />
@@ -259,6 +286,7 @@ const mapStateToProps = (state: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     logout: () => dispatch(logout()),
+    update: (form: Update) => dispatch(update(form)),
   };
 };
 

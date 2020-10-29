@@ -8,8 +8,9 @@ const callApi = async (
   params = {},
 ) => {
   const headers = {
-    Authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json',
+    // Authorization: `Bearer ${jwt}`,
+    // 'Content-Type': 'application/json',
+    'X-AUTH-TOKEN': jwt,
   };
   const baseUrl = 'http://k3d204.p.ssafy.io:9999';
   const fullUrl = `${baseUrl}${path}`;
@@ -28,8 +29,10 @@ export default {
 
   login: (form: object) => callApi('post', '/users/login/', form),
 
-  getUser: (userNo: number, token: string) =>
-    callApi('get', `/users/${userNo}`, null, token),
+  getUser: (token: string) => callApi('get', '/users/details', null, token),
+
+  updateUser: (form: object, userNo: number, token: string) =>
+    callApi('put', '/users', form, token),
 
   //   createSupplies: (id, token, form) =>
   //     callApi("post", `/checks/${id}/new/`, form, token),

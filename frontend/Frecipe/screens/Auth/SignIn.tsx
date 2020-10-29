@@ -79,20 +79,16 @@ class SignIn extends Component<Props, State> {
 
     try {
       const { data: token } = await api.login({ username, password });
-
-      var jwtDecode = require('jwt-decode');
-      const userNo = jwtDecode(token).sub;
-
-      const { data: userDetail } = await api.getUser(userNo, token);
+      const { data } = await api.getUser(token);
 
       const { login } = this.props;
       login({
         token: token,
-        userNo: userNo,
+        userNo: data.userNo,
         username: username,
-        nickname: userDetail.nickname,
-        phone: userDetail.phone,
-        img: userDetail.img,
+        nickname: data.nickname,
+        phone: data.phone,
+        img: data.img,
       });
     } catch (event) {
       console.error(event);

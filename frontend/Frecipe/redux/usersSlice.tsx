@@ -1,9 +1,9 @@
 // import { Observable } from 'rxjs/Rx';
 const LOGIN = 'user/LOGIN' as const;
 const LOGOUT = 'user/LOGOUT' as const;
-const DETAIL = 'user/DETAIL' as const;
+const UPDATE = 'user/UPDATE' as const;
 
-interface Login {
+interface User {
   token: string;
   userNo: number;
   username: string;
@@ -12,10 +12,14 @@ interface Login {
   img: string | null;
 }
 
-export const login = (form: Login) => ({ type: LOGIN, payload: form });
+export const login = (form: User) => ({ type: LOGIN, payload: form });
 export const logout = () => ({ type: LOGOUT });
+export const update = (form: User) => ({ type: UPDATE, payload: form });
 
-type UserAction = ReturnType<typeof login> | ReturnType<typeof logout>;
+type UserAction =
+  | ReturnType<typeof login>
+  | ReturnType<typeof logout>
+  | ReturnType<typeof update>;
 
 type UserState = {
   isLogin: boolean;
@@ -62,6 +66,12 @@ export default function user(
         phone: null,
         img: null,
       };
+    case UPDATE:
+      return Object.assign({}, state, {
+        nickname: action.payload.nickname,
+        phone: action.payload.phone,
+        img: action.payload.img,
+      });
     default:
       return state;
   }
