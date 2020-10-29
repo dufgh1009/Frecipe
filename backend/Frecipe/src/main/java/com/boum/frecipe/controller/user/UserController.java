@@ -54,16 +54,17 @@ public class UserController {
 		return new ResponseEntity<List<User>>(service.retrieveAllUser(), HttpStatus.OK);
 	}
 	
-//	@ApiImplicitParams({
-//		@ApiImplicitParam(name = "로그인 후 발급된 JWT 토큰", required = true, dataType = "String", paramType = "header")
-//	})
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", value = "로그인 성공 후 access_token", required = false, dataType = "String", paramType = "header")
+	})
 	@ApiOperation(value = "회원 정보 조회")
-	@GetMapping("/{userNo}")	
-	public ResponseEntity<User> retrieve(@PathVariable String userNo) {	
-		// SecurityContext에서 인증받은 회원의 정보를 얻어온다.	
-//		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//		String email = authentication.getName();
+	@GetMapping("/details")	
+	public ResponseEntity<User> retrieve() {	
+		// SecurityContext에서 인증받은 회원의 정보를 얻어온다.
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String id = authentication.getName();
+        // 결과데이터가 단일건인경우 getSingleResult를 이용해서 결과를 출력한다.
 
-		return new ResponseEntity<User>(service.retrieveUser(userNo), HttpStatus.OK);
+		return new ResponseEntity<User>(service.retrieveUser(id), HttpStatus.OK);
 	}
 }

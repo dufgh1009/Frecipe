@@ -14,4 +14,8 @@ public class FrecipeApplication {
 		SpringApplication.run(FrecipeApplication.class, args);
 	}
 	
+	@Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 }
