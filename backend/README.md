@@ -81,7 +81,7 @@ methods|POST
 ### Refrigerator
 methods|POST|GET|PUT|DELETE||
 :---:|:----:|:---:|:---:|:---:|:---:
-/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정 :heavy_check_mark:|냉장고 삭제 (회원 탈퇴시) :heavy_check_mark:|
+/fridges|식품 등록 :heavy_check_mark:|식품 조회 :heavy_check_mark:|냉장고 이름 수정 :heavy_check_mark:|냉장고 삭제 (회원 탈퇴시) :heavy_check_mark:|
 <br>
 
 ### Recipe
