@@ -1,6 +1,6 @@
 # :computer: Back-End!~
 
-## 20.10.29(수)
+## 20.11.02(월)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -81,7 +81,7 @@ methods|POST|GET|PUT|DELETE
 ### Refrigerator
 methods|POST|GET|PUT|DELETE||
 :---:|:----:|:---:|:---:|:---:|:---:
-/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정|냉장고 삭제|
+/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정 :heavy_check_mark:|냉장고 삭제|
 <br>
 
 ### Recipe
