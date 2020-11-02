@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boum.frecipe.domain.fridge.Fridge;
 import com.boum.frecipe.domain.ingredient.Ingredient;
 import com.boum.frecipe.dto.fridge.FridgeDTO;
+import com.boum.frecipe.dto.ingredient.IngredientDTO;
 import com.boum.frecipe.service.fridge.FridgeService;
 
 import io.swagger.annotations.Api;
@@ -32,18 +34,6 @@ public class FridgeController {
 
 	private final FridgeService service;
 
-	// 식품 조회
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
-	})
-	@ApiOperation(value = "식품 조회")
-	@GetMapping
-	public ResponseEntity<Fridge> retrieve() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
-		return new ResponseEntity<Fridge>(service.retrieveIng(username), HttpStatus.OK);
-	}
-
 	// 식품 등록
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
@@ -56,6 +46,18 @@ public class FridgeController {
 		return new ResponseEntity<Ingredient>(service.addIng(username, ingredient), HttpStatus.OK);
 	}
 
+	// 식품 조회
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "식품 조회")
+	@GetMapping
+	public ResponseEntity<Fridge> retrieve() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		return new ResponseEntity<Fridge>(service.retrieveIng(username), HttpStatus.OK);
+	}
+
 	// 냉장고 이름 수정
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
@@ -65,6 +67,20 @@ public class FridgeController {
 	public ResponseEntity<Fridge> update(@RequestBody FridgeDTO fridgeDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Fridge>(service.update(username, fridgeDto.getFridgeName()), HttpStatus.OK);
+		return new ResponseEntity<Fridge>(service.updateFridgeName(username, fridgeDto.getFridgeName()), HttpStatus.OK);
+	}
+
+	// 식품 삭제
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "식품 삭제")
+	@DeleteMapping
+	public ResponseEntity<Void> delete(@RequestBody IngredientDTO ingredientDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		service.deleteIng(username, ingredientDto);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
