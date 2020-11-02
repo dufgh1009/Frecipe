@@ -13,7 +13,7 @@ import {
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Dispatch } from 'redux';
 import { Header, Overlay, Button } from 'react-native-elements';
-import { AntDesign, Entypo } from '@expo/vector-icons';
+import { AntDesign, Entypo, MaterialCommunityIcons } from '@expo/vector-icons';
 import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { ingredient, add, deleteIngredient, deleteAll, search, increaseMaxId, order } from '../../../redux/refrigeratorSlice';
@@ -132,7 +132,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
 
   render() {
     const { redFood, yellowFood, searchIngredients } = this.props
-    const { addVisible, addIngredients, ingredients } = this.state;
+    const { addVisible, addIngredients } = this.state;
     var displayIngredient = null;
     if (searchIngredients === []) {
       displayIngredient = <Text>재료 없음</Text>
@@ -151,20 +151,38 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               return (
                 <TouchableOpacity onPress={() => this.deleteIngredientList(item.id)} activeOpacity={0.6}>
                   <View style={{ backgroundColor: 'red' }}>
-                    <Animated.Text style={{ color: 'red', transform: [{ scale: scale }] }}>
+                    <Animated.Text style={{ color: 'white', transform: [{ scale: scale }] }}>
                       Delete
                     </Animated.Text>
                   </View>
                 </TouchableOpacity>
               )
             }
+            var statusColor = null
+            if (item.status === '냉장') {
+              statusColor = 'blue'
+            } else {
+              statusColor = 'grey'
+            }
+            var experationIcon = <View style={{ flex: 2 }}></View>
+            if (item.date > 3) {
+              experationIcon = <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }} ><MaterialCommunityIcons name="emoticon" size={22} color="#008450" /></View>
+            } else if (item.date < 1) {
+              experationIcon = <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }} ><MaterialCommunityIcons name="emoticon-dead" size={22} color="#B81D13" /></View>
+            } else {
+              experationIcon = <View style={{ flex: 2, alignItems: 'center', justifyContent: 'center' }} ><MaterialCommunityIcons name="emoticon-sad" size={22} color="#EFB700" /></View>
+            }
             return (
               <Swipeable
                 renderRightActions={rightSwipe}
                 key={item.id}
               >
-                <View>
-                  <Text>{item.id} {item.name} {item.count} {item.date}</Text>
+                <View style={styles.ingredientsListRow}>
+                  <View style={{ flex: 3, justifyContent: 'center' }}><Text style={{ backgroundColor: statusColor, color: 'white', textAlign: 'center', marginHorizontal: 20, borderRadius: 10 }}>{item.status}</Text></View>
+                  <Text style={{ flex: 3, textAlign: 'center' }}>{item.name}</Text>
+                  <Text style={{ flex: 1, textAlign: 'center' }}>{item.count}</Text>
+                  <Text style={{ flex: 1, textAlign: 'center' }}>{item.date}</Text>
+                  {experationIcon}
                 </View>
               </Swipeable>
             );
@@ -493,6 +511,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     right: 0,
   },
+  ingredientsListRow: {
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: 10,
+    alignItems: 'flex-end'
+  }
 });
 
 const mapStateToProps = (state: RootState) => {
