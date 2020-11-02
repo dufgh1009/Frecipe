@@ -8,8 +8,9 @@ const callApi = async (
   params = {},
 ) => {
   const headers = {
-    Authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json',
+    // Authorization: `Bearer ${jwt}`,
+    // 'Content-Type': 'application/json',
+    'X-AUTH-TOKEN': jwt,
   };
   const baseUrl = 'http://k3d204.p.ssafy.io:9999';
   const fullUrl = `${baseUrl}${path}`;
@@ -23,13 +24,17 @@ const callApi = async (
 export default {
   AWS_S3_SERVER: 'https://frecipe-pjt.s3.ap-northeast-2.amazonaws.com/',
 
-  createAccount: (form: object) => callApi('post', '/users/', form),
-  findId: (form: object) => callApi('post', '/finds/id/', form),
+  createAccount: (form: object) => callApi('post', '/users', form),
+  findId: (form: object) => callApi('post', '/finds/id', form),
 
-  login: (form: object) => callApi('post', '/users/login/', form),
+  login: (form: object) => callApi('post', '/users/login', form),
 
-  getUser: (userNo: number, token: string) =>
-    callApi('get', `/users/${userNo}`, null, token),
+  getUser: (token: string) => callApi('get', '/users/details', null, token),
+
+  updateUser: (form: object, token: string) =>
+    callApi('put', '/users.', form, token),
+
+  deleteUser: (token: string) => callApi('delete', '/users', null, token),
 
   //   createSupplies: (id, token, form) =>
   //     callApi("post", `/checks/${id}/new/`, form, token),

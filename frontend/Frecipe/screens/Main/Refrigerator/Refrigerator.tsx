@@ -1,169 +1,208 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, ScrollView, TextInput } from 'react-native';
-import { bindActionCreators } from 'redux';
-import { Header, Overlay, Button, Input } from 'react-native-elements';
+import {
+  Text,
+  View,
+  StyleSheet,
+  ScrollView,
+  TextInput,
+  FlatList,
+  Animated,
+  Dimensions,
+  TouchableOpacity,
+} from 'react-native';
+import Swipeable from 'react-native-gesture-handler/Swipeable'
+import { Dispatch } from 'redux';
+import { Header, Overlay, Button } from 'react-native-elements';
 import { AntDesign, Entypo } from '@expo/vector-icons';
-import DropDownPicker from 'react-native-dropdown-picker';
 import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { ingredient, actions } from '../../../redux/refrigeratorSlice';
+import { ingredient, add, deleteIngredient, deleteAll, search, increaseMaxId, order } from '../../../redux/refrigeratorSlice';
 import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 
 interface RefrigeratorProps {
   ingredients: Array<ingredient>;
-  actions: typeof actions;
-}
-
-type status = 'freeze' | 'refrigeration';
-
-interface newIngredient {
-  id: number;
-  date: number;
-  name: string;
-  status: status;
-  count: number;
+  maxId: number;
+  increaseMaxId: typeof increaseMaxId;
+  add: typeof add;
+  deleteIngredient: typeof deleteIngredient;
+  deleteAll: typeof deleteAll;
+  search: typeof search;
+  order: typeof order;
+  yellowFood: number;
+  redFood: number;
+  searchIngredients: Array<ingredient>
 }
 
 interface RefrigeratorState {
   filter: string;
   addVisible: boolean;
-  ingredients: Array<newIngredient>;
+  addIngredients: Array<ingredient>;
   maxId: number;
-  yellowFood: number;
-  redFood: number;
+  ingredients: Array<ingredient>;
+  searchIngredients: Array<ingredient>;
 }
 
 class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   constructor(props: RefrigeratorProps) {
     super(props);
     this.state = {
-      filter: 'experation',
+      filter: 'update',
       addVisible: false,
-      ingredients: [],
-      maxId: 0,
-      yellowFood: 0,
-      redFood: 0,
+      addIngredients: [],
+      maxId: this.props.maxId,
+      ingredients: this.props.ingredients,
+      searchIngredients: this.props.ingredients
     };
   }
   addOverlay = () => {
     this.setState({ addVisible: !this.state.addVisible });
-    this.setState({ ingredients: [] });
+    this.setState({ addIngredients: [] });
   };
+
+  deleteIngredientList(id: number) {
+    this.props.deleteIngredient(id)
+  }
 
   addIngredientList = () => {
-    var id = this.state.maxId;
     var initList: Array<ingredient> = [];
-    var newIngredient = Object.assign(initList, this.state.ingredients);
+    var newIngredient = Object.assign(initList, this.state.addIngredients);
     var ingredient = {
-      id: id,
+      id: this.props.maxId,
       name: '',
       count: 0,
-      date: 0,
-      status: '냉동',
+      date: -1,
+      status: '냉장',
     };
+
     newIngredient.push(ingredient);
-    this.setState({ maxId: id + 1 });
-    this.setState({ ingredients: newIngredient });
+    this.props.increaseMaxId()
+    this.setState({ addIngredients: newIngredient });
   };
 
-  addIngredient = (addIngredients: Array<ingredient>) => {
-    this.props.actions.add(addIngredients);
+  addIngredient = (addIngredients: ingredient[]) => {
+    this.props.add(addIngredients);
     this.addOverlay();
   };
   scroll: any;
-
-  countYellowFood(ingredients: ingredient[]) {
-    var count = 0
-    ingredients.map(element => {
-      if (element.date <= 3 && element.date >= 1) {
-        count = count + 1
-      }
-    })
-    this.setState({
-      yellowFood: count
-    })
-  }
-
-  countRedFood(ingredients: ingredient[]) {
-    var count = 0
-    ingredients.map(element => {
-      if (element.date < 0) {
-        count = count + 1
-      }
-    })
-    this.setState({
-      redFood: count
-    })
-  }
 
   _scrollToInput(reactNode: any) {
     // Add a 'scroll' ref to your ScrollView
     this.scroll.props.scrollToFocusedInput(reactNode);
   }
 
-  componentWillMount() {
-    this.countRedFood(this.props.ingredients)
-    this.countYellowFood(this.props.ingredients)
-  }
-
   onChangeAddlist(id: number, data: any, type: string) {
-    const newArray = [...this.state.ingredients];
+    const newArray = [...this.state.addIngredients];
     for (let i = 0; i < newArray.length; i++) {
       if (newArray[i].id === id) {
         if (type === 'name') {
           newArray[i].name = data;
         }
         if (type === 'count') {
+          data *= 1
           newArray[i].count = data;
         }
         if (type === 'status') {
           newArray[i].status = data;
         }
         if (type === 'date') {
+          data *= 1
           newArray[i].date = data;
         }
       }
     }
     this.setState({
-      ingredients: newArray,
+      addIngredients: newArray,
     });
   }
 
+  searchIngredient(keyword: string) {
+    this.props.search(keyword)
+  }
+
+  orderIngredient(filter: string) {
+    this.props.order(filter)
+  }
+  deleteAllIng() {
+    this.props.deleteAll()
+    this.setState({
+      searchIngredients: []
+    })
+  }
+
   render() {
-    const { addVisible } = this.state;
-    const newIngredient = this.props.ingredients;
-    const displayIngredient = newIngredient.map((ingredient: ingredient) => {
-      return (
-        <Text>
-          {ingredient.status} {ingredient.name} {ingredient.count}{' '}
-          {ingredient.date}
-        </Text>
-      );
-    });
-    const addList = this.state.ingredients.map((ingredient: newIngredient) => {
+    const { redFood, yellowFood, searchIngredients } = this.props
+    const { addVisible, addIngredients, ingredients } = this.state;
+    var displayIngredient = null;
+    if (searchIngredients === []) {
+      displayIngredient = <Text>재료 없음</Text>
+    }
+    else {
+      displayIngredient =
+        <FlatList<ingredient>
+          data={searchIngredients}
+          renderItem={({ item }: { item: ingredient }) => {
+            const rightSwipe = (progress: any, dragX: any) => {
+              const scale = dragX.interpolate({
+                inputRange: [0, 100],
+                outputRange: [0, 1],
+                extrapolate: 'clamp'
+              });
+              return (
+                <TouchableOpacity onPress={() => this.deleteIngredientList(item.id)} activeOpacity={0.6}>
+                  <View style={{ backgroundColor: 'red' }}>
+                    <Animated.Text style={{ color: 'red', transform: [{ scale: scale }] }}>
+                      Delete
+                    </Animated.Text>
+                  </View>
+                </TouchableOpacity>
+              )
+            }
+            return (
+              <Swipeable
+                renderRightActions={rightSwipe}
+                key={item.id}
+              >
+                <View>
+                  <Text>{item.id} {item.name} {item.count} {item.date}</Text>
+                </View>
+              </Swipeable>
+            );
+          }
+          }
+        />
+    }
+
+
+    const addList = addIngredients.map((ingredient: ingredient) => {
       const index = ingredient.id;
+      if (ingredient.status === '냉장') {
+        var statusButton =
+          <View key={index} style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}>
+            <Button onPress={() =>
+              this.onChangeAddlist(index, '냉장', 'status')}
+              type='solid' buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }} title='냉장'>
+            </Button>
+            <Button onPress={() =>
+              this.onChangeAddlist(index, '냉동', 'status')} type='clear' buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }} title='냉동'>
+            </Button>
+          </View>
+      } else {
+        var statusButton =
+          <View style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}>
+            <Button onPress={() =>
+              this.onChangeAddlist(index, '냉장', 'status')}
+              type='clear' buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }} title='냉장'>
+            </Button>
+            <Button onPress={() =>
+              this.onChangeAddlist(index, '냉동', 'status')}
+              type='solid' buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }} title='냉동'>
+            </Button>
+          </View>
+      }
       return (
         <View style={styles.ingredientInputRow}>
-          <View style={{ flex: 2 }}>
-            <DropDownPicker
-              zIndex={20}
-              onChangeItem={(item) =>
-                this.onChangeAddlist(index, item.label, 'status')
-              }
-              defaultValue={'freeze'}
-              items={[
-                { label: '냉장', value: 'refrigeration' },
-                { label: '냉동', value: 'freeze' },
-              ]}
-              containerStyle={{ height: 30 }}
-              style={{ backgroundColor: '#fafafa' }}
-              itemStyle={{
-                justifyContent: 'flex-start',
-              }}
-              dropDownStyle={{ backgroundColor: '#fafafa' }}
-            />
-          </View>
+          {statusButton}
           <View style={styles.ingredientInput}>
             <TextInput
               onChange={(e) =>
@@ -196,6 +235,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         </View>
       );
     });
+
     return (
       <KeyboardAwareScrollView
         innerRef={(ref) => {
@@ -214,44 +254,40 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
           />
 
           <View style={styles.searchBar}>
-            <SearchBar placeholder="재료를 검색하세요..." />
+            <SearchBar
+              onChangeText={(text) => this.searchIngredient(text)}
+              onClearPress={() => this.searchIngredient("")}
+              placeholder="재료를 검색하세요..." />
           </View>
           <View style={styles.expirationBar}>
             <View style={styles.expirationsBarSub}>
               <Text style={styles.expirationsBarSubYellow}>유통기한 임박</Text>
-              <Text style={styles.expirationsBarSubBlack}>{this.state.yellowFood}개</Text>
+              <Text style={styles.expirationsBarSubBlack}>{yellowFood}개</Text>
             </View>
             <View style={styles.expirationsBarSub}>
               <Text style={styles.expirationsBarSubRed}>유통기한 만료</Text>
-              <Text style={styles.expirationsBarSubBlack}>{this.state.redFood}개</Text>
+              <Text style={styles.expirationsBarSubBlack}>{redFood}개</Text>
             </View>
           </View>
           <View style={{ flex: 10 }}>
             <View style={styles.ingredientsListHeader}>
               <View style={styles.ingredientsListCount}>
                 <Text>품목</Text>
-                <Text>{newIngredient.length}개</Text>
+                <Text>{this.props.ingredients.length}개</Text>
               </View>
               <View style={{ flex: 0.5 }}></View>
               <View
                 style={{
                   flex: 5,
+                  flexDirection: 'row'
                 }}
               >
-                <DropDownPicker
-                  zIndex={20}
-                  defaultValue={this.state.filter}
-                  items={[
-                    { label: '유통기한 임박 순', value: 'experation' },
-                    { label: '업데이트 순', value: 'update' },
-                  ]}
-                  containerStyle={{ height: 30 }}
-                  style={{ backgroundColor: '#fafafa' }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',
-                  }}
-                  dropDownStyle={{ backgroundColor: '#fafafa' }}
-                />
+                <Button type='clear' titleStyle={styles.filterButton} title="업데이트"
+                  onPress={() => this.orderIngredient('update')}>
+                </Button>
+                <Button type='clear' titleStyle={styles.filterButton} title="유통기한"
+                  onPress={() => this.orderIngredient('experation')}>
+                </Button>
               </View>
               <View style={styles.ingredientsListPlus}>
                 <Button
@@ -262,6 +298,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               </View>
             </View>
             <View style={styles.ingredient}>{displayIngredient}</View>
+            <Button title="삭제" onPress={() => this.deleteAllIng()}></Button>
           </View>
 
           <Overlay
@@ -290,7 +327,6 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                   ></Button>
                 </View>
               </View>
-
               <View style={styles.overlayAddList}>
                 <ScrollView>{addList}</ScrollView>
               </View>
@@ -304,20 +340,22 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 <Button
                   type="outline"
                   style={{ flex: 4 }}
-                  onPress={(e) => this.addIngredient(this.state.ingredients)}
+                  onPress={(e) => this.addIngredient(addIngredients)}
                   title="저장"
                 ></Button>
               </View>
             </View>
           </Overlay>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView >
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
+    position: 'relative',
+    zIndex: 1,
     flex: 1,
     flexDirection: 'column',
   },
@@ -367,7 +405,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#dedcdc',
     padding: 10,
-    zIndex: 2,
+    zIndex: 10,
   },
   ingredientsListCount: {
     flex: 1.5,
@@ -382,11 +420,15 @@ const styles = StyleSheet.create({
   },
   ingredient: {
     flex: 9,
+    minHeight: 300,
+    backgroundColor: 'white',
+    position: 'relative',
     flexDirection: 'column',
     marginHorizontal: 10,
-    zIndex: 1,
   },
   overlay: {
+    position: 'relative',
+    zIndex: 10,
     flex: 1,
     flexDirection: 'column',
   },
@@ -420,23 +462,56 @@ const styles = StyleSheet.create({
     flex: 2,
   },
   ingredientInputRow: {
-    zIndex: 10,
     marginTop: 20,
     height: 30,
     flexDirection: 'row',
     justifyContent: 'space-around',
+    alignItems: 'flex-start',
+  },
+  filterButton: {
+    color: 'grey',
+  }, rowBack: {
     alignItems: 'center',
+    backgroundColor: 'white',
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+  },
+  backTextRed: {
+    color: 'red',
+  },
+  backRightBtn: {
+    alignItems: 'center',
+    bottom: 0,
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    width: 75,
+  },
+  backRightBtnRight: {
+    backgroundColor: 'white',
+    right: 0,
   },
 });
 
 const mapStateToProps = (state: RootState) => {
   return {
     ingredients: state.refrigerator.ingredients,
+    maxId: state.refrigerator.maxId,
+    yellowFood: state.refrigerator.yellowFood,
+    redFood: state.refrigerator.redFood,
+    searchIngredients: state.refrigerator.searchIngredients
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => ({
-  actions: bindActionCreators(actions, dispatch),
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  add: (ingredeients: ingredient[]) => dispatch(add(ingredeients)),
+  deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
+  deleteAll: () => dispatch(deleteAll()),
+  search: (keyword: string) => dispatch(search(keyword)),
+  increaseMaxId: () => dispatch(increaseMaxId()),
+  order: (filter: string) => dispatch(order(filter)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Refrigerator);
