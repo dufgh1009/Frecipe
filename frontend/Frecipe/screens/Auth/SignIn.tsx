@@ -16,49 +16,87 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
 
+import { connect, Dispatch } from 'react-redux';
+import { login } from '../../redux/usersSlice';
+
+import api from '../../api';
+
+interface Login {
+  token: string;
+  userNo: number;
+  username: string;
+  nickname: string;
+  phone: string;
+  img: string | null;
+}
+
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
   route: RouteProp<AuthStackParamList, 'SignIn'>;
+  login: ({ token, userNo, username, nickname, phone, img }: Login) => void;
 }
 
 interface State {
-  email: string;
+  username: string;
   password: string;
 }
 
-export default class SingIn extends Component<Props, State> {
+class SignIn extends Component<Props, State> {
   constructor(props: any) {
     super(props);
 
     this.state = {
-      email: '',
+      username: '',
       password: '',
     };
   }
 
-  isEmail = (email: string) => {
+  isEmail = (username: string) => {
     const regEx = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    return regEx.test(email);
+    return regEx.test(username);
   };
 
   isFormValid = () => {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
 
-    if (email === '' || password === '') {
+    if (username === '' || password === '') {
       alert('모든 필드를 채워주세요.');
       return false;
     }
-    if (!this.isEmail(email)) {
+    if (!this.isEmail(username)) {
       alert('올바른 이메일이 아닙니다.');
       return false;
     }
     return true;
   };
 
-  doSignIn = () => {};
+  doSignIn = async () => {
+    const { username, password } = this.state;
+
+    if (!this.isFormValid()) {
+      return;
+    }
+
+    try {
+      const { data: token } = await api.login({ username, password });
+      const { data } = await api.getUser(token);
+
+      const { login } = this.props;
+      login({
+        token: token,
+        userNo: data.userNo,
+        username: username,
+        nickname: data.nickname,
+        phone: data.phone,
+        img: data.img,
+      });
+    } catch (event) {
+      console.error(event);
+    }
+  };
 
   render() {
-    const { email, password } = this.state;
+    const { username, password } = this.state;
     const { navigation } = this.props;
     return (
       <KeyboardAvoidingView
@@ -72,8 +110,8 @@ export default class SingIn extends Component<Props, State> {
               style={styles.logo}
             />
             <Input
-              value={email}
-              onChangeText={(email: string) => this.setState({ email })}
+              value={username}
+              onChangeText={(username: string) => this.setState({ username })}
               containerStyle={styles.inputContainer}
               placeholder="email@address.com"
               keyboardType="email-address"
@@ -108,6 +146,14 @@ export default class SingIn extends Component<Props, State> {
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    login: (form: Login) => dispatch(login(form)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(SignIn);
 
 const styles = StyleSheet.create({
   container: {

@@ -10,6 +10,7 @@ import {
   KeyboardAvoidingView,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { Input, Button } from 'react-native-elements';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -17,6 +18,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
+
+import api from '../../api';
 
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'Find'>;
@@ -26,6 +29,9 @@ interface Props {
 interface State {
   selectedCategory: number;
   isLoading: boolean;
+  email: string;
+  nickname: string;
+  phone: string;
 }
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -54,6 +60,9 @@ export default class Find extends Component<Props, State> {
     this.state = {
       selectedCategory: 0,
       isLoading: false,
+      email: '',
+      nickname: '',
+      phone: '',
     };
 
     this.selectCategory = this.selectCategory.bind(this);
@@ -67,10 +76,24 @@ export default class Find extends Component<Props, State> {
     });
   }
 
-  find() {}
+  find = async (selectedCategory: number) => {
+    const { email, nickname, phone } = this.state;
+    if (selectedCategory === 0) {
+      try {
+        const { data } = await api.findId({
+          nickname,
+          phone,
+        });
+        Alert.alert(`${nickname}님의 이메일은 ${data}입니다.`);
+      } catch (event) {
+        console.error(event);
+      }
+    } else {
+    }
+  };
 
   render() {
-    const { selectedCategory, isLoading } = this.state;
+    const { selectedCategory, isLoading, email, nickname, phone } = this.state;
     const isLoginPage = selectedCategory === 0;
     const isSignUpPage = selectedCategory === 1;
     const { navigation } = this.props;
@@ -120,6 +143,8 @@ export default class Find extends Component<Props, State> {
               <View style={styles.formContainer}>
                 {isSignUpPage && (
                   <Input
+                    value={email}
+                    onChangeText={(email) => this.setState({ email })}
                     containerStyle={styles.inputContainer}
                     placeholder="email@address.com"
                     keyboardType="email-address"
@@ -132,8 +157,10 @@ export default class Find extends Component<Props, State> {
                 )}
                 {isSignUpPage ? (
                   <Input
+                    value={nickname}
+                    onChangeText={(nickname) => this.setState({ nickname })}
                     containerStyle={styles.inputContainer}
-                    placeholder="홍길동"
+                    placeholder="홍길동(닉네임)"
                     returnKeyType="next"
                     ref={(input) => (this.userNameInput = input)}
                     onSubmitEditing={() => this.phoneNumberInput.focus()}
@@ -143,8 +170,10 @@ export default class Find extends Component<Props, State> {
                   />
                 ) : (
                   <Input
+                    value={nickname}
+                    onChangeText={(nickname) => this.setState({ nickname })}
                     containerStyle={styles.inputContainer}
-                    placeholder="홍길동"
+                    placeholder="홍길동(닉네임)"
                     returnKeyType="next"
                     onSubmitEditing={() => this.phoneNumberInput.focus()}
                     leftIcon={
@@ -154,10 +183,12 @@ export default class Find extends Component<Props, State> {
                 )}
 
                 <Input
+                  value={phone}
+                  onChangeText={(phone) => this.setState({ phone })}
                   containerStyle={styles.inputContainer}
                   placeholder="0101234567"
                   ref={(input) => (this.phoneNumberInput = input)}
-                  onSubmitEditing={this.find}
+                  onSubmitEditing={() => this.find(selectedCategory)}
                   leftIcon={
                     <MaterialIcons
                       name="smartphone"
@@ -174,6 +205,7 @@ export default class Find extends Component<Props, State> {
                     titleStyle={styles.findTitle}
                     loading={isLoading}
                     disabled={isLoading}
+                    onPress={() => this.find(selectedCategory)}
                   />
                   <Button
                     title="뒤로"

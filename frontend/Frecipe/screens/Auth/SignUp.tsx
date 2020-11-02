@@ -6,6 +6,7 @@ import {
   Image,
   TouchableWithoutFeedback,
   Keyboard,
+  Alert,
 } from 'react-native';
 import { Button, Input } from 'react-native-elements';
 
@@ -15,16 +16,18 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../navigation/Auth';
 import { RouteProp } from '@react-navigation/native';
 
+import api from '../../api';
+
 interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignUp'>;
   route: RouteProp<AuthStackParamList, 'SignUp'>;
 }
 
 interface State {
-  email: string;
+  username: string;
   password: string;
   passwordConfirm: string;
-  nickName: string;
+  nickname: string;
   phone: string;
 }
 
@@ -33,31 +36,32 @@ export default class SingIn extends Component<Props, State> {
     super(props);
 
     this.state = {
-      email: '',
+      username: '',
       password: '',
       passwordConfirm: '',
-      nickName: '',
+      nickname: '',
       phone: '',
     };
   }
 
-  isEmail = (email: string) => {
+  isEmail = (username: string) => {
     const regEx = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/;
-    return regEx.test(email);
+    return regEx.test(username);
   };
 
   isFormValid = () => {
-    const { email, password, passwordConfirm, nickName } = this.state;
+    const { username, password, passwordConfirm, nickname, phone } = this.state;
     if (
-      email === '' ||
+      username === '' ||
       password === '' ||
       passwordConfirm === '' ||
-      nickName === ''
+      username === '' ||
+      phone === ''
     ) {
       alert('모든 필드를 채워주세요.');
       return false;
     }
-    if (!this.isEmail(email)) {
+    if (!this.isEmail(username)) {
       alert('올바른 이메일을 작성해주세요.');
       return false;
     }
@@ -68,32 +72,32 @@ export default class SingIn extends Component<Props, State> {
   };
 
   doSignUp = async () => {
-    const { email, password, nickName } = this.state;
+    const { username, password, nickname, phone } = this.state;
+    const { navigation } = this.props;
 
     if (!this.isFormValid()) {
       return;
     }
-
-    // try {
-    //     const { status } = await api.createAccount({
-    //         username: email,
-    //         email,
-    //         password,
-    //         nickname: username,
-    //         phone_number: phoneNumber,
-    //     });
-    //     if (status === 201) {
-    //         alert("회원가입완료");
-    //     }
-    // } catch (event) {
-    //     console.error(event);
-    //     alert("이미 존재하는 이메일입니다.");
-    // }
+    try {
+      const { status } = await api.createAccount({
+        username,
+        password,
+        nickname,
+        phone,
+      });
+      if (status === 200) {
+        Alert.alert('회원가입 완료');
+        navigation.navigate('SignIn');
+      }
+    } catch (event) {
+      console.log(event);
+      alert('이미 존재하는 이메일입니다.');
+    }
   };
 
   render() {
     const { navigation } = this.props;
-    const { email, password, passwordConfirm, nickName, phone } = this.state;
+    const { username, password, passwordConfirm, nickname, phone } = this.state;
     return (
       <KeyboardAvoidingView
         behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
@@ -106,8 +110,8 @@ export default class SingIn extends Component<Props, State> {
               style={styles.logo}
             />
             <Input
-              value={email}
-              onChangeText={(email) => this.setState({ email })}
+              value={username}
+              onChangeText={(username) => this.setState({ username })}
               containerStyle={styles.inputContainer}
               placeholder="email@address.com"
               keyboardType="email-address"
@@ -142,10 +146,10 @@ export default class SingIn extends Component<Props, State> {
               leftIcon={<MaterialIcons name="lock" size={24} color="#00BD75" />}
             />
             <Input
-              value={nickName}
-              onChangeText={(nickName) => this.setState({ nickName })}
+              value={nickname}
+              onChangeText={(nickname) => this.setState({ nickname })}
               containerStyle={styles.inputContainer}
-              placeholder="홍길동"
+              placeholder="홍길동(닉네임)"
               returnKeyType="next"
               ref={(input) => (this.userNameInput = input)}
               onSubmitEditing={() => this.phoneInput.focus()}
