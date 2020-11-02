@@ -72,8 +72,8 @@ methods|POST|GET|PUT|DELETE
 <br>
 
 ### Find
-methods|POST|GET|PUT|DELETE
-:---:|:----:|:---:|:---:|:---:
+methods|POST
+:---:|:----:
 /finds/id|아이디 찾기 :heavy_check_mark:
 /finds/pw|비밀번호 찾기
 <br>
@@ -81,7 +81,7 @@ methods|POST|GET|PUT|DELETE
 ### Refrigerator
 methods|POST|GET|PUT|DELETE||
 :---:|:----:|:---:|:---:|:---:|:---:
-/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정 :heavy_check_mark:|냉장고 삭제|
+/fridges|식품 등록|식품 전체 조회|냉장고 이름 수정 :heavy_check_mark:|냉장고 삭제 (회원 탈퇴시) :heavy_check_mark:|
 <br>
 
 ### Recipe
