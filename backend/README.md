@@ -1,4 +1,20 @@
-# :computer: Back-End
+# :computer: Back-End!~
+
+## 20.10.29(수)
+### Done  
+    - API  
+        http://k3d204.p.ssafy.io/swagger-ui.html#/
+    - Server
+        Spring Boot 서버 배포 (AWS EC2)
+        Nginx & Tomcat port 연동
+        Jenkins 연동 
+### To Do
+    - API 
+        냉장고 CRUD
+    - Server
+        SSL 적용 (letsencrypt, Certbot)
+        Jenkins 배포 자동화
+<br>
 
 ## 기술 스택
 
@@ -50,9 +66,9 @@ Library
 ### User 
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/users|회원 가입 :heavy_check_mark:|회원 전체 조회|회원 수정|회원 전체 삭제
-/users/1||회원 '1' 조회|회원 '1' 수정|회원 '1' 삭제
-/users/login|로그인|
+/users|회원 가입 :heavy_check_mark:|전체 회원 조회 :heavy_check_mark:|현재 회원 정보 수정   :heavy_check_mark:|회원 탈퇴 :heavy_check_mark:
+/users/login|로그인 :heavy_check_mark:|
+/users/details||현재 회원 정보  :heavy_check_mark:
 <br>
 
 ### Find
@@ -80,3 +96,9 @@ methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
 /ingredients|재료 등록|재료 전체 조회|재료 수정|재료 삭제
 /ingredients/1||재료 '1' 조회|재료 '1' 수정|재료 '1'삭제
+<br>  
+
+## AWS EC2
+Spring Boot WAS 배포 완료  
+NginX <-> Tomcat 연동 완료
+
