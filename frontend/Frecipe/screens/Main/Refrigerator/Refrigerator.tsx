@@ -179,9 +179,9 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               >
                 <View style={styles.ingredientsListRow}>
                   <View style={{ flex: 3, justifyContent: 'center' }}><Text style={{ backgroundColor: statusColor, color: 'white', textAlign: 'center', marginHorizontal: 20, borderRadius: 10 }}>{item.status}</Text></View>
-                  <Text style={{ flex: 3, textAlign: 'center' }}>{item.name}</Text>
+                  <Text style={{ flex: 2, textAlign: 'center' }}>{item.name}</Text>
                   <Text style={{ flex: 1, textAlign: 'center' }}>{item.count}</Text>
-                  <Text style={{ flex: 1, textAlign: 'center' }}>{item.date}</Text>
+                  <Text style={{ flex: 2, textAlign: 'center' }}>{item.date}</Text>
                   {experationIcon}
                 </View>
               </Swipeable>
@@ -315,6 +315,13 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 ></Button>
               </View>
             </View>
+            <View style={styles.ingredientHeader}>
+              <Text style={{ flex: 3, textAlign: 'center' }}>보관방법</Text>
+              <Text style={{ flex: 2, textAlign: 'center' }}>재료</Text>
+              <Text style={{ flex: 1, textAlign: 'center' }}>재고</Text>
+              <Text style={{ flex: 2, textAlign: 'center' }}>유통기한</Text>
+              <Text style={{ flex: 2, textAlign: 'center' }}>비고</Text>
+            </View>
             <View style={styles.ingredient}>{displayIngredient}</View>
             <Button title="삭제" onPress={() => this.deleteAllIng()}></Button>
           </View>
@@ -436,11 +443,15 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-end',
   },
+  ingredientHeader: {
+    flex: 1,
+    flexDirection: 'row',
+    margin: 10,
+  },
   ingredient: {
-    flex: 9,
+    flex: 8,
     minHeight: 300,
     backgroundColor: 'white',
-    position: 'relative',
     flexDirection: 'column',
     marginHorizontal: 10,
   },
