@@ -72,7 +72,7 @@ public class User implements UserDetails{
     private List<String> roles = new ArrayList<>();
 
 	// 회원 냉장고
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
