@@ -51,10 +51,13 @@ public class UserServiceImpl implements UserService{
 	// 로그인
 	@Override
 	public String signIn(String username, String password) {
-		User user = userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
 		if(!encoder.matches(password, user.getPassword())) {
 			throw new IllegalArgumentException("비밀번호를 확인 해주세요.");
 		}
+		
 		System.out.println(jwtUtils.createToken(user.getUsername(), user.getRoles()));
 		return jwtUtils.createToken(user.getUsername(), user.getRoles());
 	}
@@ -69,7 +72,8 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User retrieveUser(String username) {
 		System.out.println("회원 정보 조회 ID : " + username);
-		return userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		return userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 	}
 	
 	// 회원 정보 수정
@@ -77,7 +81,8 @@ public class UserServiceImpl implements UserService{
 	@Transactional
 	public User updateUser(String username, UserDTO userDto) {
 		System.out.println("회원 정보 수정 ID : " + username);
-		User user = userRepo.findByUsername(username).orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		user.update(userDto.getNickname(), userDto.getPhone(), userDto.getImg());
 		return user;
 	}

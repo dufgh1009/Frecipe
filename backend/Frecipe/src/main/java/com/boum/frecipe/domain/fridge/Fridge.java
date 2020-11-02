@@ -1,14 +1,19 @@
 package com.boum.frecipe.domain.fridge;
 
-import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
+import com.boum.frecipe.domain.ingredient.Ingredient;
 import com.boum.frecipe.domain.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -34,23 +39,17 @@ public class Fridge {
 	@Column(name = "fridge_name")
 	private String fridgeName;
 	
-	// 유통기한
-	private Date exp;
-	
-	// 보관 상태 (냉장/냉동)
-	private String status;
-	
-	// 품목
-	private String category;
-	
-	// 설명
-	private String description;
-	
 	// 회원
 	@OneToOne(mappedBy = "fridge")
 	@JsonIgnore
 	private User user;
 	
+	// 재료
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "fridge_no")
+	private Set<Ingredient> ingredient;
+	
+	// 냉장고 이름 수정
 	public void update(String fridgeName) {
 		this.fridgeName = fridgeName;
 	}
