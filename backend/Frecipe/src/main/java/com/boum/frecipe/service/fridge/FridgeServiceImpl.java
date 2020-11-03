@@ -100,6 +100,6 @@ public class FridgeServiceImpl implements FridgeService{
 		
 		System.out.println("삭제 식품 : " + ing);
 		
-		ingRepo.delete(ing);
+		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
 	}
 }

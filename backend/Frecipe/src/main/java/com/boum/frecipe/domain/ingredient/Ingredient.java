@@ -25,6 +25,7 @@ public class Ingredient {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ing_no")
 	private Long ingNo;
 	
 	// 식품 이름
