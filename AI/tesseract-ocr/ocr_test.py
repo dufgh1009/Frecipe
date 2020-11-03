@@ -15,7 +15,6 @@ adaptive_threshold = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSI
 # cv2.THRESH_BINARY뒤의 앞의 숫자를 조절하면 굵기를 조절 할 수 있다. 뒤의 숫자는 threshold이다 noise를 줄일 수 있다.
 # 굴곡(wave)를 개선해 준다. + text가 없는 부분까지 tesseract가 인식하는 것을 방지해 준다. 
 
-
 # PageSegMode values(PSM)
 config = "--psm 3"
 # text = pytesseract.image_to_string(img, config=config, lang='kor')
