@@ -80,7 +80,7 @@ methods|POST
 
 ### Refrigerator
 methods|POST|GET|PUT|DELETE
-:---:|:----:|:---:|:---:|:---:|:---:
+:---:|:----:|:---:|:---:|:---:
 /fridges|식품 등록 :heavy_check_mark:|식품 조회 :heavy_check_mark:|냉장고 이름 수정 :heavy_check_mark:|식품 삭제 :heavy_check_mark:
 <br>
 
