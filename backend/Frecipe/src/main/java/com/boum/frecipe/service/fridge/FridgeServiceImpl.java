@@ -2,8 +2,9 @@ package com.boum.frecipe.service.fridge;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -58,14 +59,13 @@ public class FridgeServiceImpl implements FridgeService{
 
 	// 식품 조회
 	@Override
-	public Fridge retrieveIng(String username) {
+	public List<Ingredient> retrieveIng(String username) {
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 
-		Fridge fridge = fridgeRepo.findByFridgeNo(user.getFridge().getFridgeNo())
-				.orElseThrow(() -> new IllegalArgumentException("해당 회원에게 냉장고가 존재하지 않습니다."));;
-
-		return fridge;
+		List<Ingredient> ingredients = ingRepo.findAllByFridgeNo(user.getFridge().getFridgeNo());
+		
+		return ingredients;
 	}
 
 	// 냉장고 이름 수정
