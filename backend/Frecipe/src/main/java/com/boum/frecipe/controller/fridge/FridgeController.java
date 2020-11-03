@@ -47,17 +47,29 @@ public class FridgeController {
 		String username = authentication.getName();
 		return new ResponseEntity<Ingredient>(service.addIng(username, ingredient), HttpStatus.OK);
 	}
-
-	// 식품 조회
+	
+	// 식품 전체 조회
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "식품 조회")
+	@ApiOperation(value = "식품 전체 조회")
 	@GetMapping
-	public ResponseEntity<List<Ingredient>> retrieve() {
+	public ResponseEntity<Fridge> retrieve() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<List<Ingredient>>(service.retrieveIng(username), HttpStatus.OK);
+		return new ResponseEntity<Fridge>(service.retrieve(username), HttpStatus.OK);
+	}
+		
+	// 유통기한을 기준으로 식품 7개 조회
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "유통기한을 기준으로 식품 7개 조회")
+	@GetMapping("/recommands")
+	public ResponseEntity<List<Ingredient>> retrieveByExp() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		return new ResponseEntity<List<Ingredient>>(service.retrieveByExp(username), HttpStatus.OK);
 	}
 
 	// 냉장고 이름 수정

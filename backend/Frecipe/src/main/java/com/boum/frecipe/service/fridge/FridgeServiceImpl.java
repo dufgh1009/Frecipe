@@ -57,9 +57,21 @@ public class FridgeServiceImpl implements FridgeService{
 		return ingredient;
 	}
 
-	// 식품 조회
+	// 식품 전체 조회
 	@Override
-	public List<Ingredient> retrieveIng(String username) {
+	public Fridge retrieve(String username) {
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		Fridge fridge = fridgeRepo.findByFridgeNo(user.getFridge().getFridgeNo())
+				.orElseThrow(() -> new IllegalArgumentException("해당 회원에게 냉장고가 존재하지 않습니다."));
+		
+		return fridge;
+	}
+		
+	// 유통기한을 기준으로 식품 7개 조회
+	@Override
+	public List<Ingredient> retrieveByExp(String username) {
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 

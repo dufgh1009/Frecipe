@@ -13,7 +13,7 @@ import com.boum.frecipe.domain.ingredient.Ingredient;
 @Repository
 public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 
-	// 냉장고에 있는 식품 조회
+	// 유통기한을 기준으로 식품 7개 조회
 	@Query(value = "SELECT * "
 				   + "FROM ingredient "
 				   + "WHERE CAST(`exp` as signed) > 0 "

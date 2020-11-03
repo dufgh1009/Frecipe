@@ -10,9 +10,12 @@ public interface FridgeService {
 	
 	// 식품 등록
 	public Ingredient addIng(String username, Ingredient ingredient);
-
-	// 식품 조회
-	public List<Ingredient> retrieveIng(String username);
+	
+	// 식품 전체 조회
+	public Fridge retrieve(String username);
+	
+	// 유통기한을 기준으로 식품 7개 조회
+	public List<Ingredient> retrieveByExp(String username);
 	
 	// 냉장고 이름 수정
 	public Fridge updateFridgeName(String username, String fridgeName);
