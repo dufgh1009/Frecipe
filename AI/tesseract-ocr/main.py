@@ -1,6 +1,10 @@
 import cv2
 import numpy as np
 import pytesseract
+import re
+import json
+from pprint import pprint
+
 #참고 사이트
 # https://bkshin.tistory.com/entry/OpenCV-10-%ED%9E%88%EC%8A%A4%ED%86%A0%EA%B7%B8%EB%9E%A8
 # https://jongwony.github.io/blog/posts/2017-04-26-ocr-training/
@@ -41,16 +45,25 @@ text_list.pop()
 # for i, line in enumerate(text_list):
 #     print(i+1, ':', line)
 
-import re
-
 new_text = []
 for i, line in enumerate(text_list):
     if line[-1].isdecimal():
         temp = re.sub('[^가-힣]', '', line)
         if(temp != ''):
             new_text.append(temp)
-print(new_text)
+# print(new_text)
+
+data = dict()
+data["food"] = new_text
+print(type(data))
+pprint(data)
+json_data = json.dumps(data, indent='\t')
+# pprint(json_data)
+# print(type(json_data))
+
+with open('./data/out/food.json', 'w', encoding='utf-8') as make_file:
+    json.dump(data, make_file, ensure_ascii=False, indent='\t')
+
 # cv2.imshow("gray", gray)
 # cv2.imshow("adaptive th", adaptive_threshold)
 # cv2.waitKey(0)
-#
