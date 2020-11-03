@@ -1,5 +1,10 @@
 package com.boum.frecipe.service.fridge;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -28,9 +33,26 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 
-		ingredient.setFridgeNo(user.getFridge().getFridgeNo());
+		try {
+			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+			Date now = new Date();
+			Date exp = df.parse(ingredient.getExp());
 
-		ingRepo.save(ingredient);
+			// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
+			long diff = (exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000) + 2;
+
+			System.out.println("현재 날짜 : " + df.format(now.getTime()));
+			System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
+			System.out.println("날짜 차이 : " + diff);
+			
+			ingredient.setFridgeNo(user.getFridge().getFridgeNo());
+			ingredient.setExp(String.valueOf(diff));
+			ingRepo.save(ingredient);
+			
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 		return ingredient;
 	}
 
@@ -78,6 +100,6 @@ public class FridgeServiceImpl implements FridgeService{
 		
 		System.out.println("삭제 식품 : " + ing);
 		
-		ingRepo.delete(ing);
+		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
 	}
 }

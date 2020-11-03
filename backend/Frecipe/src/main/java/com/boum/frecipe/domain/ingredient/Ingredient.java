@@ -25,6 +25,7 @@ public class Ingredient {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "ing_no")
 	private Long ingNo;
 	
 	// 식품 이름
@@ -32,7 +33,7 @@ public class Ingredient {
 	private String ingName;
 	
 	// 유통기한
-	private Date exp;
+	private String exp;
 
 	// 보관 상태 (냉장/냉동)
 	private String status;
