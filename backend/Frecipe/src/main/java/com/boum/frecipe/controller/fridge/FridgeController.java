@@ -1,5 +1,7 @@
 package com.boum.frecipe.controller.fridge;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -52,10 +54,10 @@ public class FridgeController {
 	})
 	@ApiOperation(value = "식품 조회")
 	@GetMapping
-	public ResponseEntity<Fridge> retrieve() {
+	public ResponseEntity<List<Ingredient>> retrieve() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Fridge>(service.retrieveIng(username), HttpStatus.OK);
+		return new ResponseEntity<List<Ingredient>>(service.retrieveIng(username), HttpStatus.OK);
 	}
 
 	// 냉장고 이름 수정
