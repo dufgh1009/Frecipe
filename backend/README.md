@@ -1,6 +1,6 @@
 # :computer: Back-End!~
 
-## 20.11.02(월)
+## 20.11.04(수)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -10,7 +10,8 @@
         Jenkins 연동 
 ### To Do
     - API 
-        냉장고 CRUD
+        냉장고 API 프론트 연동 확인
+        레시피 CRUD
     - Server
         SSL 적용 (letsencrypt, Certbot)
         Jenkins 배포 자동화
