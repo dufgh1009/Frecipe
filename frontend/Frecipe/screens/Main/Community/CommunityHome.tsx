@@ -11,8 +11,11 @@ import { Header, ListItem, Image, Button } from 'react-native-elements';
 
 import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 
-
 import { AntDesign } from '@expo/vector-icons';
+
+import { connect, Dispatch } from 'react-redux';
+import { RootState } from '../../../redux/rootReducer';
+import { list, filter } from '../../../redux/communitySlice';
 
 interface Props {
   navigation: any;
@@ -28,49 +31,76 @@ interface Recipe {
   writer: string;
 }
 
-interface State {
-  selectedCategory: string;
-  searchRecipe: string;
-  recipes: Array<Recipe>;
+interface filterType {
+  selected: string;
+  clickSelect: number;
 }
 
-const TabSelector = ({ selected }: any) => {
-  return (
-    <View style={styles.selector}>
-      <AntDesign name="caretleft" size={24} color="#00BD75" />
-      <Text style={styles.selectorText}>{selected}</Text>
-      <AntDesign name="caretright" size={24} color="#00BD75" />
-    </View>
-  );
-};
+interface State {
+  selected: string;
+  searchRecipe: string;
+  recipes: Array<Recipe>;
+  clickSelect: number;
+}
 
-TabSelector.propTypes = {
-  selected: PropTypes.string.isRequired,
-};
+interface Props {
+  list: typeof list;
+  filter: typeof filter;
+  recipes: Array<Recipe>;
+  selected: string;
+  searchRecipe: string;
+  clickSelect: number;
+}
 
 class Community extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      selectedCategory: '업데이트순',
-      searchRecipe: '',
-      recipes: [
-        {
-          recNo: 1,
-          mainImg:
-            'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
-          title: '간장계란밥',
-          writer: 'kwonsky',
-          view: 9,
-          rate: 4.5,
-          comment: 5,
-        },
-      ],
+      recipes: this.props.recipes,
+      selected: this.props.selected,
+      searchRecipe: this.props.searchRecipe,
+      clickSelect: this.props.clickSelect,
     };
   }
 
+  componentDidMount() {
+    console.log(this.state.selected);
+  }
+
+  leftFilter = () => {
+    const { clickSelect } = this.state;
+    const { filter } = this.props;
+    const selectedList: Array<string> = [
+      '업데이트순',
+      '조회순',
+      '평점순',
+      '댓글순',
+    ];
+    filter({
+      selected: selectedList[(clickSelect + 1) % 4],
+      clickSelect: (clickSelect + 1) % 4,
+    });
+  };
+
+  rightFilter = () => {
+    const { clickSelect } = this.state;
+    const { filter } = this.props;
+    const selectedList: Array<string> = [
+      '업데이트순',
+      '조회수순',
+      '평점순',
+      '댓글순',
+    ];
+    filter({
+      selected: selectedList[(clickSelect + 1) % 4],
+      clickSelect: (clickSelect + 1) % 4,
+    });
+    console.log(this.state.selected, clickSelect);
+  };
+
   render() {
-    const { selectedCategory, recipes } = this.state;
+    console.log('나 다시 렌더링 되니?');
+    const { selected, recipes } = this.state;
     return (
       <View>
         <Header
@@ -80,16 +110,36 @@ class Community extends Component<Props, State> {
             text: '커뮤니티',
             style: { color: '#fff', fontSize: 20, fontWeight: '500' },
           }}
-          rightComponent={<Button onPress={() => this.props.navigation.navigate('RecipeCreate')} icon={<AntDesign name="edit" size={24} color="white" />}></Button>}
+          rightComponent={
+            <Button
+              onPress={() => this.props.navigation.navigate('RecipeCreate')}
+              icon={<AntDesign name="edit" size={24} color="white" />}
+              buttonStyle={styles.createButton}
+            />
+          }
         />
-        <TabSelector selected={selectedCategory} />
+        <View style={styles.selected}>
+          <AntDesign
+            name="caretleft"
+            size={24}
+            color="#00BD75"
+            onPress={this.leftFilter}
+          />
+          <Text style={styles.selectorText}>{selected}</Text>
+          <AntDesign
+            name="caretright"
+            size={24}
+            color="#00BD75"
+            onPress={this.rightFilter}
+          />
+        </View>
         <SearchBar
           style={styles.searchBar}
           onChangeText={(searchRecipe) => this.setState({ searchRecipe })}
           onClearPress={() => this.setState({ searchRecipe: '' })}
           placeholder="레시피를 검색하세요."
         />
-        <Text style={styles.myIngredient}>나의 냉장고 재료보기</Text>
+        <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
           {recipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback key={recipe.recNo}>
@@ -119,10 +169,29 @@ class Community extends Component<Props, State> {
   }
 }
 
-export default Community;
+const mapStateToProps = (state: RootState) => {
+  return {
+    recipes: state.community.recipes,
+    selected: state.community.selected,
+    searchRecipe: state.community.searchRecipe,
+    clickSelect: state.community.clickSelect,
+  };
+};
+
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    list: (form: Array<Recipe>) => dispatch(list(form)),
+    filter: (form: filterType) => dispatch(filter(form)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Community);
 
 const styles = StyleSheet.create({
-  selector: {
+  createButton: {
+    backgroundColor: '#00BD75',
+  },
+  selected: {
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 15,
