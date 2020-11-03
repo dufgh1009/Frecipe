@@ -32,7 +32,7 @@ public class Ingredient {
 	private String ingName;
 	
 	// 유통기한
-	private Date exp;
+	private String exp;
 
 	// 보관 상태 (냉장/냉동)
 	private String status;
