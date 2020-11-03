@@ -3,7 +3,7 @@ import { MaterialCommunityIcons, MaterialIcons, Ionicons } from '@expo/vector-ic
 import Refrigerator from "../screens/Main/Refrigerator/Refrigerator";
 import Setting from "../screens/Main/Setting/Setting";
 import RecipeRecommend from "../screens/Main/RecipeRecommend/RecipeRecommend";
-import Community from "../screens/Main/Community/Community";
+import { Community } from "../screens/Main/Community/Community";
 
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
