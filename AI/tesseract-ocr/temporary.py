@@ -10,7 +10,7 @@ import pytesseract
 # https://github.com/parksunwoo/ocr_kor
 # pytesseract.pytesseract.tesseract_cmd = r"C:\Users\multicampus\Desktop\2semester\Tesseract-ocr\tesseract.exe"
 
-img = cv2.imread("7.jpg")
+img = cv2.imread("12.jpg")
 # img = cv2.bitwise_not(img_1) #색반전
 # 너무 크거나 작은 jpg파일을 적절한 size로 변경해 준다.
 img = cv2.resize(img, None, fx=1, fy=1)
