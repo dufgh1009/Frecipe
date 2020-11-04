@@ -7,11 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boum.frecipe.domain.recipe.Recipe;
@@ -50,11 +51,11 @@ public class RecipeController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 상세 조회")
-	@PostMapping("/details")
-	public ResponseEntity<Recipe> retrieve(@RequestBody RecipeDTO recipeDto) {
+	@GetMapping("/{recipeNo}")
+	public ResponseEntity<Recipe> retrieve(@PathVariable("recipeNo") Long recipeNo) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Recipe>(service.retrieve(username, recipeDto.getTitle()), HttpStatus.OK);
+		return new ResponseEntity<Recipe>(service.retrieve(username, recipeNo), HttpStatus.OK);
 	}
 	
 	// 전체 레시피 조회
@@ -62,5 +63,19 @@ public class RecipeController {
 	@GetMapping
 	public ResponseEntity<List<Recipe>> retrieveAll() {
 		return new ResponseEntity<List<Recipe>>(service.retrieveAll(), HttpStatus.OK);
+	}
+	
+	// 레시피 삭제
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "레시피 삭제")
+	@DeleteMapping("/{recipeNo}")
+	public ResponseEntity<Void> delete(@PathVariable("recipeNo") Long recipeNo) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		
+		service.delete(username, recipeNo);
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

@@ -1,14 +1,11 @@
 package com.boum.frecipe.service.recipe;
 
 import java.util.List;
-
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
 import com.boum.frecipe.domain.recipe.Recipe;
-import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
 import com.boum.frecipe.repository.recipe.RecipeRepository;
-import com.boum.frecipe.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,9 +40,8 @@ public class RecipeServiceImpl implements RecipeService {
 
 	// 레시피 상세 조회
 	@Override
-	public Recipe retrieve(String username, String title) {
-		
-		Recipe recipe = recipeRepo.findByUsernameAndTitle(username, title)
+	public Recipe retrieve(String username, Long recipeNo) {
+		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
 		return recipe;
@@ -54,10 +50,18 @@ public class RecipeServiceImpl implements RecipeService {
 	// 전체 레시피 조회
 	@Override
 	public List<Recipe> retrieveAll() {
-		
 		List<Recipe> recipes = recipeRepo.findAll();
-		
 		return recipes;
+	}
+
+	// 레시피 삭제
+	@Override
+	@Transactional
+	public void delete(String username, Long recipeNo) {
+		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
+				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+		
+		recipeRepo.delete(recipe);
 	}
 
 }
