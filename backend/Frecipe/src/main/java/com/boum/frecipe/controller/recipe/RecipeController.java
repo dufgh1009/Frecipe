@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +37,7 @@ public class RecipeController {
 	
 	// 레시피 등록
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 등록")
 	@PostMapping
@@ -48,7 +49,7 @@ public class RecipeController {
 	
 	// 레시피 상세 조회
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 상세 조회")
 	@GetMapping("/{recipeNo}")
@@ -65,9 +66,21 @@ public class RecipeController {
 		return new ResponseEntity<List<Recipe>>(service.retrieveAll(), HttpStatus.OK);
 	}
 	
+	// 레시피 수정
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "레시피 수정")
+	@PutMapping("/{recipeNo}")
+	public ResponseEntity<Recipe> update(@PathVariable("recipeNo") Long recipeNo, @RequestBody RecipeDTO recipeDto) {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		return new ResponseEntity<Recipe>(service.update(username, recipeNo, recipeDto), HttpStatus.OK);
+	}
+		
 	// 레시피 삭제
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 삭제")
 	@DeleteMapping("/{recipeNo}")

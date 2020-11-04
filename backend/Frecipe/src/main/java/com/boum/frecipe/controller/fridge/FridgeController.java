@@ -38,7 +38,7 @@ public class FridgeController {
 
 	// 식품 등록
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "식품 등록")
 	@PostMapping
@@ -50,7 +50,7 @@ public class FridgeController {
 	
 	// 식품 전체 조회
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "식품 전체 조회")
 	@GetMapping
@@ -62,7 +62,7 @@ public class FridgeController {
 		
 	// 유통기한을 기준으로 식품 7개 조회
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "유통기한을 기준으로 식품 7개 조회")
 	@GetMapping("/recommands")
@@ -74,7 +74,7 @@ public class FridgeController {
 
 	// 냉장고 이름 수정
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "냉장고 이름 수정")
 	@PutMapping
@@ -86,7 +86,7 @@ public class FridgeController {
 
 	// 식품 삭제
 	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "식품 삭제")
 	@DeleteMapping
