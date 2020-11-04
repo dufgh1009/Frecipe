@@ -1,6 +1,6 @@
 # :computer: Back-End!~
 
-## 20.11.04(수)
+## 20.11.05(수)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -10,8 +10,9 @@
         Jenkins 연동 
 ### To Do
     - API 
-        냉장고 API 프론트 연동 확인
-        레시피 CRUD
+        프론트 연동 확인
+        식품 수정
+        레시피 이미지 등록
     - Server
         SSL 적용 (letsencrypt, Certbot)
         Jenkins 배포 자동화
@@ -90,7 +91,7 @@ methods|POST|GET|PUT|DELETE
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
 /recipes|레시피 등록 :heavy_check_mark:|레시피 전체 조회 :heavy_check_mark:
-/recipes/1||레시피 '1' 조회 :heavy_check_mark:|레시피 '1' 수정|레시피 '1' 삭제 :heavy_check_mark:
+/recipes/1||레시피 '1' 조회 :heavy_check_mark:|레시피 '1' 수정 :heavy_check_mark:|레시피 '1' 삭제 :heavy_check_mark:
 <br>
 
 ### Comment
