@@ -56,7 +56,7 @@ public class UserController {
 	@ApiImplicitParams({
         @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "회원 정보 조회")
+	@ApiOperation(value = "회원 상세 조회")
 	@GetMapping("/details")	
 	public ResponseEntity<User> retrieve() {	
 		// SecurityContext에서 인증된 회원의 아이디를 가져온다.

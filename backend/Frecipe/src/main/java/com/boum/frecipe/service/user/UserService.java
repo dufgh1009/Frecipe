@@ -16,7 +16,7 @@ public interface UserService {
 	// 전체 회원 조회
 	public List<User> retrieveAllUser();
 	
-	// 회원 정보 조회
+	// 회원 상세 조회
 	public User retrieveUser(String username);
 	
 	// 회원 정보 수정

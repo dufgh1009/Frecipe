@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService{
 		return userRepo.findAll();
 	}
 	
-	// 회원 정보 조회
+	// 회원 상세 조회
 	@Override
 	public User retrieveUser(String username) {
 		System.out.println("회원 정보 조회 ID : " + username);
