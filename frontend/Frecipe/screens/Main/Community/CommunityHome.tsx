@@ -36,13 +36,6 @@ interface filterType {
   clickSelect: number;
 }
 
-interface State {
-  selected: string;
-  searchRecipe: string;
-  recipes: Array<Recipe>;
-  clickSelect: number;
-}
-
 interface Props {
   list: typeof list;
   filter: typeof filter;
@@ -52,38 +45,28 @@ interface Props {
   clickSelect: number;
 }
 
-class Community extends Component<Props, State> {
+class Community extends Component<Props> {
   constructor(props: Props) {
     super(props);
-    this.state = {
-      recipes: this.props.recipes,
-      selected: this.props.selected,
-      searchRecipe: this.props.searchRecipe,
-      clickSelect: this.props.clickSelect,
-    };
-  }
-
-  componentDidMount() {
-    console.log(this.state.searchRecipe);
   }
 
   leftFilter = () => {
-    const { clickSelect } = this.state;
+    const { clickSelect } = this.props;
     const { filter } = this.props;
     const selectedList: Array<string> = [
       '업데이트순',
-      '조회순',
+      '조회수순',
       '평점순',
       '댓글순',
     ];
     filter({
-      selected: selectedList[(clickSelect + 1) % 4],
-      clickSelect: (clickSelect + 1) % 4,
+      selected: selectedList[(clickSelect + 3) % 4],
+      clickSelect: (clickSelect + 3) % 4,
     });
   };
 
   rightFilter = () => {
-    const { clickSelect } = this.state;
+    const { clickSelect } = this.props;
     const { filter } = this.props;
     const selectedList: Array<string> = [
       '업데이트순',
@@ -95,11 +78,10 @@ class Community extends Component<Props, State> {
       selected: selectedList[(clickSelect + 1) % 4],
       clickSelect: (clickSelect + 1) % 4,
     });
-    console.log(this.state.selected, clickSelect);
   };
 
   render() {
-    const { selected, recipes } = this.state;
+    const { selected, recipes } = this.props;
     return (
       <View>
         <Header

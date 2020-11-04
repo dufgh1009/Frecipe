@@ -69,29 +69,23 @@ function community(
     case FILTER:
       var filterRecipeList = Object.assign([], state.recipes);
       if (action.payload.selected === '업데이트순') {
-        console.log('업데이트순');
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
           return b.recNo - a.recNo;
         });
       } else if (action.payload.selected === '평점순') {
-        console.log('평점순');
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
           return b.rate - a.rate;
         });
       } else if (action.payload.selected === '조회수순') {
-        console.log('조회수순');
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
           return b.view - a.view;
         });
       } else {
         // 댓글순
-        console.log('댓글순');
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
           return b.comment - a.comment;
         });
       }
-      //   console.log('응 리턴할거야~');
-      //   console.log(filterRecipeList);
       return Object.assign({}, state, {
         recipes: filterRecipeList,
         selected: action.payload.selected,
