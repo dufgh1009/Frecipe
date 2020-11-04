@@ -54,7 +54,7 @@ public class FridgeController {
 	})
 	@ApiOperation(value = "식품 전체 조회")
 	@GetMapping
-	public ResponseEntity<Fridge> retrieve() {
+	public ResponseEntity<Fridge> retrieveAll() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		return new ResponseEntity<Fridge>(service.retrieve(username), HttpStatus.OK);
@@ -66,7 +66,7 @@ public class FridgeController {
 	})
 	@ApiOperation(value = "유통기한을 기준으로 식품 7개 조회")
 	@GetMapping("/recommands")
-	public ResponseEntity<List<Ingredient>> retrieveByExp() {
+	public ResponseEntity<List<Ingredient>> retrieve() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		return new ResponseEntity<List<Ingredient>>(service.retrieveByExp(username), HttpStatus.OK);
