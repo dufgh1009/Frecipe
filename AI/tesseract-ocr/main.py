@@ -67,3 +67,4 @@ with open('./data/out/food.json', 'w', encoding='utf-8') as make_file:
 # cv2.imshow("gray", gray)
 # cv2.imshow("adaptive th", adaptive_threshold)
 # cv2.waitKey(0)
+
