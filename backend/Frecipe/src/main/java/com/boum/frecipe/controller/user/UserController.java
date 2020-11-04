@@ -54,7 +54,7 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 상세 조회")
 	@GetMapping("/details")	
@@ -68,7 +68,7 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 정보 수정")
 	@PutMapping
@@ -79,7 +79,7 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 탈퇴")
 	@DeleteMapping

@@ -54,6 +54,18 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipes;
 	}
 
+	// 레시피 수정
+	@Override
+	@Transactional
+	public Recipe update(String username, Long recipeNo, RecipeDTO recipeDto) {
+		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
+				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+		
+		recipe.update(recipeDto.getTitle(), recipeDto.getContent());
+		recipeRepo.save(recipe);
+		return recipe;
+	}
+	
 	// 레시피 삭제
 	@Override
 	@Transactional
@@ -63,5 +75,7 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		recipeRepo.delete(recipe);
 	}
+
+	
 
 }
