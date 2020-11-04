@@ -17,10 +17,7 @@ class Gate extends Component<Props> {
       user: { isLogin },
     } = this.props;
     return (
-      // <NavigationContainer>{isLogin ? <Main /> : <Auth />}</NavigationContainer>
-      <NavigationContainer>
-        <Main />
-      </NavigationContainer>
+      <NavigationContainer>{isLogin ? <Main /> : <Auth />}</NavigationContainer>
     );
   }
 }
