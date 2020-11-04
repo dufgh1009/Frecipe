@@ -11,13 +11,13 @@ export interface Recipe {
   writer: string;
 }
 
-interface filter {
+interface filterType {
   selected: string;
   clickSelect: number;
 }
 
 export const list = (form: Array<Recipe>) => ({ type: LIST, payload: form });
-export const filter = (form: filter) => ({
+export const filter = (form: filterType) => ({
   type: FILTER,
   payload: form,
 });

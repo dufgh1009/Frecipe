@@ -64,7 +64,7 @@ class Community extends Component<Props, State> {
   }
 
   componentDidMount() {
-    console.log(this.state.selected);
+    console.log(this.state.searchRecipe);
   }
 
   leftFilter = () => {
@@ -99,7 +99,6 @@ class Community extends Component<Props, State> {
   };
 
   render() {
-    console.log('나 다시 렌더링 되니?');
     const { selected, recipes } = this.state;
     return (
       <View>
