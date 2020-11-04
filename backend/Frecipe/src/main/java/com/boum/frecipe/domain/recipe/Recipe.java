@@ -1,28 +1,28 @@
 package com.boum.frecipe.domain.recipe;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Document("recipe")
+@Getter
+@Setter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Document(collection = "recipe")
 public class Recipe {
 	
-	// 레시피 번호
+	// 레시피 ID
 	@Id
-	private ObjectId recipeNo;
+	private String _id;
+	
+	// 레시피 번호
+	private Long recipeNo;
+	
+	// 회원 아이디
+	private String username;
 	
 	// 제목
 	private String title;
@@ -33,7 +33,4 @@ public class Recipe {
 	// 조회수
 	private Long view;
 	
-	// 회원 번호
-	@Column(name = "user_no")
-	private Long userNo;
 }

@@ -10,8 +10,10 @@ public interface RecipeService {
 	// 레시피 등록
 	public Recipe addRecipe(String username, RecipeDTO recipeDto);
 	
-	// 나의 레시피 조회
-	public List<Recipe> retrieveByUserNo(String username);
+	// 레시피 상세 조회
+	public Recipe retrieve(String username, String title);
 	
-	
+	// 전체 레시피 조회
+	public List<Recipe> retrieveAll();
 }
+	

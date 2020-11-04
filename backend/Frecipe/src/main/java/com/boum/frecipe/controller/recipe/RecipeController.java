@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boum.frecipe.domain.recipe.Recipe;
@@ -44,15 +45,22 @@ public class RecipeController {
 		return new ResponseEntity<Recipe>(service.addRecipe(username, recipeDto), HttpStatus.OK);
 	}
 	
-	// 나의 레시피 조회
+	// 레시피 상세 조회
 	@ApiImplicitParams({
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "나의 레시피 조회")
-	@GetMapping
-	public ResponseEntity<List<Recipe>> retrieveAll() {
+	@ApiOperation(value = "레시피 상세 조회")
+	@PostMapping("/details")
+	public ResponseEntity<Recipe> retrieve(@RequestBody RecipeDTO recipeDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<List<Recipe>>(service.retrieveByUserNo(username), HttpStatus.OK);
+		return new ResponseEntity<Recipe>(service.retrieve(username, recipeDto.getTitle()), HttpStatus.OK);
+	}
+	
+	// 전체 레시피 조회
+	@ApiOperation(value = "전체 레시피 조회")
+	@GetMapping
+	public ResponseEntity<List<Recipe>> retrieveAll() {
+		return new ResponseEntity<List<Recipe>>(service.retrieveAll(), HttpStatus.OK);
 	}
 }

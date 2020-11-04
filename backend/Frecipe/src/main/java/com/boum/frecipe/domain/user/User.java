@@ -75,11 +75,6 @@ public class User implements UserDetails{
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
-	// 회원 레시피
-//	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JoinColumn(name = "user_no")
-//	private Set<Recipe> recipe;
-	
 	// 회원 정보 수정
 	public void update(String nickname, String phone, String img) {
 		this.nickname = nickname;

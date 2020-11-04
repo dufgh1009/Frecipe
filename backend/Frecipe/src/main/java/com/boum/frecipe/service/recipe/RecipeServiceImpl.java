@@ -16,36 +16,46 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RecipeServiceImpl implements RecipeService {
 
-	private final UserRepository userRepo;
 	private final RecipeRepository recipeRepo;
 	
 	// 레시피 등록
 	@Override
 	public Recipe addRecipe(String username, RecipeDTO recipeDto) {
+		List<Recipe> cnt = recipeRepo.findAll();
 		
-		User user = userRepo.findByUsername(username)
-				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		System.out.println("현재 레시피 개수 : " + cnt.size());
 		
 		Recipe recipe = Recipe.builder()
 				.title(recipeDto.getTitle())
 				.content(recipeDto.getContent())
 				.view(recipeDto.getView())
-				.userNo(user.getUserNo())
+				.username(username)
+				.recipeNo(Long.valueOf(cnt.size()+1))
 				.build();
 		
-		recipeRepo.save(recipe);
+		System.out.println("레시피 번호 : " + recipe.getRecipeNo());
+		recipeRepo.insert(recipe);
 		
+		List<Recipe> cnt2 = recipeRepo.findAll();
+		System.out.println("등록 후 레시피 개수 : " + cnt2.size());
 		return recipe;
 	}
 
-	// 나의 레시피 조회
+	// 레시피 상세 조회
 	@Override
-	public List<Recipe> retrieveByUserNo(String username) {
+	public Recipe retrieve(String username, String title) {
 		
-		User user = userRepo.findByUsername(username)
-				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		Recipe recipe = recipeRepo.findByUsernameAndTitle(username, title)
+				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
-		List<Recipe> recipes = recipeRepo.findAllByUserNo(user.getUserNo());
+		return recipe;
+	}
+	
+	// 전체 레시피 조회
+	@Override
+	public List<Recipe> retrieveAll() {
+		
+		List<Recipe> recipes = recipeRepo.findAll();
 		
 		return recipes;
 	}
