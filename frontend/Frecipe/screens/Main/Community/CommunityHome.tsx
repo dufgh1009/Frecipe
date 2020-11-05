@@ -22,7 +22,9 @@ interface Recipe {
   view: number;
   rate: number;
   mainImg: string;
-  comment: string;
+  commentCount: string;
+  comment: Array<Comment>;
+  ingredients: Array<String>;
   writer: string;
 }
 
@@ -126,7 +128,10 @@ class Community extends Component<Props> {
         <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
           {searchRecipes.map((recipe: Recipe) => (
-            <TouchableWithoutFeedback key={recipe.recNo}>
+            <TouchableWithoutFeedback
+              key={recipe.recNo}
+              onPress={() => this.props.navigation.navigate('RecipeDetail')}
+            >
               <ListItem bottomDivider>
                 <Image
                   source={{ uri: recipe.mainImg }}
