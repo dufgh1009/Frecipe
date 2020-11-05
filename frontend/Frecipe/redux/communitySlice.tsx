@@ -1,5 +1,6 @@
 const LIST = 'community/LIST' as const;
 const FILTER = 'community/FILTER' as const;
+const SEARCH = 'community/SEARCH' as const;
 
 export interface Recipe {
   recNo: number;
@@ -21,13 +22,18 @@ export const filter = (form: filterType) => ({
   type: FILTER,
   payload: form,
 });
+export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 
-type Actions = ReturnType<typeof list> | ReturnType<typeof filter>;
+type Actions =
+  | ReturnType<typeof list>
+  | ReturnType<typeof filter>
+  | ReturnType<typeof search>;
 
 type CommunityState = {
   recipes: Array<Recipe>;
   selected: string;
-  searchRecipe: string;
+  searchKeyword: string;
+  searchRecipes: Array<Recipe>;
   clickSelect: number;
 };
 
@@ -54,8 +60,30 @@ const initialState: CommunityState = {
       comment: 7,
     },
   ],
+  searchRecipes: [
+    {
+      recNo: 1,
+      mainImg:
+        'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
+      title: '간장계란밥',
+      writer: 'kwonsky',
+      view: 9,
+      rate: 4.5,
+      comment: 5,
+    },
+    {
+      recNo: 2,
+      mainImg:
+        'https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjZfMjgw/MDAxNTg3ODMwODI5NDA5.eKKl-K8aWanYwrwtlJhM6z5etDgCEMSsYsTvFfTXKTUg.2muwFdf6YD7qAKLi0ObSRcEhkTYYRPAAJ4N0Aip6CE8g.JPEG.eett7777/IMG_4527.jpg?type=w800',
+      title: '토마토계란볶음',
+      writer: 'zeunny',
+      view: 3,
+      rate: 5,
+      comment: 7,
+    },
+  ],
   selected: '업데이트순',
-  searchRecipe: '',
+  searchKeyword: '',
   clickSelect: 0,
 };
 
@@ -63,11 +91,15 @@ function community(
   state: CommunityState = initialState,
   action: Actions,
 ): CommunityState {
+  const recipes = Object.assign([], state.recipes);
   switch (action.type) {
     case LIST:
-      return Object.assign({}, state, { recipes: action.payload });
+      return Object.assign({}, state, {
+        recipes: action.payload,
+        searchRecipes: action.payload,
+      });
     case FILTER:
-      var filterRecipeList = Object.assign([], state.recipes);
+      var filterRecipeList = Object.assign([], state.searchRecipes);
       if (action.payload.selected === '업데이트순') {
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
           return b.recNo - a.recNo;
@@ -87,9 +119,20 @@ function community(
         });
       }
       return Object.assign({}, state, {
-        recipes: filterRecipeList,
+        searchRecipes: filterRecipeList,
         selected: action.payload.selected,
         clickSelect: action.payload.clickSelect,
+      });
+    case SEARCH:
+      var searchRecipeList: Recipe[] = [];
+      recipes.map((element: Recipe) => {
+        if (element.title.includes(action.payload)) {
+          searchRecipeList.push(element);
+        }
+      });
+      return Object.assign({}, state, {
+        searchRecipes: searchRecipeList,
+        searchKeyword: action.payload,
       });
     default:
       return state;

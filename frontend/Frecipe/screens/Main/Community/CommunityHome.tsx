@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Text,
@@ -15,11 +14,7 @@ import { AntDesign } from '@expo/vector-icons';
 
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { list, filter } from '../../../redux/communitySlice';
-
-interface Props {
-  navigation: any;
-}
+import { list, filter, search } from '../../../redux/communitySlice';
 
 interface Recipe {
   recNo: number;
@@ -27,7 +22,7 @@ interface Recipe {
   view: number;
   rate: number;
   mainImg: string;
-  comment: number;
+  comment: string;
   writer: string;
 }
 
@@ -37,11 +32,14 @@ interface filterType {
 }
 
 interface Props {
+  navigation: any;
   list: typeof list;
   filter: typeof filter;
+  search: typeof search;
   recipes: Array<Recipe>;
+  searchRecipes: Array<Recipe>;
+  searchKeyword: string;
   selected: string;
-  searchRecipe: string;
   clickSelect: number;
 }
 
@@ -80,8 +78,13 @@ class Community extends Component<Props> {
     });
   };
 
+  searchRecipe = (keyword: string) => {
+    const { search } = this.props;
+    search(keyword);
+  };
+
   render() {
-    const { selected, recipes } = this.props;
+    const { selected, searchRecipes } = this.props;
     return (
       <View>
         <Header
@@ -116,13 +119,13 @@ class Community extends Component<Props> {
         </View>
         <SearchBar
           style={styles.searchBar}
-          onChangeText={(searchRecipe) => this.setState({ searchRecipe })}
-          onClearPress={() => this.setState({ searchRecipe: '' })}
+          onChangeText={(keyword: string) => this.searchRecipe(keyword)}
+          onClearPress={() => this.searchRecipe('')}
           placeholder="레시피를 검색하세요."
         />
         <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
-          {recipes.map((recipe: Recipe) => (
+          {searchRecipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback key={recipe.recNo}>
               <ListItem bottomDivider>
                 <Image
@@ -154,7 +157,8 @@ const mapStateToProps = (state: RootState) => {
   return {
     recipes: state.community.recipes,
     selected: state.community.selected,
-    searchRecipe: state.community.searchRecipe,
+    searchRecipes: state.community.searchRecipes,
+    searchKeyword: state.community.searchKeyword,
     clickSelect: state.community.clickSelect,
   };
 };
@@ -163,6 +167,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     list: (form: Array<Recipe>) => dispatch(list(form)),
     filter: (form: filterType) => dispatch(filter(form)),
+    search: (keyword: string) => dispatch(search(keyword)),
   };
 };
 
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginLeft: 10,
     marginRight: 10,
-    width: 90,
+    width: 100,
   },
   searchBar: {
     marginTop: 20,

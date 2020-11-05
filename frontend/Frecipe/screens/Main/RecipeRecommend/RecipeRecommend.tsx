@@ -19,7 +19,6 @@ import { connect } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 
 import api from '../../../api';
-import { ingredient } from '../../../redux/refrigeratorSlice';
 
 const API_URL = 'https://www.googleapis.com/youtube/v3/search';
 const API_YOUTUBE_KEY = 'AIzaSyBFPXqfcFfZ6jhcDYgdyMSsEaknL1Yl9NM';
@@ -47,7 +46,7 @@ interface Recipe {
   view: number;
   rate: number;
   mainImg: string;
-  comment: number;
+  comment: string;
   writer: string;
 }
 
@@ -63,7 +62,7 @@ interface Ingredient {
 
 interface State {
   ingredients: Array<Ingredient>;
-  selectIngredients: Array<Ingredient>;
+  selectIngredients: Array<string>;
   videos: Array<Video>;
   recipes: Array<Recipe>;
 }
@@ -91,9 +90,8 @@ class RecipeRecommend extends Component<Props, State> {
   }
 
   componentDidMount = async () => {
-    const { data }: Array<Ingredient> = await api.sevenIngredient(
-      this.props.user.token,
-    );
+    const { data }: any = await api.sevenIngredient(this.props.user.token);
+
     this.setState({ ingredients: data });
 
     let temp = this.randomIngredients();
@@ -108,7 +106,7 @@ class RecipeRecommend extends Component<Props, State> {
   };
 
   randomIngredients = () => {
-    const { ingredients }: Array<Ingredient> = this.state;
+    const { ingredients }: any = this.state;
 
     // 재료 랜덤으로 3개 추출
     let random: Array<number> = [];
@@ -120,7 +118,7 @@ class RecipeRecommend extends Component<Props, State> {
         i++;
       }
     }
-    let temp: Array<Ingredient> = [];
+    let temp: Array<string> = [];
     random.map((n) => temp.push(ingredients[n].ingName));
     this.setState({ selectIngredients: temp });
 
