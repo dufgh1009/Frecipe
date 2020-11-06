@@ -23,4 +23,6 @@ public interface FridgeService {
 	// 식품 삭제
 	public void deleteIng(String username, IngredientDTO ingredientDto);
 	
+	// 남은 기한 갱신
+	public void updateExp();
 }
