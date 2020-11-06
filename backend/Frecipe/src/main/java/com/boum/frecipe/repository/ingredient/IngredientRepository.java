@@ -16,11 +16,12 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 	// 유통기한을 기준으로 식품 7개 조회
 	@Query(value = "SELECT * "
 				   + "FROM ingredient "
-				   + "WHERE CAST(`exp` as signed) > 0 "
-				   + "ORDER BY CAST(`exp` as signed) "
+				   + "WHERE rest_exp > 0 "
+				   + "AND fridge_no = :fridgeNo "
+				   + "ORDER BY rest_exp "
 				   + "LIMIT 7 "
 				   , nativeQuery = true)
-	List<Ingredient> findAllByFridgeNo(Long fridgeNo);
+	List<Ingredient> findAllByFridgeNo(@Param("fridgeNo")Long fridgeNo);
 	
 	// 냉장고 번호와 식품 이름으로 찾기
 	Optional<Ingredient> findByFridgeNoAndIngName(Long fridgeNo, String ingName);

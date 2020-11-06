@@ -7,6 +7,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import com.boum.frecipe.domain.baseTime.BaseTimeEntity;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +19,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient {
+public class Ingredient{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,6 +33,9 @@ public class Ingredient {
 	// 유통기한
 	private String exp;
 
+	// 남은 유통기한
+	private int restExp;
+	
 	// 보관 상태 (냉장/냉동)
 	private String status;
 
