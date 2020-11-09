@@ -14,5 +14,8 @@ public interface CommentService {
 	public List<Comment> retrieveComment(Long recipeNo);
 	
 	// 댓글 신고
-	public Comment reportComment(String username, CommentDTO commentDto);
+	public Comment reportComment(String username, Long commentNo);
+	
+	// 댓글 삭제
+	public void deleteComment(String username, Long commentNo);
 }

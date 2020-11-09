@@ -16,4 +16,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long>{
 	
 	// 댓글 조회 (레시피 번호)
 	List<Comment> findByRecipeNo(Long recipeNo);
+	
+	// 댓글 조회 (회원 번호, 댓글 번호)
+	Optional<Comment> findByUserNoAndCommentNo(Long userNo, Long commentNo);
 }

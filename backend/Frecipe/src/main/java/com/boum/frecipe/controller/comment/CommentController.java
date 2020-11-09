@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,18 @@ public class CommentController {
 	public ResponseEntity<Comment> report(@RequestBody CommentDTO commentDto){
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Comment>(service.reportComment(username, commentDto), HttpStatus.OK);
+		return new ResponseEntity<Comment>(service.reportComment(username, commentDto.getCommentNo()), HttpStatus.OK);
+	}
+	
+	@ApiImplicitParams({
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "댓글 삭제")
+	@DeleteMapping
+	public ResponseEntity<Void> delete(@RequestBody CommentDTO commentDto){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+		service.deleteComment(username, commentDto.getCommentNo());
+		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
