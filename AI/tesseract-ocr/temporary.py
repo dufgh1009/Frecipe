@@ -62,4 +62,4 @@ print(new_text)
 # cv2.imshow("gray", gray)
 # cv2.imshow("adaptive th", adaptive_threshold)
 # cv2.waitKey(0)
-#
+# 
