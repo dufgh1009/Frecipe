@@ -1,8 +1,11 @@
 package com.boum.frecipe.service.recipe;
 
 import java.util.List;
+
 import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
+
 import com.boum.frecipe.domain.recipe.Recipe;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
 import com.boum.frecipe.repository.recipe.RecipeRepository;
@@ -26,6 +29,7 @@ public class RecipeServiceImpl implements RecipeService {
 				.title(recipeDto.getTitle())
 				.content(recipeDto.getContent())
 				.username(username)
+				.view((long) 0)
 				.recipeNo(Long.valueOf(cnt.size()+1))
 				.build();
 		
@@ -43,6 +47,8 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
+		recipe.updateView(recipe.getView()+1);
+		recipeRepo.save(recipe);
 		return recipe;
 	}
 	
