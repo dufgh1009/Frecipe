@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class CommentDTO {
 	
+	// 댓글 번호
+	private Long commentNo;
+	
 	// 내용
 	private String content;
 

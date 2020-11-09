@@ -1,7 +1,13 @@
 package com.boum.frecipe.domain.comment;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +28,7 @@ public class Comment {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "comment_no")
-	private Long CommentNo;
+	private Long commentNo;
 	
 	// 내용
 	private String content;
@@ -31,7 +37,7 @@ public class Comment {
 	private float rate;
 	
 	// 신고 횟수
-	private Long blind;
+	private Long report;
 	
 	// 회원 번호
 	@Column(name = "user_no")
@@ -40,4 +46,14 @@ public class Comment {
 	// 레시피 번호
 	@Column(name = "recipe_no")
 	private Long recipeNo;
+	
+	// 댓글 신고 여부
+	@ElementCollection(fetch = FetchType.LAZY)
+	@Builder.Default
+	private List<Long> reports = new ArrayList<>();
+	
+	public void update(List<Long> reports, Long report) {
+		this.reports = reports;
+		this.report = report;
+	}
 }

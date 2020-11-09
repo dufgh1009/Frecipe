@@ -1,5 +1,6 @@
 package com.boum.frecipe.service.comment;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -26,7 +27,6 @@ public class CommentServiceImpl implements CommentService{
 	
 	// 댓글 작성
 	@Override
-	@Transactional
 	public Comment addComment(String username, CommentDTO commentDto) {
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
@@ -36,6 +36,7 @@ public class CommentServiceImpl implements CommentService{
 				.rate(commentDto.getRate())
 				.userNo(user.getUserNo())
 				.recipeNo(commentDto.getRecipeNo())
+				.report((long) 0)
 				.build();
 		
 		commentRepo.save(comment);
@@ -66,6 +67,20 @@ public class CommentServiceImpl implements CommentService{
 	public List<Comment> retrieveComment(Long recipeNo) {
 		List<Comment> comments = commentRepo.findByRecipeNo(recipeNo);
 		return comments;
+	}
+
+	// 댓글 신고
+	@Override
+	@Transactional
+	public Comment reportComment(String username, CommentDTO commentDto) {
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		Comment comment = commentRepo.findByCommentNo(commentDto.getCommentNo())
+				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
+		
+		comment.update(Collections.singletonList(user.getUserNo()), comment.getReport()+1);
+		return comment;
 	}
 
 }

@@ -12,4 +12,7 @@ public interface CommentService {
 	
 	// 댓글 조회
 	public List<Comment> retrieveComment(Long recipeNo);
+	
+	// 댓글 신고
+	public Comment reportComment(String username, CommentDTO commentDto);
 }
