@@ -4,7 +4,6 @@ import { View, Text, } from 'react-native'
 import { AntDesign } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { image } from './RecipeCreate';
 
 interface Props {
   onPressAlbum: () => void;
