@@ -43,12 +43,21 @@ public class RecipeServiceImpl implements RecipeService {
 
 	// 레시피 상세 조회
 	@Override
-	public Recipe retrieve(String username, Long recipeNo) {
+	public Recipe retrieve(Long recipeNo) {
+		Recipe recipe = recipeRepo.findByRecipeNo(recipeNo)
+				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
+
+		recipe.updateView(recipe.getView()+1);
+		recipeRepo.save(recipe);
+		return recipe;
+	}
+		
+	// 나의 레시피 상세 조회
+	@Override
+	public Recipe retrieveMine(String username, Long recipeNo) {
 		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
-		recipe.updateView(recipe.getView()+1);
-		recipeRepo.save(recipe);
 		return recipe;
 	}
 	

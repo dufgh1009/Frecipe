@@ -61,4 +61,11 @@ public class CommentServiceImpl implements CommentService{
 		return comment;
 	}
 
+	// 댓글 조회
+	@Override
+	public List<Comment> retrieveComment(Long recipeNo) {
+		List<Comment> comments = commentRepo.findByRecipeNo(recipeNo);
+		return comments;
+	}
+
 }

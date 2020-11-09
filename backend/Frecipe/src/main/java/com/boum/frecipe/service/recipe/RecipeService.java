@@ -11,7 +11,10 @@ public interface RecipeService {
 	public Recipe addRecipe(String username, RecipeDTO recipeDto);
 	
 	// 레시피 상세 조회
-	public Recipe retrieve(String username, Long recipeNo);
+	public Recipe retrieve(Long recipeNo);
+	
+	// 나의 레시피 상세 조회
+	public Recipe retrieveMine(String username, Long recipeNo);
 	
 	// 전체 레시피 조회
 	public List<Recipe> retrieveAll();
