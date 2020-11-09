@@ -15,10 +15,24 @@ import { Feather, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import axios from 'axios';
 import { unescape } from 'lodash';
 
+import { connect } from 'react-redux';
+import { RootState } from '../../../redux/rootReducer';
+
+import api from '../../../api';
+
 const API_URL = 'https://www.googleapis.com/youtube/v3/search';
 const API_YOUTUBE_KEY = 'AIzaSyBFPXqfcFfZ6jhcDYgdyMSsEaknL1Yl9NM';
 
-interface Props {}
+interface Props {
+  user: {
+    token: string;
+    userNo: number;
+    username: string;
+    nickname: string;
+    phone: string;
+    img: string;
+  };
+}
 
 interface Video {
   etag: string;
@@ -32,12 +46,22 @@ interface Recipe {
   view: number;
   rate: number;
   mainImg: string;
-  comment: number;
+  comment: string;
   writer: string;
 }
 
+interface Ingredient {
+  category: string;
+  description: string;
+  exp: string;
+  fridgeNo: number;
+  ingName: string;
+  ingNo: number;
+  status: string;
+}
+
 interface State {
-  ingredients: Array<string>;
+  ingredients: Array<Ingredient>;
   selectIngredients: Array<string>;
   videos: Array<Video>;
   recipes: Array<Recipe>;
@@ -47,7 +71,7 @@ class RecipeRecommend extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      ingredients: ['양파', '계란', '토마토', '당근', '감자', '파', '콩나물'],
+      ingredients: [],
       selectIngredients: [],
       videos: [],
       recipes: [
@@ -59,17 +83,21 @@ class RecipeRecommend extends Component<Props, State> {
           writer: 'kwonsky',
           view: 9,
           rate: 4.5,
-          comment: 5,
+          comment: '5',
         },
       ],
     };
   }
 
-  componentDidMount() {
+  componentDidMount = async () => {
+    const { data }: any = await api.sevenIngredient(this.props.user.token);
+
+    this.setState({ ingredients: data });
+
     let temp = this.randomIngredients();
 
     this.searchVideo(temp);
-  }
+  };
 
   refresh = () => {
     let temp = this.randomIngredients();
@@ -78,7 +106,7 @@ class RecipeRecommend extends Component<Props, State> {
   };
 
   randomIngredients = () => {
-    const { ingredients } = this.state;
+    const { ingredients }: any = this.state;
 
     // 재료 랜덤으로 3개 추출
     let random: Array<number> = [];
@@ -91,7 +119,7 @@ class RecipeRecommend extends Component<Props, State> {
       }
     }
     let temp: Array<string> = [];
-    random.map((n) => temp.push(ingredients[n]));
+    random.map((n) => temp.push(ingredients[n].ingName));
     this.setState({ selectIngredients: temp });
 
     return temp;
@@ -233,7 +261,11 @@ class RecipeRecommend extends Component<Props, State> {
   }
 }
 
-export default RecipeRecommend;
+const mapStateToProps = (state: RootState) => {
+  return { user: state.usersReducer };
+};
+
+export default connect(mapStateToProps, null)(RecipeRecommend);
 
 const styles = StyleSheet.create({
   buttonContainer: {
@@ -274,8 +306,8 @@ const styles = StyleSheet.create({
   commentButton: {
     backgroundColor: '#00BD75',
     borderRadius: 20,
-    width: 30,
-    height: 30,
+    width: 40,
+    height: 40,
   },
   thumbnailImage: {
     width: 120,

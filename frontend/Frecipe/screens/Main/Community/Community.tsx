@@ -1,14 +1,39 @@
-import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import React from 'react';
+import CommunityHome from './CommunityHome';
+import RecipeCreate from './RecipeCreate';
+import RecipeDetail from './RecipeDetail';
 
-class Community extends Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Hello, I am community!</Text>
-      </View>
-    );
-  }
+import { enableScreens } from 'react-native-screens';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+
+enableScreens();
+const Stack = createNativeStackNavigator();
+
+export function Community() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="CommunityHome"
+        children={({ navigation }) => (
+          <CommunityHome navigation={navigation}></CommunityHome>
+        )}
+      />
+      <Stack.Screen
+        name="RecipeCreate"
+        children={({ navigation }) => (
+          <RecipeCreate navigation={navigation}></RecipeCreate>
+        )}
+      />
+      <Stack.Screen
+        name="RecipeDetail"
+        children={({ navigation }) => (
+          <RecipeDetail navigation={navigation}></RecipeDetail>
+        )}
+      />
+    </Stack.Navigator>
+  );
 }
-
-export default Community;
