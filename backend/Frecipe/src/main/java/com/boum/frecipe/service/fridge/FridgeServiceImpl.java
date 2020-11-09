@@ -126,7 +126,7 @@ public class FridgeServiceImpl implements FridgeService{
 		
 		for(Ingredient i : ingredients) {
 			try {
-				Date now = df.parse("2020-11-12");
+				Date now = new Date();
 				Date exp = df.parse(i.getExp());
 				
 				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
