@@ -37,14 +37,14 @@ public class Recipe {
 	private Long view;
 	
 	// 평점
-	private float rate;
+	private double rate;
 		
 	public void updateContent(String title, String content) {
 		this.title = title;
 		this.content = content;
 	}
 	
-	public void updateRate(float rate) {
+	public void updateRate(double rate) {
 		this.rate = rate;
 	}
 }

@@ -2,6 +2,8 @@ package com.boum.frecipe.service.comment;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.stereotype.Service;
 
 import com.boum.frecipe.domain.comment.Comment;
@@ -24,6 +26,7 @@ public class CommentServiceImpl implements CommentService{
 	
 	// 댓글 작성
 	@Override
+	@Transactional
 	public Comment addComment(String username, CommentDTO commentDto) {
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
@@ -40,24 +43,20 @@ public class CommentServiceImpl implements CommentService{
 		Recipe recipe = recipeRepo.findByRecipeNo(commentDto.getRecipeNo())
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
-		System.out.println("레시피 : " + recipe);
-		System.out.println("계산 전 레시피 평점 : " + recipe.getRate());
-		
 		List<Comment> comments = commentRepo.findByRecipeNo(commentDto.getRecipeNo());
 		
 		// 레시피 총 평점 계산
-		float totalRate = 0;
+		double totalRate = 0;
 		for(Comment c : comments) {
 			totalRate += c.getRate();
 		}
-		System.out.println("레시피 총 평점 : " + totalRate);
+		
 		// 레시피 평점 계산
-		float avgRate = totalRate / comments.size();
+		double avgRate = totalRate / comments.size();
 		
 		// 레시피 평점 갱신
-		recipe.updateRate(avgRate);
-		
-		System.out.println("계산 후 레시피 평점 : " + avgRate);
+		recipe.updateRate( Math.round(avgRate*10) / 10.0);
+		recipeRepo.save(recipe);
 		
 		return comment;
 	}
