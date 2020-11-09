@@ -7,10 +7,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
+@Builder
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -34,4 +36,8 @@ public class Comment {
 	// 회원 번호
 	@Column(name = "user_no")
 	private Long userNo;
+	
+	// 레시피 번호
+	@Column(name = "recipe_no")
+	private Long recipeNo;
 }
