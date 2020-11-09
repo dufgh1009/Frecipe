@@ -25,7 +25,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.boum.frecipe.domain.comment.Comment;
 import com.boum.frecipe.domain.fridge.Fridge;
-import com.boum.frecipe.domain.recipe.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -72,12 +71,12 @@ public class User implements UserDetails{
     private List<String> roles = new ArrayList<>();
 
 	// 회원 냉장고
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
 	// 댓글
-	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_no")
 	private Set<Comment> Comment;
 		
