@@ -18,7 +18,7 @@ import lombok.RequiredArgsConstructor;
 @CrossOrigin(origins = { "*" })
 @RestController
 @RequiredArgsConstructor
-@Api(tags = "Find")
+@Api(tags = "찾기")
 @RequestMapping("/finds")
 public class FindController {
 	

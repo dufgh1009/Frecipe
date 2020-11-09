@@ -24,15 +24,16 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 
 @CrossOrigin(origins = { "*" })
 @RestController
-@Api(tags = "User")
+@Api(tags = "회원")
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
 	
-	@Autowired
-	UserService service;
+	private final UserService service;
 	
 	@ApiOperation(value = "회원가입")
 	@PostMapping
@@ -53,39 +54,39 @@ public class UserController {
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
-	@ApiOperation(value = "회원 정보 조회")
+	@ApiOperation(value = "회원 상세 조회")
 	@GetMapping("/details")	
 	public ResponseEntity<User> retrieve() {	
 		// SecurityContext에서 인증된 회원의 아이디를 가져온다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
+        String username = authentication.getName();
         // 결과데이터가 단일건인경우 getSingleResult를 이용해서 결과를 출력한다.
-        System.out.println("controller id : " + id);
-		return new ResponseEntity<User>(service.retrieveUser(id), HttpStatus.OK);
+        System.out.println("controller id : " + username);
+		return new ResponseEntity<User>(service.retrieveUser(username), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN",required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 정보 수정")
 	@PutMapping
 	public ResponseEntity<User> update(@RequestBody UserDTO userDTO) {	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
-		return new ResponseEntity<User>(service.updateUser(id, userDTO), HttpStatus.OK);
+        String username = authentication.getName();
+		return new ResponseEntity<User>(service.updateUser(username, userDTO), HttpStatus.OK);
 	}
 	
 	@ApiImplicitParams({
-        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = false, dataType = "String", paramType = "header")
+        @ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "회원 탈퇴")
 	@DeleteMapping
 	public ResponseEntity<Void> delete() {	
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String id = authentication.getName();
-        service.deleteUser(id);
+        String username = authentication.getName();
+        service.deleteUser(username);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

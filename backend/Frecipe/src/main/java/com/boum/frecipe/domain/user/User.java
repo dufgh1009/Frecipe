@@ -3,8 +3,10 @@ package com.boum.frecipe.domain.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -12,12 +14,17 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.boum.frecipe.domain.fridge.Fridge;
+import com.boum.frecipe.domain.recipe.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -32,6 +39,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Table(name = "user")
 public class User implements UserDetails{
+
+	private static final long serialVersionUID = 1L;
 
 	// 회원 번호
 	@Id
@@ -56,14 +65,16 @@ public class User implements UserDetails{
 	// 프로필 사진 url
 	private String img;
 	
-	// 냉장고 이름
-	@Column(name = "ref_name")
-	private String refName;
-	
+	// 회원 권한
 	@ElementCollection(fetch = FetchType.EAGER)
     @Builder.Default
     private List<String> roles = new ArrayList<>();
 
+	// 회원 냉장고
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "fridge_no")
+	private Fridge fridge;
+	
 	// 회원 정보 수정
 	public void update(String nickname, String phone, String img) {
 		this.nickname = nickname;
