@@ -17,7 +17,7 @@ public interface RecipeService {
 	public List<Recipe> retrieveAll();
 	
 	// 레시피 수정
-	public Recipe update(String username, Long recipeNo, RecipeDTO recipeDto);
+	public Recipe update(String username, RecipeDTO recipeDto);
 	
 	// 레시피 삭제
 	public void delete(String username, Long recipeNo);

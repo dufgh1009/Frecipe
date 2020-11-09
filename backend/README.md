@@ -90,8 +90,8 @@ methods|POST|GET|PUT|DELETE
 ### Recipe
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/recipes|레시피 등록 :heavy_check_mark:|레시피 전체 조회 :heavy_check_mark:
-/recipes/1||레시피 '1' 조회 :heavy_check_mark:|레시피 '1' 수정 :heavy_check_mark:|레시피 '1' 삭제 :heavy_check_mark:
+/recipes|레시피 등록 :heavy_check_mark:|레시피 전체 조회 :heavy_check_mark:|레시피 수정 :heavy_check_mark:|레시피 삭제 :heavy_check_mark:
+/recipes/1||레시피 '1' 조회 :heavy_check_mark:||
 <br>
 
 ### Comment
