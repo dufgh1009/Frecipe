@@ -1,8 +1,10 @@
 package com.boum.frecipe.domain.recipe;
 
+
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +35,9 @@ public class Recipe {
 	// 조회수
 	private Long view;
 	
+	// 평점
+	private float rate;
+		
 	public void update(String title, String content) {
 		this.title = title;
 		this.content = content;

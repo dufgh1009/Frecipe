@@ -23,6 +23,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.boum.frecipe.domain.comment.Comment;
 import com.boum.frecipe.domain.fridge.Fridge;
 import com.boum.frecipe.domain.recipe.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -75,6 +76,11 @@ public class User implements UserDetails{
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
+	// 댓글
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_no")
+	private Set<Comment> Comment;
+		
 	// 회원 정보 수정
 	public void update(String nickname, String phone, String img) {
 		this.nickname = nickname;
