@@ -62,8 +62,8 @@ public class RecipeServiceImpl implements RecipeService {
 	// 레시피 수정
 	@Override
 	@Transactional
-	public Recipe update(String username, Long recipeNo, RecipeDTO recipeDto) {
-		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
+	public Recipe update(String username, RecipeDTO recipeDto) {
+		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeDto.getRecipeNo())
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
 		recipe.updateContent(recipeDto.getTitle(), recipeDto.getContent());
