@@ -1,16 +1,20 @@
-package com.boum.frecipe.dto.recipe;
+package com.boum.frecipe.dto.comment;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RecipeDTO {
+public class CommentDTO {
 	
-	private String title;
+	// 내용
 	private String content;
+
+	// 평점
+	private float rate;
+	
+	// 레시피 번호
+	private Long recipeNo;
 }

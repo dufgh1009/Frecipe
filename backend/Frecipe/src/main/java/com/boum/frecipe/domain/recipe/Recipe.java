@@ -4,7 +4,7 @@ package com.boum.frecipe.domain.recipe;
 import javax.persistence.Id;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -21,6 +21,7 @@ public class Recipe {
 	private String _id;
 	
 	// 레시피 번호
+	@Field(name = "recipe_no")
 	private Long recipeNo;
 	
 	// 회원 아이디
@@ -36,10 +37,14 @@ public class Recipe {
 	private Long view;
 	
 	// 평점
-	private float rate;
+	private double rate;
 		
-	public void update(String title, String content) {
+	public void updateContent(String title, String content) {
 		this.title = title;
 		this.content = content;
+	}
+	
+	public void updateRate(double rate) {
+		this.rate = rate;
 	}
 }

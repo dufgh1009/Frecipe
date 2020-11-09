@@ -25,7 +25,6 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe recipe = Recipe.builder()
 				.title(recipeDto.getTitle())
 				.content(recipeDto.getContent())
-				.view(recipeDto.getView())
 				.username(username)
 				.recipeNo(Long.valueOf(cnt.size()+1))
 				.build();
@@ -61,7 +60,7 @@ public class RecipeServiceImpl implements RecipeService {
 		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
-		recipe.update(recipeDto.getTitle(), recipeDto.getContent());
+		recipe.updateContent(recipeDto.getTitle(), recipeDto.getContent());
 		recipeRepo.save(recipe);
 		return recipe;
 	}
