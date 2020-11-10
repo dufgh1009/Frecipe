@@ -1,20 +1,23 @@
 package com.boum.frecipe.service.comment;
 
-import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
 import com.boum.frecipe.domain.comment.Comment;
+import com.boum.frecipe.domain.comment.UserReports;
 import com.boum.frecipe.domain.recipe.Recipe;
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.comment.CommentDTO;
 import com.boum.frecipe.repository.comment.CommentRepository;
+import com.boum.frecipe.repository.comment.UserReportsRepository;
 import com.boum.frecipe.repository.recipe.RecipeRepository;
 import com.boum.frecipe.repository.user.UserRepository;
 
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -24,6 +27,7 @@ public class CommentServiceImpl implements CommentService{
 	private final UserRepository userRepo;
 	private final CommentRepository commentRepo;
 	private final RecipeRepository recipeRepo;
+	private final UserReportsRepository userReportRepo;
 	
 	// 댓글 작성
 	@Override
@@ -76,10 +80,24 @@ public class CommentServiceImpl implements CommentService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
+		Optional<UserReports> checkReport = userReportRepo.findByUserNoAndCommentNo(user.getUserNo(), commentNo);
+		
+		if(checkReport.isPresent()) {
+			throw new IllegalArgumentException("이미 신고한 댓글입니다.");
+		}
+		
 		Comment comment = commentRepo.findByCommentNo(commentNo)
 				.orElseThrow(() -> new IllegalArgumentException("존재하지 않는 댓글입니다."));
 		
-		comment.update(Collections.singletonList(user.getUserNo()), comment.getReport()+1);
+		comment.update(comment.getReport()+1);
+		
+		UserReports userReport = UserReports.builder()
+				.commentNo(commentNo)
+				.userNo(user.getUserNo())
+				.build();
+		
+		userReportRepo.save(userReport);
+		
 		return comment;
 	}
 

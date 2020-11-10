@@ -3,7 +3,6 @@ package com.boum.frecipe.domain.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -23,7 +22,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import com.boum.frecipe.domain.comment.Comment;
+import com.boum.frecipe.domain.comment.UserReports;
 import com.boum.frecipe.domain.fridge.Fridge;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -75,10 +74,10 @@ public class User implements UserDetails{
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
-	// 댓글
+	// 신고한 댓글
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_no")
-	private Set<Comment> Comment;
+	private List<UserReports> userReports;
 		
 	// 회원 정보 수정
 	public void update(String nickname, String phone, String img) {
