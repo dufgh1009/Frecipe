@@ -1,13 +1,10 @@
 package com.boum.frecipe.domain.ingredient;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
-import com.boum.frecipe.domain.baseTime.BaseTimeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

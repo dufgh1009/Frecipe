@@ -1,16 +1,16 @@
 package com.boum.frecipe.domain.comment;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -47,13 +47,12 @@ public class Comment {
 	@Column(name = "recipe_no")
 	private Long recipeNo;
 	
-	// 댓글 신고 여부
-	@ElementCollection(fetch = FetchType.LAZY)
-	@Builder.Default
-	private List<Long> reports = new ArrayList<>();
+	// 신고한 댓글
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "comment_no")
+	private List<UserReports> userReports;
 	
-	public void update(List<Long> reports, Long report) {
-		this.reports = reports;
+	public void update(Long report) {
 		this.report = report;
 	}
 }
