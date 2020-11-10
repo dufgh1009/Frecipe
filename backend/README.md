@@ -1,6 +1,6 @@
 # :computer: Back-End!~
 
-## 20.11.05(수)
+## 20.11.11(수)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -11,8 +11,8 @@
 ### To Do
     - API 
         프론트 연동 확인
-        식품 수정
         레시피 이미지 등록
+        레시피 재료 등록
     - Server
         SSL 적용 (letsencrypt, Certbot)
         Jenkins 배포 자동화
@@ -98,7 +98,7 @@ methods|POST|GET|PUT|DELETE
 ### Comment
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/comments|댓글 등록 :heavy_check_mark:|댓글 조회 :heavy_check_mark:|댓글 신고|댓글 삭제 :heavy_check_mark:
+/comments|댓글 등록 :heavy_check_mark:|댓글 조회 :heavy_check_mark:|댓글 신고 :heavy_check_mark:|댓글 삭제 :heavy_check_mark:
 <br>
 
 ### Ingredient

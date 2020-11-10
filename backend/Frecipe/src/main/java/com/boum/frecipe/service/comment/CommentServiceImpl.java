@@ -17,7 +17,6 @@ import com.boum.frecipe.repository.comment.UserReportsRepository;
 import com.boum.frecipe.repository.recipe.RecipeRepository;
 import com.boum.frecipe.repository.user.UserRepository;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 @Service
