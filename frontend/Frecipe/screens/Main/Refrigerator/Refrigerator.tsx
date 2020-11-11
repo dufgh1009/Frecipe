@@ -21,7 +21,8 @@ import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 
 interface RefrigeratorProps {
-  ingredients: Array<ingredient>;
+  onCamera: () => void,
+  ingredients: Array<ingredient>,
   maxId: number;
   increaseMaxId: typeof increaseMaxId;
   add: typeof add;
@@ -268,7 +269,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               text: 'MY Refrigerator',
               style: { color: '#fff' },
             }}
-            rightComponent={<AntDesign name="edit" size={24} color="white" />}
+            rightComponent={<Button type='clear' icon={<AntDesign name="edit" size={24} color="white" />}></Button>}
           />
 
           <View style={styles.searchBar}>
@@ -347,6 +348,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 </View>
                 <View style={styles.overlayHeaderRight}>
                   <Button
+                    onPress={this.props.onCamera}
                     type="clear"
                     icon={<Entypo name="camera" size={24} color="black" />}
                   ></Button>

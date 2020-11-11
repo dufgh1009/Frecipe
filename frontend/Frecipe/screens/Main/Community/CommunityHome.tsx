@@ -12,26 +12,27 @@ import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 
 import { AntDesign } from '@expo/vector-icons';
 
-import { connect, Dispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { list, filter, search } from '../../../redux/communitySlice';
+import { list, filter, search, Recipe, filterType } from '../../../redux/communitySlice';
 
-interface Recipe {
-  recNo: number;
-  title: string;
-  view: number;
-  rate: number;
-  mainImg: string;
-  commentCount: string;
-  comment: Array<Comment>;
-  ingredients: Array<String>;
-  writer: string;
-}
+// interface Recipe {
+//   recNo: number;
+//   title: string;
+//   view: number;
+//   rate: number;
+//   mainImg: string;
+//   commentCount: string;
+//   comment: Array<Comment>;
+//   ingredients: Array<String>;
+//   writer: string;
+// }
 
-interface filterType {
-  selected: string;
-  clickSelect: number;
-}
+// interface filterType {
+//   selected: string;
+//   clickSelect: number;
+// }
 
 interface Props {
   navigation: any;
@@ -52,6 +53,7 @@ class Community extends Component<Props> {
 
   leftFilter = () => {
     const { clickSelect } = this.props;
+
     const { filter } = this.props;
     const selectedList: Array<string> = [
       '업데이트순',
@@ -145,7 +147,7 @@ class Community extends Component<Props> {
                   </ListItem.Subtitle>
                 </ListItem.Content>
                 <Button
-                  title={recipe.comment}
+                  title={recipe.commentCount}
                   titleStyle={styles.commentButtonTitle}
                   buttonStyle={styles.commentButton}
                 />

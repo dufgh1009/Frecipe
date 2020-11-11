@@ -4,14 +4,20 @@ import Refrigerator from "../screens/Main/Refrigerator/Refrigerator";
 import Setting from "../screens/Main/Setting/Setting";
 import RecipeRecommend from "../screens/Main/RecipeRecommend/RecipeRecommend";
 import { Community } from "../screens/Main/Community/Community";
-
+import MyCamera from "./Camera";
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tab = createBottomTabNavigator();
+import { enableScreens } from 'react-native-screens';
+import { createNativeStackNavigator } from 'react-native-screens/native-stack';
+
+interface Props {
+  onCamera: () => void
+}
 
 
-export default function Main() {
+function MainPage(props: Props) {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -39,10 +45,36 @@ export default function Main() {
         inactiveTintColor: 'white',
       }}
     >
-      <Tab.Screen name="냉장고" component={Refrigerator} />
+      <Tab.Screen name="냉장고" >{() => <Refrigerator onCamera={props.onCamera} />}</Tab.Screen>
       <Tab.Screen name="레시피 추천" component={RecipeRecommend} />
-      <Tab.Screen name="커뮤니티" component={Community} />
+      <Tab.Screen name="커뮤니티" >{() => <Community onCamera={props.onCamera} />}</Tab.Screen>
       <Tab.Screen name="마이페이지" component={Setting} />
     </Tab.Navigator>
   );
+}
+
+enableScreens();
+const Stack = createNativeStackNavigator();
+
+export default function Main() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen
+        name="MainPage"
+        children={({ navigation }) => (
+          <MainPage onCamera={() => navigation.navigate('MyCamera')}></MainPage>
+        )}
+      />
+      <Stack.Screen
+        name="MyCamera"
+        children={({ navigation }) => (
+          <MyCamera navigation={navigation}></MyCamera>
+        )}
+      />
+    </Stack.Navigator>
+  )
 }

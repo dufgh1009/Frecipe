@@ -3,6 +3,7 @@ const FILTER = 'community/FILTER' as const;
 const SEARCH = 'community/SEARCH' as const;
 const DETAIL = 'community/DETAIL' as const;
 
+
 interface Comment {
   content: string;
   writer: string;
@@ -21,18 +22,16 @@ export interface Recipe {
   writer: string;
 }
 
-interface filterType {
+export interface filterType {
   selected: string;
   clickSelect: number;
 }
 
 export const list = (form: Array<Recipe>) => ({ type: LIST, payload: form });
-export const filter = (form: filterType) => ({
-  type: FILTER,
-  payload: form,
-});
+export const filter = (form: filterType) => ({ type: FILTER, payload: form });
 export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 export const detail = (recipe: Object) => ({ type: DETAIL, payload: recipe });
+
 
 type Actions =
   | ReturnType<typeof list>
@@ -144,7 +143,7 @@ const initialState: CommunityState = {
 
 function community(
   state: CommunityState = initialState,
-  action: Actions,
+  action: Actions
 ): CommunityState {
   const recipes = Object.assign([], state.recipes);
   switch (action.type) {

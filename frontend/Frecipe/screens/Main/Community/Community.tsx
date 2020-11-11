@@ -9,7 +9,11 @@ import { createNativeStackNavigator } from 'react-native-screens/native-stack';
 enableScreens();
 const Stack = createNativeStackNavigator();
 
-export function Community() {
+interface Props {
+  onCamera: () => void
+}
+
+export function Community(props: Props) {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -25,7 +29,7 @@ export function Community() {
       <Stack.Screen
         name="RecipeCreate"
         children={({ navigation }) => (
-          <RecipeCreate navigation={navigation}></RecipeCreate>
+          <RecipeCreate navigation={navigation} onCamera={props.onCamera}></RecipeCreate>
         )}
       />
       <Stack.Screen
