@@ -5,19 +5,22 @@ import * as MediaLibrary from 'expo-media-library';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
+import { saveImage } from '../redux/createRecipeSlice';
+
+import { connect } from 'react-redux';
+import { Dispatch } from 'redux';
 
 interface State {
-  hasCameraPermission: boolean
 }
 interface Props {
   navigation: any
+  saveImage: typeof saveImage;
 }
 
 class MyCamera extends Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      hasCameraPermission: false,
     }
   }
   camera: Camera | null = null;
@@ -54,7 +57,10 @@ class MyCamera extends Component<Props, State> {
           aspect: [3, 3],
           quality: 1
         });
-        console.log(result)
+        if (!result.cancelled) {
+          this.props.saveImage(0, 'completeImage', result.uri)
+          this.props.navigation.goBack()
+        }
       }
     }
   }
@@ -86,6 +92,10 @@ class MyCamera extends Component<Props, State> {
                   aspect: [3, 3],
                   quality: 1
                 });
+                if (!result.cancelled) {
+                  this.props.saveImage(0, 'completeImage', result.uri)
+                  this.props.navigation.goBack()
+                }
               }}>
               <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}> Album </Text>
             </TouchableOpacity>
@@ -98,4 +108,10 @@ class MyCamera extends Component<Props, State> {
 
 }
 
-export default MyCamera;
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    saveImage: (index: number, category: string, uri: string) => dispatch(saveImage(index, category, uri)),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(MyCamera);

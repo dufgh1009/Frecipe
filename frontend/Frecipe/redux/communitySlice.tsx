@@ -2,25 +2,7 @@ const LIST = 'community/LIST' as const;
 const FILTER = 'community/FILTER' as const;
 const SEARCH = 'community/SEARCH' as const;
 const DETAIL = 'community/DETAIL' as const;
-const ADD_INGREDIENT = 'recipe/ADD_INGREDIENT' as const;
-const ADD_SAUCE = 'recipe/ADD_SAUCE' as const;
-const CHANGE_MAIN_INGREDIENT = 'recipe/CHANGE_MAIN_INGREDIENT' as const;
-const CHANGE_INGREDIENT = 'recipe/CHANGE_INGREDIENT' as const;
-const ADD_CONTEXT = 'recipe/ADD_CONTEXT' as const;
-const CHANGE_CONTEXT = 'recipe/CHANGE_CONTEXT' as const;
-const CHANGE_TITLE = 'recipe/CHANGE_TITLE' as const;
-const SAVE_IMAGE = 'recipe/SAVE_IMAGE' as const;
-const INIT_RECIPE = 'recipe/INIT_RECIPE' as const;
 
-export interface recipeToAdd {
-  title: string,
-  mainIngredients: any[],
-  ingredients: any[],
-  sauce: any[],
-  representationImage: string,
-  context: any[],
-  completeImage: any[],
-}
 
 interface Comment {
   content: string;
@@ -49,34 +31,15 @@ export const list = (form: Array<Recipe>) => ({ type: LIST, payload: form });
 export const filter = (form: filterType) => ({ type: FILTER, payload: form });
 export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 export const detail = (recipe: Object) => ({ type: DETAIL, payload: recipe });
-export const addIngredient = () => ({ type: ADD_INGREDIENT })
-export const addSauce = () => ({ type: ADD_SAUCE })
-export const addContext = () => ({ type: ADD_CONTEXT })
-export const changeMainIngredient = (index: number, value: string) => ({ type: CHANGE_MAIN_INGREDIENT, payload: { index, value } })
-export const changeIngredient = (index: number, value: string, what: string, category: string) => ({ type: CHANGE_INGREDIENT, payload: { index, value, what, category } })
-export const changeContext = (index: number, value: string) => ({ type: CHANGE_CONTEXT, payload: { index, value } })
-export const changeTitle = (value: string) => ({ type: CHANGE_TITLE, payload: value })
-export const saveImage = (index: number, category: string, uri: string) => ({ type: SAVE_IMAGE, payload: { index, category, uri } })
-export const initRecipeToAdd = () => ({ type: INIT_RECIPE })
 
 
 type Actions =
   | ReturnType<typeof list>
   | ReturnType<typeof filter>
   | ReturnType<typeof search>
-  | ReturnType<typeof detail>
-  | ReturnType<typeof addIngredient>
-  | ReturnType<typeof addSauce>
-  | ReturnType<typeof changeMainIngredient>
-  | ReturnType<typeof changeIngredient>
-  | ReturnType<typeof addContext>
-  | ReturnType<typeof changeContext>
-  | ReturnType<typeof changeTitle>
-  | ReturnType<typeof saveImage>
-  | ReturnType<typeof initRecipeToAdd>;
+  | ReturnType<typeof detail>;
 
 type CommunityState = {
-  recipeAdd: recipeToAdd;
   recipes: Array<Recipe>;
   selected: string;
   searchKeyword: string;
@@ -176,33 +139,6 @@ const initialState: CommunityState = {
   selected: '업데이트순',
   searchKeyword: '',
   clickSelect: 0,
-  recipeAdd: {
-    title: "",
-    mainIngredients: [{ id: 0, ingredient: "" }, { id: 1, ingredient: "" }, { id: 2, ingredient: "" }],
-    ingredients: [
-      {
-        id: 0,
-        name: '',
-        quantity: '',
-      },
-    ],
-    sauce: [
-      {
-        id: 0,
-        name: '',
-        quantity: '',
-      },
-    ],
-    representationImage: '',
-    context: [
-      {
-        id: 0,
-        text: '',
-        image: ''
-      },
-    ],
-    completeImage: [{ id: 0, image: '' }, { id: 1, image: '' }, { id: 2, image: '' }],
-  },
 };
 
 function community(
@@ -254,125 +190,6 @@ function community(
       });
     case DETAIL:
       return Object.assign({}, state, { recipeDetail: action.payload });
-    case ADD_INGREDIENT:
-      let newIngredients = Object.assign([], state.recipeAdd.ingredients)
-      var newIngredient = {
-        id: newIngredients.length,
-        name: '',
-        quantity: ''
-      }
-      newIngredients.push(newIngredient)
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { ingredients: newIngredients })
-      return Object.assign({}, state, { recipeToAdd: newRecipe })
-    case ADD_SAUCE:
-      var newSauceIngredients = Object.assign([], state.recipeAdd.sauce)
-      var newSauceIngredient = {
-        id: newSauceIngredients.length,
-        name: '',
-        quantity: ''
-      }
-      newSauceIngredients.push(newSauceIngredient)
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { sauce: newSauceIngredients })
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case CHANGE_MAIN_INGREDIENT:
-      var newMainIngredients: any[] = Object.assign([], state.recipeAdd.mainIngredients)
-      newMainIngredients[action.payload.index] = {
-        id: action.payload.index,
-        ingredient: action.payload.value,
-      }
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { mainIngredients: newMainIngredients })
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case CHANGE_INGREDIENT:
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd,)
-      if (action.payload.category === 'ingredient') {
-        let newIngredients: any[] = Object.assign([], state.recipeAdd.ingredients)
-        if (action.payload.what === 'name') {
-          newIngredients[action.payload.index] = {
-            id: action.payload.index,
-            name: action.payload.value,
-            quantity: newIngredients[action.payload.index].quantity,
-          }
-          newRecipe.ingredients = newIngredients
-        } else {
-          newIngredients[action.payload.index] = {
-            id: action.payload.index,
-            name: newIngredients[action.payload.index].name,
-            quantity: action.payload.value,
-          }
-          newRecipe.ingredients = newIngredients
-        }
-      } else {
-        let newSauce: any[] = Object.assign([], state.recipeAdd.sauce)
-        if (action.payload.what === 'name') {
-          newSauce[action.payload.index] = {
-            id: action.payload.index,
-            name: action.payload.value,
-            quantity: newSauce[action.payload.index].quantity,
-          }
-          newRecipe.sauce = newSauce
-        } else {
-          newSauce[action.payload.index] = {
-            id: action.payload.index,
-            name: newSauce[action.payload.index].name,
-            quantity: action.payload.value,
-          }
-          newRecipe.sauce = newSauce
-        }
-      }
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case ADD_CONTEXT:
-      let newContext: any[]
-      newContext = Object.assign([], state.recipeAdd.context)
-      var content = {
-        id: newContext.length,
-        text: '과정을 설명하시오',
-        image: ''
-      }
-      newContext.push(content)
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { context: newContext })
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case CHANGE_CONTEXT:
-      newContext = Object.assign([], state.recipeAdd.context)
-      newContext[action.payload.index] = {
-        id: action.payload.index,
-        text: action.payload.value,
-        image: newContext[action.payload.index].image
-      }
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { context: newContext })
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case CHANGE_TITLE:
-      var newRecipe: recipeToAdd = Object.assign({}, state.recipeAdd, { title: action.payload })
-      return Object.assign({}, state, { recipeAdd: newRecipe })
-    case INIT_RECIPE:
-      return Object.assign({}, state, {
-        recipeAdd: {
-          title: "",
-          mainIngredients: [{ id: 0, ingredient: "" }, { id: 1, ingredient: "" }, { id: 2, ingredient: "" }],
-          ingredients: [
-            {
-              id: 0,
-              name: '',
-              quantity: '',
-            },
-          ],
-          sauce: [
-            {
-              id: 0,
-              name: '',
-              quantity: '',
-            },
-          ],
-          representationImage: '',
-          context: [
-            {
-              id: 0,
-              text: '과정을 설명하시오.',
-              image: ''
-            },
-          ],
-          completeImage: [{ id: 0, image: '' }, { id: 1, image: '' }, { id: 2, image: '' }],
-        },
-      })
     default:
       return state;
   }
