@@ -1,8 +1,9 @@
 package com.boum.frecipe.domain.recipe;
 
+import java.util.List;
+
 import javax.persistence.Id;
 
-import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -37,7 +38,7 @@ public class Recipe {
 	private Long view;
 	
 	// 이미지
-	private Binary image;
+	private List<String> images;
 	
 	// 평점
 	private double rate;

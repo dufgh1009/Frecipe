@@ -5,7 +5,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.boum.frecipe.domain.recipe.Recipe;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
@@ -24,11 +23,10 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe addRecipe(String username, RecipeDTO recipeDto) {
 		List<Recipe> cnt = recipeRepo.findAll();
 		
-		System.out.println("현재 레시피 개수 : " + cnt.size());
-		
 		Recipe recipe = Recipe.builder()
 				.title(recipeDto.getTitle())
 				.content(recipeDto.getContent())
+				.images(recipeDto.getImages())
 				.username(username)
 				.view((long) 0)
 				.recipeNo(Long.valueOf(cnt.size()+1))
@@ -37,16 +35,7 @@ public class RecipeServiceImpl implements RecipeService {
 		System.out.println("레시피 번호 : " + recipe.getRecipeNo());
 		recipeRepo.insert(recipe);
 		
-		List<Recipe> cnt2 = recipeRepo.findAll();
-		System.out.println("등록 후 레시피 개수 : " + cnt2.size());
 		return recipe;
-	}
-
-	// 레시피 이미지 등록
-	@Override
-	public String uploadImages(String title, MultipartFile image) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	// 레시피 상세 조회
@@ -65,7 +54,6 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe retrieveMine(String username, Long recipeNo) {
 		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
-		
 		return recipe;
 	}
 	

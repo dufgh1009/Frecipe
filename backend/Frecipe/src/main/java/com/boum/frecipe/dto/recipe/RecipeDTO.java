@@ -1,5 +1,7 @@
 package com.boum.frecipe.dto.recipe;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,4 +16,5 @@ public class RecipeDTO {
 	private Long recipeNo;
 	private String title;
 	private String content;
+	private List<String> images;
 }
