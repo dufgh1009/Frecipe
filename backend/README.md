@@ -1,4 +1,4 @@
-# :computer: Back-End!!zdㅋddd
+# :computer: Back-End!!z
 
 ## 20.11.11(수)
 ### Done  
