@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class IngredientDTO {
 
-	private String ingName;
+	private Long ingNo;
 }

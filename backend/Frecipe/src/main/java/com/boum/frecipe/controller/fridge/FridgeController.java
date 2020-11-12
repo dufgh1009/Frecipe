@@ -94,7 +94,7 @@ public class FridgeController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		
-		service.deleteIng(username, ingredientDto);
+		service.deleteIng(username, ingredientDto.getIngNo());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 	
