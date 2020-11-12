@@ -47,18 +47,6 @@ public class RecipeController {
 		return new ResponseEntity<Recipe>(service.addRecipe(username, recipeDto), HttpStatus.OK);
 	}
 	
-	// 레시피 이미지 등록
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
-	})
-	@ApiOperation(value = "레시피 이미지 등록")
-	@PostMapping("/images")
-	public ResponseEntity<Recipe> upload(@RequestBody RecipeDTO recipeDto) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String username = authentication.getName();
-		return new ResponseEntity<Recipe>(service.addRecipe(username, recipeDto), HttpStatus.OK);
-	}
-	
 	// 레시피 상세 조회
 	@ApiOperation(value = "레시피 상세 조회")
 	@GetMapping("/{recipeNo}")

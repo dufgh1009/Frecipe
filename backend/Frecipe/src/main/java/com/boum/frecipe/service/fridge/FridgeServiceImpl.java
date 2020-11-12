@@ -33,18 +33,22 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
+		int date = 20201112;
+		
 		for(Ingredient i : ingredients) {
 			try {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				Date now = new Date();
 				Date exp = df.parse(i.getExp());
+				Date test = df.parse(String.valueOf(date));
 				
 				// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
 				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
 				
-				System.out.println("현재 날짜 : " + df.format(now.getTime()));
-				System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
-				System.out.println("날짜 차이 : " + diff);
+				System.out.println("test : " + test);
+//				System.out.println("현재 날짜 : " + df.format(now.getTime()));
+//				System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
+//				System.out.println("날짜 차이 : " + diff);
 				
 				i.setFridgeNo(user.getFridge().getFridgeNo());
 				
@@ -92,9 +96,6 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 
-		System.out.println("냉장고 수정 회원 : " + user.getUsername());
-		System.out.println("수정 냉장고 번호 : " + user.getFridge().getFridgeNo());
-
 		Fridge fridge = fridgeRepo.findByFridgeNo(user.getFridge().getFridgeNo())
 				.orElseThrow(() -> new IllegalArgumentException("해당 회원에게 냉장고가 존재하지 않습니다."));
 
@@ -109,12 +110,8 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
-		System.out.println("식품 삭제 냉장고 : " + user.getFridge().getFridgeNo());
-		
 		Ingredient ing = ingRepo.findByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ingredientDto.getIngName())
 				.orElseThrow(() -> new IllegalArgumentException("식품 이름을 정확히 입력 해주세요."));
-		
-		System.out.println("삭제 식품 : " + ing);
 		
 		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
 	}
@@ -131,13 +128,13 @@ public class FridgeServiceImpl implements FridgeService{
 				
 				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
 				
-				System.out.println("저장된 남은 기간 : " + i.getRestExp());
-				System.out.println("현재 남은 기간 : " + checkDiff);
+//				System.out.println("저장된 남은 기간 : " + i.getRestExp());
+//				System.out.println("현재 남은 기간 : " + checkDiff);
 				
 				if(i.getRestExp() != checkDiff) {
 					i.setRestExp(checkDiff);
 					
-					System.out.println("남은 기한 갱신 완료");
+//					System.out.println("남은 기한 갱신 완료");
 					
 					ingRepo.save(i);
 					continue;
