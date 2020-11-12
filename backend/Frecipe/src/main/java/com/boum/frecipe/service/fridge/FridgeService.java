@@ -9,7 +9,7 @@ import com.boum.frecipe.dto.ingredient.IngredientDTO;
 public interface FridgeService {
 	
 	// 식품 등록
-	public Ingredient addIng(String username, Ingredient ingredient);
+	public List<Ingredient> addIng(String username, List<Ingredient> ingredient);
 	
 	// 식품 전체 조회
 	public Fridge retrieve(String username);
