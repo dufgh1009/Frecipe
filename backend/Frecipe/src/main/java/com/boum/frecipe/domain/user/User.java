@@ -70,10 +70,11 @@ public class User implements UserDetails{
     private List<String> roles = new ArrayList<>();
 
 	// 회원 냉장고
-	@OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
+	// EAGER로 하니까 에러남..
 	// 신고한 댓글
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_no")
