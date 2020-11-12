@@ -97,4 +97,18 @@ public class FridgeController {
 		service.deleteIng(username, ingredientDto);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
+	
+	// 전체 식품 삭제
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "전체 식품 삭제")
+	@DeleteMapping("/delete")
+	public ResponseEntity<Void> deleteAll() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+
+		service.deleteAllIng(username);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
 }

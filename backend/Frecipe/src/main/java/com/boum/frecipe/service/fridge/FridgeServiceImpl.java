@@ -116,6 +116,16 @@ public class FridgeServiceImpl implements FridgeService{
 		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
 	}
 	
+	// 전체 식품 삭제
+	@Override
+	@Transactional
+	public void deleteAllIng(String username) {
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+
+		ingRepo.deleteByFridgeNo(user.getFridge().getFridgeNo());
+	}
+	
 	// 남은 기한 갱신
 	public void updateExp() {
 		List<Ingredient> ingredients = ingRepo.findAll();
