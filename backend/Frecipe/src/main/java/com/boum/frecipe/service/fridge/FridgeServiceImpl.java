@@ -33,19 +33,14 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
-		int date = 20201112;
-		
 		for(Ingredient i : ingredients) {
 			try {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 				Date now = new Date();
 				Date exp = df.parse(i.getExp());
-				Date test = df.parse(String.valueOf(date));
-				
 				// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
 				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
 				
-				System.out.println("test : " + test);
 //				System.out.println("현재 날짜 : " + df.format(now.getTime()));
 //				System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
 //				System.out.println("날짜 차이 : " + diff);
@@ -110,10 +105,10 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
-		Ingredient ing = ingRepo.findByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ingredientDto.getIngName())
-				.orElseThrow(() -> new IllegalArgumentException("식품 이름을 정확히 입력 해주세요."));
+//		Ingredient ing = ingRepo.findByFridgeNoAndIngNo(user.getFridge().getFridgeNo(), ingredientDto.getIngNo())
+//				.orElseThrow(() -> new IllegalArgumentException("식품 이름을 정확히 입력 해주세요."));
 		
-		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
+//		ingRepo.deleteByFridgeNoAndIngName(user.getFridge().getFridgeNo(), ing.getIngName());
 	}
 	
 	// 전체 식품 삭제
