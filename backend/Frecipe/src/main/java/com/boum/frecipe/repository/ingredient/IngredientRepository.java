@@ -31,7 +31,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 	
 	// 식품 삭제
 	@Query(value = "DELETE "
-					+ "FROM INGREDIENT "
+					+ "FROM ingredient "
 					+ "WHERE fridge_no = :fridgeNo "
 					+ "AND ing_no = :ingNo "
 					, nativeQuery = true)
@@ -39,7 +39,7 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 
 	// 전체 식품 삭제
 	@Query(value = "DELETE "
-					+ "FROM INGREDIENT "
+					+ "FROM ingredient "
 					+ "WHERE fridge_no = :fridgeNo "
 					, nativeQuery = true)
 	void deleteByFridgeNo(Long fridgeNo);
