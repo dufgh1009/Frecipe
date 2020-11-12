@@ -105,10 +105,7 @@ public class FridgeServiceImpl implements FridgeService{
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
-		Ingredient ing = ingRepo.findByFridgeNoAndIngNo(user.getFridge().getFridgeNo(), ingNo)
-				.orElseThrow(() -> new IllegalArgumentException("식품 이름을 정확히 입력 해주세요."));
-		
-		ingRepo.deleteByFridgeNoAndIngNo(user.getFridge().getFridgeNo(), ing.getIngName());
+		ingRepo.deleteByFridgeNoAndIngNo(user.getFridge().getFridgeNo(), ingNo);
 	}
 	
 	// 전체 식품 삭제
