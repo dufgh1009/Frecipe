@@ -13,8 +13,8 @@ public interface RecipeRepository extends MongoRepository<Recipe, String>{
 	// 레시피 상세 조회 (레시피 번호)
 	Optional<Recipe> findByRecipeNo(Long recipeNo);
 	
-	// 레시피 상세 조회 (회원 아이디, 레시피 번호)
-	Optional<Recipe> findByUsernameAndRecipeNo(String username, Long recipeNo);
+	// 레시피 상세 조회 (회원 번호, 레시피 번호)
+	Optional<Recipe> findByUserNoAndRecipeNo(Long userNo, Long recipeNo);
 	
 	
 }

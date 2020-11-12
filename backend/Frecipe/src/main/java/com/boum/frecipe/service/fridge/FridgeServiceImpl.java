@@ -87,7 +87,7 @@ public class FridgeServiceImpl implements FridgeService{
 	@Override
 	@Transactional
 	public Fridge updateFridgeName(String username, String fridgeName) {
-
+		
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 
@@ -102,6 +102,8 @@ public class FridgeServiceImpl implements FridgeService{
 	@Override
 	@Transactional
 	public void deleteIng(String username, Long ingNo) {
+		System.out.println("username : " + username);
+		
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
