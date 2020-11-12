@@ -1,14 +1,20 @@
 package com.boum.frecipe.service.recipe;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
+import com.boum.frecipe.domain.comment.Comment;
 import com.boum.frecipe.domain.recipe.Recipe;
+import com.boum.frecipe.domain.recipe.RecipeWithComment;
+import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
+import com.boum.frecipe.repository.comment.CommentRepository;
 import com.boum.frecipe.repository.recipe.RecipeRepository;
+import com.boum.frecipe.repository.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,22 +23,31 @@ import lombok.RequiredArgsConstructor;
 public class RecipeServiceImpl implements RecipeService {
 
 	private final RecipeRepository recipeRepo;
+	private final UserRepository userRepo;
+	private final CommentRepository commentRepo;
 	
 	// 레시피 등록
 	@Override
 	public Recipe addRecipe(String username, RecipeDTO recipeDto) {
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
 		List<Recipe> cnt = recipeRepo.findAll();
 		
 		Recipe recipe = Recipe.builder()
+				.userNo(user.getUserNo())
+				.nickname(user.getNickname())
 				.title(recipeDto.getTitle())
-				.content(recipeDto.getContent())
-				.images(recipeDto.getImages())
-				.username(username)
+				.contexts(recipeDto.getContexts())
+				.mainImage(recipeDto.getMainImage())
+				.completeImage(recipeDto.getCompleteImage())
+				.mainIngredients(recipeDto.getMainIngredients())
+				.ingredients(recipeDto.getIngredients())
+				.sources(recipeDto.getSources())
 				.view((long) 0)
 				.recipeNo(Long.valueOf(cnt.size()+1))
 				.build();
 		
-		System.out.println("레시피 번호 : " + recipe.getRecipeNo());
 		recipeRepo.insert(recipe);
 		
 		return recipe;
@@ -40,19 +55,30 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	// 레시피 상세 조회
 	@Override
-	public Recipe retrieve(Long recipeNo) {
+	public RecipeWithComment retrieve(Long recipeNo) {
 		Recipe recipe = recipeRepo.findByRecipeNo(recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 
 		recipe.updateView(recipe.getView()+1);
 		recipeRepo.save(recipe);
-		return recipe;
+		
+		List<Comment> comment = commentRepo.findByRecipeNo(recipeNo);
+		
+		RecipeWithComment rwc = RecipeWithComment.builder()
+				.recipe(recipe)
+				.comment(comment)
+				.build();
+		
+		return rwc;
 	}
 		
 	// 나의 레시피 상세 조회
 	@Override
 	public Recipe retrieveMine(String username, Long recipeNo) {
-		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		Recipe recipe = recipeRepo.findByUserNoAndRecipeNo(user.getUserNo(), recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		return recipe;
 	}
@@ -68,10 +94,13 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	@Transactional
 	public Recipe update(String username, RecipeDTO recipeDto) {
-		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeDto.getRecipeNo())
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		Recipe recipe = recipeRepo.findByUserNoAndRecipeNo(user.getUserNo(), recipeDto.getRecipeNo())
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
-		recipe.updateContent(recipeDto.getTitle(), recipeDto.getContent());
+		recipe.updateContent(recipeDto.getTitle(), recipeDto.getContexts());
 		recipeRepo.save(recipe);
 		return recipe;
 	}
@@ -80,7 +109,10 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	@Transactional
 	public void delete(String username, Long recipeNo) {
-		Recipe recipe = recipeRepo.findByUsernameAndRecipeNo(username, recipeNo)
+		User user = userRepo.findByUsername(username)
+				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		
+		Recipe recipe = recipeRepo.findByUserNoAndRecipeNo(user.getUserNo(), recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 		
 		recipeRepo.delete(recipe);

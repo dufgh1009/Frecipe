@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.boum.frecipe.domain.recipe.Recipe;
+import com.boum.frecipe.domain.recipe.RecipeWithComment;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
 import com.boum.frecipe.service.recipe.RecipeService;
 
@@ -50,8 +51,8 @@ public class RecipeController {
 	// 레시피 상세 조회
 	@ApiOperation(value = "레시피 상세 조회")
 	@GetMapping("/{recipeNo}")
-	public ResponseEntity<Recipe> retrieve(@PathVariable("recipeNo") Long recipeNo) {
-		return new ResponseEntity<Recipe>(service.retrieve(recipeNo), HttpStatus.OK);
+	public ResponseEntity<RecipeWithComment> retrieve(@PathVariable("recipeNo") Long recipeNo) {
+		return new ResponseEntity<RecipeWithComment>(service.retrieve(recipeNo), HttpStatus.OK);
 	}
 	
 	// 나의 레시피 상세 조회
