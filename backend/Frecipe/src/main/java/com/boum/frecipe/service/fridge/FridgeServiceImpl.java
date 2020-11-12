@@ -29,33 +29,34 @@ public class FridgeServiceImpl implements FridgeService{
 
 	// 식품 등록
 	@Override
-	public Ingredient addIng(String username, Ingredient ingredient) {
+	public List<Ingredient> addIng(String username, List<Ingredient> ingredients) {
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
 		
-		
-		try {
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			Date now = new Date();
-			Date exp = df.parse(ingredient.getExp());
-			
-			// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
-			int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
-			
-			System.out.println("현재 날짜 : " + df.format(now.getTime()));
-			System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
-			System.out.println("날짜 차이 : " + diff);
-			
-			ingredient.setFridgeNo(user.getFridge().getFridgeNo());
-			
-			ingredient.setRestExp(diff);
-			ingRepo.save(ingredient);
-			
-		} catch (ParseException e) {
-			e.printStackTrace();
+		for(Ingredient i : ingredients) {
+			try {
+				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+				Date now = new Date();
+				Date exp = df.parse(i.getExp());
+				
+				// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
+				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+				
+				System.out.println("현재 날짜 : " + df.format(now.getTime()));
+				System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
+				System.out.println("날짜 차이 : " + diff);
+				
+				i.setFridgeNo(user.getFridge().getFridgeNo());
+				
+				i.setRestExp(diff);
+				ingRepo.save(i);
+				
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
 		}
 		
-		return ingredient;
+		return ingredients;
 	}
 
 	// 식품 전체 조회

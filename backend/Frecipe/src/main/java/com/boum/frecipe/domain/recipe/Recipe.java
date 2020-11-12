@@ -2,9 +2,9 @@ package com.boum.frecipe.domain.recipe;
 
 import javax.persistence.Id;
 
+import org.bson.types.Binary;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
-
 
 import lombok.Builder;
 import lombok.Getter;
@@ -35,6 +35,9 @@ public class Recipe {
 	
 	// 조회수
 	private Long view;
+	
+	// 이미지
+	private Binary image;
 	
 	// 평점
 	private double rate;

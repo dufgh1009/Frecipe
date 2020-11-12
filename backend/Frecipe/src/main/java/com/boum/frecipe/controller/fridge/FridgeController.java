@@ -42,10 +42,10 @@ public class FridgeController {
 	})
 	@ApiOperation(value = "식품 등록")
 	@PostMapping
-	public ResponseEntity<Ingredient> add(@RequestBody Ingredient ingredient) {
+	public ResponseEntity<List<Ingredient>> add(@RequestBody List<Ingredient> ingredients) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Ingredient>(service.addIng(username, ingredient), HttpStatus.OK);
+		return new ResponseEntity<List<Ingredient>>(service.addIng(username, ingredients), HttpStatus.OK);
 	}
 	
 	// 식품 전체 조회
