@@ -3,23 +3,43 @@ const FILTER = 'community/FILTER' as const;
 const SEARCH = 'community/SEARCH' as const;
 const DETAIL = 'community/DETAIL' as const;
 
-
 interface Comment {
   content: string;
-  writer: string;
+  nickname: string;
+  rate: number;
 }
 
-export interface Recipe {
-  recNo: number;
+export interface Context {
+  text: string;
+  image: string;
+}
+
+export interface Ingredient {
+  name: string;
+}
+
+export interface Sauce {
+  name: string;
+  quantity: string;
+}
+
+export interface Img {
+  image: string;
+}
+
+interface Recipe {
+  recipeNo: number;
+  mainImage: string;
   title: string;
+  nickname: string;
+  context: Array<Context>;
   view: number;
   rate: number;
-  mainImg: string;
-  commentCount: string;
   comments: Array<Comment>;
-  ingredients: Array<String>;
-  content: string;
-  writer: string;
+  mainIngredients: Array<Ingredient>;
+  ingredients: Array<Ingredient>;
+  sauce: Array<Sauce>;
+  completeImage: Array<Img>;
 }
 
 export interface filterType {
@@ -31,7 +51,6 @@ export const list = (form: Array<Recipe>) => ({ type: LIST, payload: form });
 export const filter = (form: filterType) => ({ type: FILTER, payload: form });
 export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 export const detail = (recipe: Object) => ({ type: DETAIL, payload: recipe });
-
 
 type Actions =
   | ReturnType<typeof list>
@@ -50,90 +69,120 @@ type CommunityState = {
 
 const initialState: CommunityState = {
   recipeDetail: {
-    recNo: 1,
-    mainImg:
+    recipeNo: 1,
+    mainImage:
       'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
     title: '간장계란밥',
-    writer: 'kwonsky',
+    nickname: 'kwonsky',
+    context: [
+      {
+        text: '',
+        image: '',
+      },
+    ],
     view: 9,
     rate: 4.5,
-    commentCount: '5',
-    content: '간장계란밥 응~ 맛있어^^',
     comments: [
-      { writer: '성중이', content: '맛없겠다.' },
-      { writer: '성여로', content: '나도 간계밥!!!' },
-      { writer: '아잉으니야', content: '난 언제 해줌?' },
-      { writer: '엄...', content: '하늘이 집 가면 돼?' },
-      { writer: 'kwonsky', content: '다 나가주세요. 혼자 있고 싶으니깐...' },
+      { nickname: '성중이', content: '맛없겠다.', rate: 5 },
+      { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
+      { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
+      { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
+      {
+        nickname: 'kwonsky',
+        content: '다 나가주세요. 혼자 있고 싶으니깐...',
+        rate: 5,
+      },
     ],
-    ingredients: ['계란', '간장'],
+    mainIngredients: [{ name: '' }, { name: '' }, { name: '' }],
+    ingredients: [{ name: '' }, { name: '' }, { name: '' }],
+    sauce: [
+      {
+        name: '',
+        quantity: '',
+      },
+    ],
+    completeImage: [{ image: '' }, { image: '' }, { image: '' }],
   },
   recipes: [
     {
-      recNo: 1,
-      mainImg:
+      recipeNo: 1,
+      mainImage:
         'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
       title: '간장계란밥',
-      writer: 'kwonsky',
-      content: '간장계란밥 응~ 맛있어^^',
+      nickname: 'kwonsky',
+      context: [
+        {
+          text: '',
+          image: '',
+        },
+      ],
       view: 9,
       rate: 4.5,
-      commentCount: '5',
       comments: [
-        { writer: '성중이', content: '맛없겠다.' },
-        { writer: '성여로', content: '나도 간계밥!!!' },
-        { writer: '아잉으니야', content: '난 언제 해줌?' },
-        { writer: '엄...', content: '하늘이 집 가면 돼?' },
-        { writer: 'kwonsky', content: '다 나가주세요. 혼자 있고 싶으니깐...' },
+        { nickname: '성중이', content: '맛없겠다.', rate: 5 },
+        { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
+        { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
+        { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
+        {
+          nickname: 'kwonsky',
+          content: '다 나가주세요. 혼자 있고 싶으니깐...',
+          rate: 5,
+        },
       ],
-      ingredients: ['계란', '간장'],
-    },
-    {
-      recNo: 2,
-      mainImg:
-        'https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjZfMjgw/MDAxNTg3ODMwODI5NDA5.eKKl-K8aWanYwrwtlJhM6z5etDgCEMSsYsTvFfTXKTUg.2muwFdf6YD7qAKLi0ObSRcEhkTYYRPAAJ4N0Aip6CE8g.JPEG.eett7777/IMG_4527.jpg?type=w800',
-      title: '토마토계란볶음',
-      writer: 'zeunny',
-      content: '토마토계란볶음은 양손꼬치가 짱이지',
-      view: 3,
-      rate: 5,
-      commentCount: '0',
-      comments: [],
-      ingredients: ['계란', '토마토'],
+      mainIngredients: [
+        { ingredient: '' },
+        { ingredient: '' },
+        { ingredient: '' },
+      ],
+      ingredients: [{ ingredient: '' }, { ingredient: '' }, { ingredient: '' }],
+      sauce: [
+        {
+          name: '',
+          quantity: '',
+        },
+      ],
+      completeImage: [{ image: '' }, { image: '' }, { image: '' }],
     },
   ],
   searchRecipes: [
     {
-      recNo: 1,
-      mainImg:
+      recipeNo: 1,
+      mainImage:
         'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
       title: '간장계란밥',
-      writer: 'kwonsky',
-      content: '간장계란밥 응~ 맛있어^^',
+      nickname: 'kwonsky',
+      context: [
+        {
+          text: '',
+          image: '',
+        },
+      ],
       view: 9,
       rate: 4.5,
-      commentCount: '5',
       comments: [
-        { writer: '성중이', content: '맛없겠다.' },
-        { writer: '성여로', content: '나도 간계밥!!!' },
-        { writer: '아잉으니야', content: '난 언제 해줌?' },
-        { writer: '엄...', content: '하늘이 집 가면 돼?' },
-        { writer: 'kwonsky', content: '다 나가주세요. 혼자 있고 싶으니깐...' },
+        { nickname: '성중이', content: '맛없겠다.', rate: 5 },
+        { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
+        { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
+        { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
+        {
+          nickname: 'kwonsky',
+          content: '다 나가주세요. 혼자 있고 싶으니깐...',
+          rate: 5,
+        },
       ],
-      ingredients: ['계란', '간장'],
-    },
-    {
-      recNo: 2,
-      mainImg:
-        'https://mblogthumb-phinf.pstatic.net/MjAyMDA0MjZfMjgw/MDAxNTg3ODMwODI5NDA5.eKKl-K8aWanYwrwtlJhM6z5etDgCEMSsYsTvFfTXKTUg.2muwFdf6YD7qAKLi0ObSRcEhkTYYRPAAJ4N0Aip6CE8g.JPEG.eett7777/IMG_4527.jpg?type=w800',
-      title: '토마토계란볶음',
-      writer: 'zeunny',
-      content: '토마토계란볶음은 양손꼬치가 짱이지',
-      view: 3,
-      rate: 5,
-      commentCount: '0',
-      comments: [],
-      ingredients: ['계란', '토마토'],
+      mainIngredients: [
+        { ingredient: '' },
+        { ingredient: '' },
+        { ingredient: '' },
+      ],
+      ingredients: [{ ingredient: '' }, { ingredient: '' }, { ingredient: '' }],
+      sauce: [
+        {
+          name: '',
+          quantity: '',
+        },
+      ],
+      completeImage: [{ image: '' }, { image: '' }, { image: '' }],
     },
   ],
   selected: '업데이트순',
@@ -143,7 +192,7 @@ const initialState: CommunityState = {
 
 function community(
   state: CommunityState = initialState,
-  action: Actions
+  action: Actions,
 ): CommunityState {
   const recipes = Object.assign([], state.recipes);
   switch (action.type) {
@@ -156,7 +205,7 @@ function community(
       var filterRecipeList = Object.assign([], state.searchRecipes);
       if (action.payload.selected === '업데이트순') {
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
-          return b.recNo - a.recNo;
+          return b.recipeNo - a.recipeNo;
         });
       } else if (action.payload.selected === '평점순') {
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
@@ -169,7 +218,7 @@ function community(
       } else {
         // 댓글순
         filterRecipeList.sort(function (a: Recipe, b: Recipe) {
-          return Number(b.commentCount) - Number(a.commentCount);
+          return b.comments.length - a.comments.length;
         });
       }
       return Object.assign({}, state, {
