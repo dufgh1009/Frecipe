@@ -26,8 +26,8 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 	// 식품 조회 (냉장고 번호)
 	List<Ingredient> findByFridgeNo(Long fridgeNo);
 	
-	// 식품 조회 (냉장고 번호, 식품 이름)
-	Optional<Ingredient> findByFridgeNoAndIngName(Long fridgeNo, String ingName);
+	// 식품 조회 (냉장고 번호, 식품 번호)
+	Optional<Ingredient> findByFridgeNoAndIngNo(Long fridgeNo, Long ingNo);
 	
 	// 식품 삭제
 	@Query(value = "DELETE "
