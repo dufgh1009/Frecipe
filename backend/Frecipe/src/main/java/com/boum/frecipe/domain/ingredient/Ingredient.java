@@ -36,11 +36,8 @@ public class Ingredient{
 	// 보관 상태 (냉장/냉동)
 	private String status;
 
-	// 품목
-	private String category;
-
-	// 설명
-	private String description;
+	// 재고
+	private int count;
 	
 	// 냉장고 번호
 	@Column(name = "fridge_no")

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.boum.frecipe.domain.recipe.Recipe;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
@@ -41,6 +42,13 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipe;
 	}
 
+	// 레시피 이미지 등록
+	@Override
+	public String uploadImages(String title, MultipartFile image) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	// 레시피 상세 조회
 	@Override
 	public Recipe retrieve(Long recipeNo) {
@@ -89,6 +97,10 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		recipeRepo.delete(recipe);
 	}
+
+
+
+	
 
 	
 
