@@ -21,7 +21,7 @@ public interface FridgeService {
 	public Fridge updateFridgeName(String username, String fridgeName);
 	
 	// 식품 삭제
-	public void deleteIng(String username, IngredientDTO ingredientDto);
+	public void deleteIng(String username, Long ingNo);
 	
 	// 전체 식품 삭제
 	public void deleteAllIng(String username);

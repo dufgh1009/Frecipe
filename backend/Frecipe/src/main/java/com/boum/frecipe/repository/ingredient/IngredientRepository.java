@@ -33,10 +33,14 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 	@Query(value = "DELETE "
 					+ "FROM INGREDIENT "
 					+ "WHERE fridge_no = :fridgeNo "
-					+ "AND ing_name = :ingName "
+					+ "AND ing_no = :ingNo "
 					, nativeQuery = true)
-	void deleteByFridgeNoAndIngName(@Param("fridgeNo")Long fridgeNo, @Param("ingName")String ingName);
+	void deleteByFridgeNoAndIngNo(@Param("fridgeNo")Long fridgeNo, @Param("ingNo")String ingNo);
 
 	// 전체 식품 삭제
+	@Query(value = "DELETE "
+					+ "FROM INGREDIENT "
+					+ "WHERE fridge_no = :fridgeNo "
+					, nativeQuery = true)
 	void deleteByFridgeNo(Long fridgeNo);
 }
