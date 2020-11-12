@@ -38,5 +38,9 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 	void deleteByFridgeNoAndIngNo(@Param("fridgeNo")Long fridgeNo, @Param("ingNo")String ingNo);
 
 	// 전체 식품 삭제
+	@Query(value = "DELETE "
+					+ "FROM INGREDIENT "
+					+ "WHERE fridge_no = :fridgeNo "
+					, nativeQuery = true)
 	void deleteByFridgeNo(Long fridgeNo);
 }
