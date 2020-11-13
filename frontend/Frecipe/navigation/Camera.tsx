@@ -14,6 +14,7 @@ import { RootState } from '../redux/rootReducer';
 import api from '../api';
 import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 
+
 var albumBucketName = 'frecipe-pjt';
 var bucketRegion = 'ap-northeast-2';
 var IdentityPoolId = 'ap-northeast-2:43e4aae1-d94d-457e-96f2-69fc999cf72a';
@@ -30,11 +31,13 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-interface State {}
+interface State { }
 interface Props {
   navigation: any;
   saveImage: typeof saveImage;
   username: string;
+  status: string;
+  index: number;
 }
 
 class MyCamera extends Component<Props, State> {
@@ -82,10 +85,8 @@ class MyCamera extends Component<Props, State> {
           let fileName = `recipe${this.props.username.substring(
             0,
             4,
-          )}${_date.getFullYear()}${
-            _date.getMonth() + 1
-          }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
-
+          )}${_date.getFullYear()}${_date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
           // 업로드 속성 설정
           var params = {
             Bucket: albumBucketName,
@@ -95,15 +96,20 @@ class MyCamera extends Component<Props, State> {
           };
 
           const temp = api.AWS_S3_SERVER + params.Key;
-          console.log('upload url : ' + temp);
 
           // 업로드
           s3.upload(params, function (err: any) {
             if (err) {
+              console.log(err)
               return alert('There was an error uploading your photo');
             }
           });
-          this.props.saveImage(0, 'completeImage', temp);
+
+          if (this.props.status === 'completeImage') {
+            this.props.saveImage(this.props.index, 'completeImage', temp);
+          } else if (this.props.status === 'context') {
+            this.props.saveImage(this.props.index, 'context', temp);
+          }
           this.props.navigation.goBack();
         }
       }
@@ -159,7 +165,11 @@ class MyCamera extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  return { username: state.usersReducer.username };
+  return {
+    username: state.usersReducer.username,
+    status: state.cameraReducer.status,
+    index: state.cameraReducer.index,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -169,4 +179,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(MyCamera);
+export default connect(mapStateToProps, mapDispatchToProps)(MyCamera);

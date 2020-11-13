@@ -3,9 +3,6 @@ import { View, Text, TextInput, ScrollView } from 'react-native';
 import { Header, Image, Button } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 
-import { Camera } from 'expo-camera';
-import * as MediaLibrary from 'expo-media-library';
-
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../../../redux/rootReducer';
@@ -21,13 +18,12 @@ import {
   initRecipeAdd,
 } from '../../../redux/createRecipeSlice';
 
+import { changeCamera } from '../../../redux/cameraSlice';
+
 import api from '../../../api';
 
-import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-
 interface Props {
+  status: string,
   onCamera: () => void;
   navigation: any;
   addContext: typeof addContext;
@@ -38,6 +34,7 @@ interface Props {
   changeIngredient: typeof changeIngredient;
   changeTitle: typeof changeTitle;
   initRecipeToAdd: typeof initRecipeAdd;
+  changeCamera: typeof changeCamera;
   recipeAdd: recipeAdd;
   token: string;
 }
@@ -60,7 +57,7 @@ class RecipeCreate extends Component<Props> {
   render() {
     const { recipeAdd } = this.props;
     const mainIngredientsInput = recipeAdd.mainIngredients.map(
-      (element: any, i: number) => {
+      (element: any) => {
         const index = element.id;
         return (
           <TextInput
@@ -139,7 +136,11 @@ class RecipeCreate extends Component<Props> {
             }}
           >
             <Button
-              onPress={this.props.onCamera}
+              onPress={() => {
+                this.props.changeCamera('completeImage', element.id);
+                this.props.onCamera();
+              }
+              }
               type="clear"
               icon={<AntDesign name="pluscircleo" size={24} color="black" />}
             ></Button>
@@ -163,7 +164,10 @@ class RecipeCreate extends Component<Props> {
                 width: 60,
                 height: 60,
               }}
-              onPress={this.props.onCamera}
+              onPress={() => {
+                this.props.changeCamera('completeImage', element.id);
+                this.props.onCamera();
+              }}
               source={{ uri: element.image }}
             />
           </View>
@@ -253,7 +257,10 @@ class RecipeCreate extends Component<Props> {
             ></TextInput>
             <Button
               buttonStyle={{ width: 60, marginHorizontal: 20 }}
-              onPress={this.props.onCamera}
+              onPress={() => {
+                this.props.changeCamera('context', element.id);
+                this.props.onCamera();
+              }}
               type="clear"
               icon={<AntDesign name="pluscircleo" size={24} color="black" />}
             ></Button>
@@ -301,7 +308,10 @@ class RecipeCreate extends Component<Props> {
                 height: 60,
                 marginHorizontal: 20,
               }}
-              onPress={this.props.onCamera}
+              onPress={() => {
+                this.props.changeCamera('context', element.id);
+                this.props.onCamera();
+              }}
               source={{ uri: element.image }}
             />
           </View>
@@ -476,6 +486,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     changeContext: (index: number, value: string) =>
       dispatch(changeContext(index, value)),
     initRecipeToAdd: () => dispatch(initRecipeAdd()),
+    changeCamera: (status: string, index: number) => dispatch(changeCamera(status, index))
   };
 };
 
