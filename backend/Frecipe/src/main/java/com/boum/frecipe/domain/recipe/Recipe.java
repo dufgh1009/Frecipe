@@ -47,6 +47,7 @@ public class Recipe {
 	private List<RecipeImg> completeImage;
 	
 	// 3가지 메인 재료
+	@Field(name = "main_ingredients")
 	private List<RecipeMainIng> mainIngredients;
 	
 	// 재료
