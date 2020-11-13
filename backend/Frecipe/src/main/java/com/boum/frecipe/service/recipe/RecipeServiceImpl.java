@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import com.boum.frecipe.domain.comment.Comment;
 import com.boum.frecipe.domain.recipe.Recipe;
-import com.boum.frecipe.domain.recipe.RecipeWithComment;
 import com.boum.frecipe.domain.user.User;
 import com.boum.frecipe.dto.recipe.RecipeDTO;
 import com.boum.frecipe.repository.comment.CommentRepository;
@@ -56,21 +55,17 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	// 레시피 상세 조회
 	@Override
-	public RecipeWithComment retrieve(Long recipeNo) {
+	public Recipe retrieve(Long recipeNo) {
 		Recipe recipe = recipeRepo.findByRecipeNo(recipeNo)
 				.orElseThrow(() -> new IllegalArgumentException("레시피가 존재하지 않습니다."));
 
 		recipe.updateView(recipe.getView()+1);
 		recipeRepo.save(recipe);
 		
-		List<Comment> comment = commentRepo.findByRecipeNo(recipeNo);
+		List<Comment> comments = commentRepo.findByRecipeNo(recipeNo);
 		
-		RecipeWithComment rwc = RecipeWithComment.builder()
-				.recipe(recipe)
-				.comments(comment)
-				.build();
-		
-		return rwc;
+		recipe.setComments(comments);
+		return recipe;
 	}
 		
 	// 나의 레시피 상세 조회
@@ -86,20 +81,16 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	// 전체 레시피 조회
 	@Override
-	public List<RecipeWithComment> retrieveAll() {
+	public List<Recipe> retrieveAll() {
 		List<Recipe> recipes = recipeRepo.findAll();
-		
-		List<RecipeWithComment> rwc = new ArrayList<>();
+		List<Recipe> temp = new ArrayList<>();
 		
 		for(Recipe r : recipes) {
 			List<Comment> comments = commentRepo.findByRecipeNo(r.getRecipeNo());
-			RecipeWithComment temp = RecipeWithComment.builder()
-					.recipe(r)
-					.comments(comments)
-					.build();
-			rwc.add(temp);
+			r.setComments(comments);
+			temp.add(r);
 		}
-		return rwc;
+		return temp;
 	}
 
 	// 레시피 수정
