@@ -38,6 +38,7 @@ public class CommentServiceImpl implements CommentService{
 				.content(commentDto.getContent())
 				.rate(commentDto.getRate())
 				.userNo(user.getUserNo())
+				.nickname(user.getNickname())
 				.recipeNo(commentDto.getRecipeNo())
 				.report((long) 0)
 				.build();

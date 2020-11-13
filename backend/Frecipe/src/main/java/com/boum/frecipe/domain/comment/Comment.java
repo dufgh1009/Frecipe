@@ -43,6 +43,9 @@ public class Comment {
 	@Column(name = "user_no")
 	private Long userNo;
 	
+	// 회원 닉네임
+	private String nickname;
+	
 	// 레시피 번호
 	@Column(name = "recipe_no")
 	private Long recipeNo;
