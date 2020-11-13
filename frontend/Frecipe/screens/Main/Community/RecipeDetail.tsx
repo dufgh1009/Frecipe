@@ -23,9 +23,11 @@ import {
   detail,
   Context,
   Ingredient,
-  Sauce,
+  Sauces,
   Img,
 } from '../../../redux/communitySlice';
+
+import api from '../../../api';
 
 interface Props {
   navigation: any;
@@ -41,7 +43,7 @@ interface Props {
     comments: Array<Comment>;
     mainIngredients: Array<Ingredient>;
     ingredients: Array<Ingredient>;
-    sauce: Array<Sauce>;
+    sauce: Array<Sauces>;
     completeImage: Array<Img>;
   };
 }
@@ -50,61 +52,20 @@ class RecipeDetail extends Component<Props> {
   constructor(props: Props) {
     super(props);
   }
-  componentDidMount() {
-    const { detail } = this.props;
-    detail({
-      recipeNo: 1,
-      mainImage:
-        'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
-      title: '간장계란밥',
-      nickname: 'kwonsky',
-      context: [
-        {
-          text: '긴 하루의 끝에서 전해오는~',
-          image:
-            'http://imbbsfile.imbc.com/entertain07/goldfish_photo/201507/goldfish_photo150713135723entertain2.jpg',
-        },
-        {
-          text: '내 마음 속에 꼭 숨겨둔 이야기이이이',
-          image:
-            'https://pds.joins.com/news/component/htmlphoto_mmdata/201905/21/2a82311c-9907-435d-bcaa-579cebafefb1.jpg',
-        },
-        {
-          text: 'ㅋㅋ 먼 훗날 언젠가는',
-          image:
-            'https://post-phinf.pstatic.net/MjAxOTA2MjZfMTg1/MDAxNTYxNTI3MTI4MDU4.6jdvCViU0lmNqVm-z2cEp-LjFuMmb67-KS9erNMkVy4g.l7-fRM8FHbaNb7dU7nebEnCyY3oNrOGVXPkQDDPiCNMg.JPEG/%EC%9C%A0%EB%85%B8%EC%9C%A4%ED%98%B8_2.jpg',
-        },
-      ],
-      view: 9,
-      rate: 4.5,
-      comments: [
-        { nickname: '성중이', content: '맛없겠다.', rate: 5 },
-        { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
-        { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
-        { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
-        {
-          nickname: 'kwonsky',
-          content: '다 나가주세요. 혼자 있고 싶으니깐...',
-          rate: 5,
-        },
-      ],
-      mainIngredients: [{ name: '간장' }, { name: '계란' }, { name: '참기름' }],
-      ingredients: [{ name: '밥' }, { name: '숟가락' }, { name: '젓가락' }],
-      sauce: [
-        {
-          name: '지으니',
-          quantity: '10명',
-        },
-      ],
-      completeImage: [{ image: '' }, { image: '' }, { image: '' }],
-    });
-  }
+  componentDidMount = () => {
+    const recipeNo = this.props.navigation.getParam('recipeNo');
+    console.log(recipeNo);
+    // const { data } = await api.recipeDetail(recipeNo);
+    // console.log(data);
+    // this.props.detail()
+  };
 
   render() {
     const { recipeDetail } = this.props;
+
     return (
       <View>
-        <Header
+        {/* <Header
           style={{ flex: 1 }}
           backgroundColor="#00BD75"
           leftComponent={
@@ -176,7 +137,7 @@ class RecipeDetail extends Component<Props> {
               <Text style={{ marginBottom: 10 }}>{comment.content}</Text>
             </View>
           ))}
-        </Card>
+        </Card> */}
       </View>
     );
   }

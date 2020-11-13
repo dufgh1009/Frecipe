@@ -10,8 +10,14 @@ enableScreens();
 const Stack = createNativeStackNavigator();
 
 interface Props {
-  onCamera: () => void
+  onCamera: () => void;
 }
+
+export type CommunityStackParamList = {
+  CommunityHome: undefined;
+  RecipeDetail: number;
+  RecipeCreate: undefined;
+};
 
 export function Community(props: Props) {
   return (
@@ -29,7 +35,10 @@ export function Community(props: Props) {
       <Stack.Screen
         name="RecipeCreate"
         children={({ navigation }) => (
-          <RecipeCreate navigation={navigation} onCamera={props.onCamera}></RecipeCreate>
+          <RecipeCreate
+            navigation={navigation}
+            onCamera={props.onCamera}
+          ></RecipeCreate>
         )}
       />
       <Stack.Screen

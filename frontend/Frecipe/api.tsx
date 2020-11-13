@@ -4,7 +4,7 @@ const callApi = async (
   method: string,
   path: string,
   data: object | null,
-  jwt: string,
+  jwt: string | null,
   params = {},
 ) => {
   const headers = {
@@ -25,9 +25,9 @@ export default {
   AWS_S3_SERVER: 'https://frecipe-pjt.s3.ap-northeast-2.amazonaws.com/',
 
   // 로그인, 로그아웃, 아이디비밀번호 찾기
-  createAccount: (form: object) => callApi('post', '/users', form),
-  login: (form: object) => callApi('post', '/users/login', form),
-  findId: (form: object) => callApi('post', '/finds/id', form),
+  createAccount: (form: object) => callApi('post', '/users', form, null),
+  login: (form: object) => callApi('post', '/users/login', form, null),
+  findId: (form: object) => callApi('post', '/finds/id', form, null),
 
   // setting
   getUser: (token: string) => callApi('get', '/users/details', null, token),
@@ -49,6 +49,8 @@ export default {
     callApi('get', '/fridges/recommands', null, token),
 
   // community
+  getRecipe: () => callApi('get', '/recipes', null, null),
   createRecipe: (form: object, token: string) =>
     callApi('post', '/recipes', form, token),
+  recipeDetail: (id: number) => callApi('get', `/recipes/${id}`, null, null),
 };
