@@ -18,7 +18,7 @@ public interface RecipeService {
 	public Recipe retrieveMine(String username, Long recipeNo);
 	
 	// 전체 레시피 조회
-	public List<Recipe> retrieveAll();
+	public List<RecipeWithComment> retrieveAll();
 	
 	// 레시피 수정
 	public Recipe update(String username, RecipeDTO recipeDto);

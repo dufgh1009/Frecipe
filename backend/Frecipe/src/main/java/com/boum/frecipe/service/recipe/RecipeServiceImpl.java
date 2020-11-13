@@ -1,5 +1,6 @@
 package com.boum.frecipe.service.recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -85,9 +86,20 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	// 전체 레시피 조회
 	@Override
-	public List<Recipe> retrieveAll() {
+	public List<RecipeWithComment> retrieveAll() {
 		List<Recipe> recipes = recipeRepo.findAll();
-		return recipes;
+		
+		List<RecipeWithComment> rwc = new ArrayList<>();
+		
+		for(Recipe r : recipes) {
+			List<Comment> comments = commentRepo.findByRecipeNo(r.getRecipeNo());
+			RecipeWithComment temp = RecipeWithComment.builder()
+					.recipe(r)
+					.comment(comments)
+					.build();
+			rwc.add(temp);
+		}
+		return rwc;
 	}
 
 	// 레시피 수정

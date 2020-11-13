@@ -70,8 +70,8 @@ public class RecipeController {
 	// 전체 레시피 조회
 	@ApiOperation(value = "전체 레시피 조회")
 	@GetMapping
-	public ResponseEntity<List<Recipe>> retrieveAll() {
-		return new ResponseEntity<List<Recipe>>(service.retrieveAll(), HttpStatus.OK);
+	public ResponseEntity<List<RecipeWithComment>> retrieveAll() {
+		return new ResponseEntity<List<RecipeWithComment>>(service.retrieveAll(), HttpStatus.OK);
 	}
 	
 	// 레시피 수정
