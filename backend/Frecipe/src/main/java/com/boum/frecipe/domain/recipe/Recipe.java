@@ -7,7 +7,7 @@ import javax.persistence.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import com.boum.frecipe.domain.ingredient.Ingredient;
+import com.boum.frecipe.domain.comment.Comment;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -55,6 +55,9 @@ public class Recipe {
 	
 	// 소스
 	private List<Sauce> sauces;
+	
+	// 댓글들
+	private List<Comment> comments;
 	
 	// 조회수
 	private Long view;
