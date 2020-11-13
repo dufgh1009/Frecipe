@@ -15,5 +15,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class RecipeWithComment {
 	private Recipe recipe;
-	private List<Comment> comment;
+	private List<Comment> comments;
 }

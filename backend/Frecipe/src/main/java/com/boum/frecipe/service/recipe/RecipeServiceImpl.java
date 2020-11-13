@@ -67,7 +67,7 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		RecipeWithComment rwc = RecipeWithComment.builder()
 				.recipe(recipe)
-				.comment(comment)
+				.comments(comment)
 				.build();
 		
 		return rwc;
@@ -95,7 +95,7 @@ public class RecipeServiceImpl implements RecipeService {
 			List<Comment> comments = commentRepo.findByRecipeNo(r.getRecipeNo());
 			RecipeWithComment temp = RecipeWithComment.builder()
 					.recipe(r)
-					.comment(comments)
+					.comments(comments)
 					.build();
 			rwc.add(temp);
 		}
