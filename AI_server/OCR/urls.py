@@ -2,5 +2,5 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.ocr)
+    path('<str:keyword>', views.ocr.as_view()),
 ]
