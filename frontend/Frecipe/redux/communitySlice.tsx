@@ -74,7 +74,7 @@ const initialState: CommunityState = {
       'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
     title: '간장계란밥',
     nickname: 'kwonsky',
-    context: [
+    contexts: [
       {
         text: '',
         image: '',
@@ -123,7 +123,7 @@ const initialState: CommunityState = {
         'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
       title: '간장계란밥',
       nickname: 'kwonsky',
-      context: [
+      contexts: [
         {
           text: '',
           image: '',
