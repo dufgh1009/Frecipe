@@ -44,7 +44,7 @@ public class Recipe {
 	private String mainImage;
 	
 	// 이미지
-	private List<String> completeImage;
+	private List<RecipeImg> completeImage;
 	
 	// 3가지 메인 재료
 	@Field(name = "main_ingredients")
