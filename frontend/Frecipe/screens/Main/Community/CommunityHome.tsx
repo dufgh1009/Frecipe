@@ -15,7 +15,13 @@ import { AntDesign } from '@expo/vector-icons';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { list, filter, search, Recipe, filterType } from '../../../redux/communitySlice';
+import {
+  list,
+  filter,
+  search,
+  Recipe,
+  filterType,
+} from '../../../redux/communitySlice';
 
 // interface Recipe {
 //   recNo: number;
@@ -129,9 +135,9 @@ class Community extends Component<Props> {
         />
         <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
-          {searchRecipes.map((recipe: Recipe) => (
+          {/* {searchRecipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback
-              key={recipe.recNo}
+              key={recipe.recipeNo}
               onPress={() => this.props.navigation.navigate('RecipeDetail')}
             >
               <ListItem bottomDivider>
@@ -153,7 +159,7 @@ class Community extends Component<Props> {
                 />
               </ListItem>
             </TouchableWithoutFeedback>
-          ))}
+          ))} */}
         </ScrollView>
       </View>
     );

@@ -47,4 +47,8 @@ export default {
   // recipe recommend
   sevenIngredient: (token: string) =>
     callApi('get', '/fridges/recommands', null, token),
+
+  // community
+  createRecipe: (form: object, token: string) =>
+    callApi('post', '/recipes', form, token),
 };
