@@ -27,8 +27,8 @@ def ocr(request):
     if request.method == 'POST':
         serializer = UrlSerializer(data=request.data)
         if serializer.is_valid():
-            print(serializer)
-            # image_url = serializer.initial_data['url']
+            # print(serializer)
+            image_url = serializer.initial_data['url']
             # image_url = "https://picsum.photos/200/300"
             filename = "./OCR/data/images/img.jpg"
 
