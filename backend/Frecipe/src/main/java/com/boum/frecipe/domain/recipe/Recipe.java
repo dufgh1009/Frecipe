@@ -54,7 +54,7 @@ public class Recipe {
 	private List<RecipeIng> ingredients;
 	
 	// 소스
-	private List<Source> sources;
+	private List<Sauce> sauces;
 	
 	// 조회수
 	private Long view;
