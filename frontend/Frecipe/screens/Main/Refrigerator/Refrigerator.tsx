@@ -18,14 +18,15 @@ import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   list,
-  add,
-  deleteIngredient,
-  deleteAll,
+  // add,
+  // deleteIngredient,
+  // deleteAll,
   search,
   increaseMaxId,
   order,
   ingredient,
 } from '../../../redux/refrigeratorSlice';
+import { changeCamera } from '../../../redux/cameraSlice';
 import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 
@@ -36,10 +37,11 @@ interface RefrigeratorProps {
   ingredients: Array<ingredient>;
   maxId: number;
   increaseMaxId: typeof increaseMaxId;
+  changeCamera: typeof changeCamera;
   list: typeof list;
-  add: typeof add;
-  deleteIngredient: typeof deleteIngredient;
-  deleteAll: typeof deleteAll;
+  // add: typeof add;
+  // deleteIngredient: typeof deleteIngredient;
+  // deleteAll: typeof deleteAll;
   search: typeof search;
   order: typeof order;
   yellowFood: number;
@@ -165,6 +167,10 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
     this.listIngredients();
   };
 
+  takePicture() {
+    this.props.changeCamera('receipt', 0);
+    this.props.onCamera();
+  }
   render() {
     const { redFood, yellowFood, searchIngredients } = this.props;
     const { addVisible, addIngredients } = this.state;
@@ -363,7 +369,6 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         </View>
       );
     });
-
     return (
       <KeyboardAwareScrollView
         innerRef={(ref) => {
@@ -469,7 +474,10 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 </View>
                 <View style={styles.overlayHeaderRight}>
                   <Button
-                    onPress={this.props.onCamera}
+                    onPress={() => {
+                      this.takePicture()
+                    }
+                    }
                     type="clear"
                     icon={<Entypo name="camera" size={24} color="black" />}
                   ></Button>
@@ -666,10 +674,11 @@ const mapStateToProps = (state: RootState) => {
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  changeCamera: (status: string, index: number) => (dispatch(changeCamera(status, index))),
   list: (data: ingredient[]) => dispatch(list(data)),
-  add: (ingredeients: ingredient[]) => dispatch(add(ingredeients)),
-  deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
-  deleteAll: () => dispatch(deleteAll()),
+  // add: (ingredeients: ingredient[]) => dispatch(add(ingredeients)),
+  // deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
+  // deleteAll: () => dispatch(deleteAll()),
   search: (keyword: string) => dispatch(search(keyword)),
   increaseMaxId: () => dispatch(increaseMaxId()),
   order: (filter: string) => dispatch(order(filter)),
