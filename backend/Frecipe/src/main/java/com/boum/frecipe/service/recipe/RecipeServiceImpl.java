@@ -43,7 +43,7 @@ public class RecipeServiceImpl implements RecipeService {
 				.completeImage(recipeDto.getCompleteImage())
 				.mainIngredients(recipeDto.getMainIngredients())
 				.ingredients(recipeDto.getIngredients())
-				.sources(recipeDto.getSources())
+				.sauces(recipeDto.getSauces())
 				.view((long) 0)
 				.recipeNo(Long.valueOf(cnt.size()+1))
 				.build();
