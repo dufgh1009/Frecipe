@@ -18,11 +18,12 @@ import shutil # to save it locally
 
 class ocr(APIView):
     def get(self, request, **kwargs):
+        image_url = kwargs.get('url')
         # image_url = "https://picsum.photos/200/300"
-        # filename = "./OCR/data/images/img.jpg"
+        filename = "./OCR/data/images/img.jpg"
 
-        # ssl._create_default_https_context = ssl._create_unverified_context
-        # urllib.request.urlretrieve(image_url, filename)
+        ssl._create_default_https_context = ssl._create_unverified_context
+        urllib.request.urlretrieve(image_url, filename)
 
    
         img = cv2.imread("./OCR/data/images/img.jpg")
