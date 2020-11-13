@@ -6,6 +6,8 @@ import numpy as np
 import pytesseract
 import re
 import json
+import urllib.request
+import ssl
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -81,19 +83,21 @@ class ocr(APIView):
     def get(self, request, **kwargs):
         print(kwargs.get('keyword'))
         image_url = "https://picsum.photos/200/300"
-        filename = image_url.split("/")[-1]
+        filename = 'sunshine_dog.jpg'
 
         # Open the url image, set stream to True, this will return the stream content.
-        r = requests.get(image_url, stream = True)
+        # r = requests.get(image_url, stream = True)
+        ssl._create_default_https_context = ssl._create_unverified_context
+        urllib.request.urlretrieve(image_url, filename)
 
         # Check if the image was retrieved successfully
-        if r.status_code == 200:
-            # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
-            r.raw.decode_content = True
+        # if r.status_code == 200:
+        #     # Set decode_content value to True, otherwise the downloaded image file's size will be zero.
+        #     r.raw.decode_content = True
             
-            # Open a local file with wb ( write binary ) permission.
-            with open(filename,'wb') as f:
-                shutil.copyfileobj(r.raw, f)
+        #     # Open a local file with wb ( write binary ) permission.
+        #     with open(filename,'wb') as f:
+        #         shutil.copyfileobj(r.raw, f)
                 
-            print('Image sucessfully Downloaded: ',filename)
+        #     print('Image sucessfully Downloaded: ',filename)
         return Response({}, status=200)
