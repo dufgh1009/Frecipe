@@ -12,9 +12,9 @@ export interface recipeAdd {
   title: string;
   mainIngredients: any[];
   ingredients: any[];
-  sauce: any[];
+  sauces: any[];
   mainImage: string;
-  context: any[];
+  contexts: any[];
   completeImage: any[];
 }
 
@@ -64,9 +64,9 @@ const initialState: CreateRecipeState = {
   recipeAdd: {
     title: '',
     mainIngredients: [
-      { id: 0, ingredient: '' },
-      { id: 1, ingredient: '' },
-      { id: 2, ingredient: '' },
+      { id: 0, name: '' },
+      { id: 1, name: '' },
+      { id: 2, name: '' },
     ],
     ingredients: [
       {
@@ -75,7 +75,7 @@ const initialState: CreateRecipeState = {
         quantity: '',
       },
     ],
-    sauce: [
+    sauces: [
       {
         id: 0,
         name: '',
@@ -83,7 +83,7 @@ const initialState: CreateRecipeState = {
       },
     ],
     mainImage: '',
-    context: [
+    contexts: [
       {
         id: 0,
         text: '',
@@ -115,14 +115,14 @@ function createRecipe(
       recipeAdd.ingredients = newIngredients;
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case ADD_SAUCE:
-      var newSauceIngredients = Object.assign([], recipeAdd.sauce);
+      var newSauceIngredients = Object.assign([], recipeAdd.sauces);
       var newSauceIngredient = {
         id: newSauceIngredients.length,
         name: '',
         quantity: '',
       };
       newSauceIngredients.push(newSauceIngredient);
-      recipeAdd.sauce = newSauceIngredients;
+      recipeAdd.sauces = newSauceIngredients;
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case CHANGE_MAIN_INGREDIENT:
       var newMainIngredients: any[] = Object.assign(
@@ -131,7 +131,7 @@ function createRecipe(
       );
       newMainIngredients[action.payload.index] = {
         id: action.payload.index,
-        ingredient: action.payload.value,
+        name: action.payload.value,
       };
       recipeAdd.mainIngredients = newMainIngredients;
       return Object.assign({}, state, { recipeAdd: recipeAdd });
@@ -154,43 +154,43 @@ function createRecipe(
           recipeAdd.ingredients = newIngredients;
         }
       } else {
-        let newSauce: any[] = Object.assign([], recipeAdd.sauce);
+        let newSauce: any[] = Object.assign([], recipeAdd.sauces);
         if (action.payload.what === 'name') {
           newSauce[action.payload.index] = {
             id: action.payload.index,
             name: action.payload.value,
             quantity: newSauce[action.payload.index].quantity,
           };
-          recipeAdd.sauce = newSauce;
+          recipeAdd.sauces = newSauce;
         } else {
           newSauce[action.payload.index] = {
             id: action.payload.index,
             name: newSauce[action.payload.index].name,
             quantity: action.payload.value,
           };
-          recipeAdd.sauce = newSauce;
+          recipeAdd.sauces = newSauce;
         }
       }
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case ADD_CONTEXT:
       let newContext: any[];
-      newContext = Object.assign([], recipeAdd.context);
+      newContext = Object.assign([], recipeAdd.contexts);
       var content = {
         id: newContext.length,
         text: '과정을 설명하시오',
         image: '',
       };
       newContext.push(content);
-      recipeAdd.context = newContext;
+      recipeAdd.contexts = newContext;
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case CHANGE_CONTEXT:
-      newContext = Object.assign([], recipeAdd.context);
+      newContext = Object.assign([], recipeAdd.contexts);
       newContext[action.payload.index] = {
         id: action.payload.index,
         text: action.payload.value,
         image: newContext[action.payload.index].image,
       };
-      recipeAdd.context = newContext;
+      recipeAdd.contexts = newContext;
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case CHANGE_TITLE:
       recipeAdd.title = action.payload;
@@ -211,9 +211,9 @@ function createRecipe(
         recipeAdd: {
           title: '',
           mainIngredients: [
-            { id: 0, ingredient: '' },
-            { id: 1, ingredient: '' },
-            { id: 2, ingredient: '' },
+            { id: 0, name: '' },
+            { id: 1, name: '' },
+            { id: 2, name: '' },
           ],
           ingredients: [
             {
@@ -222,7 +222,7 @@ function createRecipe(
               quantity: '',
             },
           ],
-          sauce: [
+          sauces: [
             {
               id: 0,
               name: '',
@@ -230,7 +230,7 @@ function createRecipe(
             },
           ],
           mainImage: '',
-          context: [
+          contexts: [
             {
               id: 0,
               text: '과정을 설명하시오.',

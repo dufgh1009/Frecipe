@@ -18,7 +18,7 @@ export interface Ingredient {
   name: string;
 }
 
-export interface Sauce {
+export interface Sauces {
   name: string;
   quantity: string;
 }
@@ -37,8 +37,8 @@ interface Recipe {
   rate: number;
   comments: Array<Comment>;
   mainIngredients: Array<Ingredient>;
-  ingredients: Array<Ingredient>;
-  sauce: Array<Sauce>;
+  ingredients: Array<Sauces>;
+  sauce: Array<Sauces>;
   completeImage: Array<Img>;
 }
 
@@ -94,8 +94,21 @@ const initialState: CommunityState = {
       },
     ],
     mainIngredients: [{ name: '' }, { name: '' }, { name: '' }],
-    ingredients: [{ name: '' }, { name: '' }, { name: '' }],
-    sauce: [
+    ingredients: [
+      {
+        name: '',
+        quantity: '',
+      },
+      {
+        name: '',
+        quantity: '',
+      },
+      {
+        name: '',
+        quantity: '',
+      },
+    ],
+    sauces: [
       {
         name: '',
         quantity: '',
@@ -129,54 +142,22 @@ const initialState: CommunityState = {
           rate: 5,
         },
       ],
-      mainIngredients: [
-        { ingredient: '' },
-        { ingredient: '' },
-        { ingredient: '' },
-      ],
-      ingredients: [{ ingredient: '' }, { ingredient: '' }, { ingredient: '' }],
-      sauce: [
+      mainIngredients: [{ name: '' }, { name: '' }, { name: '' }],
+      ingredients: [
+        {
+          name: '',
+          quantity: '',
+        },
+        {
+          name: '',
+          quantity: '',
+        },
         {
           name: '',
           quantity: '',
         },
       ],
-      completeImage: [{ image: '' }, { image: '' }, { image: '' }],
-    },
-  ],
-  searchRecipes: [
-    {
-      recipeNo: 1,
-      mainImage:
-        'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
-      title: '간장계란밥',
-      nickname: 'kwonsky',
-      context: [
-        {
-          text: '',
-          image: '',
-        },
-      ],
-      view: 9,
-      rate: 4.5,
-      comments: [
-        { nickname: '성중이', content: '맛없겠다.', rate: 5 },
-        { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
-        { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
-        { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
-        {
-          nickname: 'kwonsky',
-          content: '다 나가주세요. 혼자 있고 싶으니깐...',
-          rate: 5,
-        },
-      ],
-      mainIngredients: [
-        { ingredient: '' },
-        { ingredient: '' },
-        { ingredient: '' },
-      ],
-      ingredients: [{ ingredient: '' }, { ingredient: '' }, { ingredient: '' }],
-      sauce: [
+      sauces: [
         {
           name: '',
           quantity: '',
