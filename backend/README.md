@@ -1,6 +1,6 @@
 # :computer: Back-End!!zdddzd
 
-## 20.11.11(수)
+## 20.11.13(금)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -11,8 +11,6 @@
 ### To Do
     - API 
         프론트 연동 확인
-        레시피 이미지 등록
-        레시피 재료 등록
     - Server
         SSL 적용 (letsencrypt, Certbot)
         Jenkins 배포 자동화
