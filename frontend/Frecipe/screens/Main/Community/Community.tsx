@@ -13,12 +13,6 @@ interface Props {
   onCamera: () => void;
 }
 
-export type CommunityStackParamList = {
-  CommunityHome: undefined;
-  RecipeDetail: number;
-  RecipeCreate: undefined;
-};
-
 export function Community(props: Props) {
   return (
     <Stack.Navigator
@@ -26,27 +20,9 @@ export function Community(props: Props) {
         headerShown: false,
       }}
     >
-      <Stack.Screen
-        name="CommunityHome"
-        children={({ navigation }) => (
-          <CommunityHome navigation={navigation}></CommunityHome>
-        )}
-      />
-      <Stack.Screen
-        name="RecipeCreate"
-        children={({ navigation }) => (
-          <RecipeCreate
-            navigation={navigation}
-            onCamera={props.onCamera}
-          ></RecipeCreate>
-        )}
-      />
-      <Stack.Screen
-        name="RecipeDetail"
-        children={({ navigation }) => (
-          <RecipeDetail navigation={navigation}></RecipeDetail>
-        )}
-      />
+      <Stack.Screen name="CommunityHome" component={CommunityHome} />
+      <Stack.Screen name="RecipeCreate" component={RecipeCreate} />
+      <Stack.Screen name="RecipeDetail" component={RecipeDetail} />
     </Stack.Navigator>
   );
 }

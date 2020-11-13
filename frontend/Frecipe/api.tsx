@@ -32,7 +32,7 @@ export default {
   // setting
   getUser: (token: string) => callApi('get', '/users/details', null, token),
   updateUser: (form: object, token: string) =>
-    callApi('put', '/users.', form, token),
+    callApi('put', '/users', form, token),
   deleteUser: (token: string) => callApi('delete', '/users', null, token),
 
   // refrigerator
@@ -53,4 +53,6 @@ export default {
   createRecipe: (form: object, token: string) =>
     callApi('post', '/recipes', form, token),
   recipeDetail: (id: number) => callApi('get', `/recipes/${id}`, null, null),
+  createComment: (form: object, token: string) =>
+    callApi('post', '/comments', form, token),
 };

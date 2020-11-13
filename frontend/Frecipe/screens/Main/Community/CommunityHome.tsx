@@ -21,16 +21,17 @@ import {
   search,
   Recipe,
   filterType,
+  detail,
 } from '../../../redux/communitySlice';
 
 import api from '../../../api';
 
 interface Props {
   navigation: any;
-  route: any;
   list: typeof list;
   filter: typeof filter;
   search: typeof search;
+  detail: typeof detail;
   recipes: Array<Recipe>;
   searchRecipes: Array<Recipe>;
   searchKeyword: string;
@@ -43,7 +44,7 @@ class Community extends Component<Props> {
     super(props);
   }
 
-  componentDidMount = async () => {
+  componentWillMount = async () => {
     const { data } = await api.getRecipe();
     this.props.list(data);
   };
@@ -82,6 +83,14 @@ class Community extends Component<Props> {
   searchRecipe = (keyword: string) => {
     const { search } = this.props;
     search(keyword);
+  };
+
+  recipeDetail = async (recipeNo: number) => {
+    const recipeDetail = await api.recipeDetail(recipeNo);
+    this.props.detail(recipeDetail.data);
+    const recipe = await api.getRecipe();
+    this.props.list(recipe.data);
+    this.props.navigation.navigate('RecipeDetail');
   };
 
   render() {
@@ -129,11 +138,7 @@ class Community extends Component<Props> {
           {searchRecipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback
               key={recipe.recipeNo}
-              onPress={() =>
-                this.props.navigation.navigate('RecipeDetail', {
-                  recipeNo: recipe.recipeNo,
-                })
-              }
+              onPress={() => this.recipeDetail(recipe.recipeNo)}
             >
               <ListItem bottomDivider>
                 <Image
@@ -176,6 +181,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     list: (form: Array<Recipe>) => dispatch(list(form)),
     filter: (form: filterType) => dispatch(filter(form)),
     search: (keyword: string) => dispatch(search(keyword)),
+    detail: (form: any) => dispatch(detail(form)),
   };
 };
 

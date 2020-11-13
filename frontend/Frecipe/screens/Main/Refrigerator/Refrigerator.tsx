@@ -453,7 +453,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
             isVisible={addVisible}
             onBackdropPress={this.addOverlay}
           >
-            <View style={styles.overlay}>
+            <View style={[styles.overlay, { marginTop: 50 }]}>
               <View style={styles.overlayHeader}>
                 <View style={{ flex: 1 }}>
                   <Button

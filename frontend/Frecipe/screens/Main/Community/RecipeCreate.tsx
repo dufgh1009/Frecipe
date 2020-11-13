@@ -20,6 +20,7 @@ import {
   recipeAdd,
   initRecipeAdd,
 } from '../../../redux/createRecipeSlice';
+import { list } from '../../../redux/communitySlice';
 
 import api from '../../../api';
 
@@ -38,6 +39,7 @@ interface Props {
   changeIngredient: typeof changeIngredient;
   changeTitle: typeof changeTitle;
   initRecipeToAdd: typeof initRecipeAdd;
+  list: typeof list;
   recipeAdd: recipeAdd;
   token: string;
 }
@@ -48,13 +50,11 @@ class RecipeCreate extends Component<Props> {
   }
 
   createRecipe = async () => {
-    console.log('들어오니?');
-    console.log(this.props.recipeAdd);
-    const { data } = await api.createRecipe(
-      this.props.recipeAdd,
-      this.props.token,
-    );
-    console.log(data);
+    await api.createRecipe(this.props.recipeAdd, this.props.token);
+    this.props.initRecipeToAdd();
+    const { data } = await api.getRecipe();
+    this.props.list(data);
+    this.props.navigation.navigate('CommunityHome');
   };
 
   render() {
@@ -476,6 +476,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     changeContext: (index: number, value: string) =>
       dispatch(changeContext(index, value)),
     initRecipeToAdd: () => dispatch(initRecipeAdd()),
+    list: (form: any) => dispatch(list(form)),
   };
 };
 

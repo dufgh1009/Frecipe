@@ -6,20 +6,14 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from 'react-native';
-import {
-  Header,
-  Text,
-  ListItem,
-  Button,
-  Card,
-  Icon,
-} from 'react-native-elements';
+import { Header, Text, Button, Card, Input } from 'react-native-elements';
 
 import { AntDesign } from '@expo/vector-icons';
 
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 import {
+  list,
   detail,
   Context,
   Ingredient,
@@ -31,48 +25,66 @@ import api from '../../../api';
 
 interface Props {
   navigation: any;
+  route: any;
   detail: typeof detail;
+  list: typeof list;
   recipeDetail: {
     recipeNo: number;
     mainImage: string;
     title: string;
     nickname: string;
-    context: Array<Context>;
+    contexts: Array<Context>;
     view: number;
     rate: number;
     comments: Array<Comment>;
     mainIngredients: Array<Ingredient>;
     ingredients: Array<Ingredient>;
-    sauce: Array<Sauces>;
+    sauces: Array<Sauces>;
     completeImage: Array<Img>;
   };
+  token: string;
 }
 
-class RecipeDetail extends Component<Props> {
+interface State {
+  comment: string;
+}
+
+class RecipeDetail extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
+
+    this.state = {
+      comment: '',
+    };
   }
-  componentDidMount = () => {
-    const recipeNo = this.props.navigation.getParam('recipeNo');
-    console.log(recipeNo);
-    // const { data } = await api.recipeDetail(recipeNo);
-    // console.log(data);
-    // this.props.detail()
+
+  commentCreate = async () => {
+    const commentObject = {
+      content: this.state.comment,
+      recipeNo: this.props.recipeDetail.recipeNo,
+    };
+    await api.createComment(commentObject, this.props.token);
+
+    const recipeDetail = await api.recipeDetail(
+      this.props.recipeDetail.recipeNo,
+    );
+    this.props.detail(recipeDetail.data);
+    const recipe = await api.getRecipe();
+    this.props.list(recipe.data);
   };
 
-  render() {
-    const { recipeDetail } = this.props;
-
+  render = () => {
+    const recipeDetail = this.props.recipeDetail;
     return (
-      <View>
-        {/* <Header
+      <ScrollView>
+        <Header
           style={{ flex: 1 }}
           backgroundColor="#00BD75"
           leftComponent={
             <Button
               icon={<AntDesign name="back" size={24} color="white" />}
               buttonStyle={styles.backButton}
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate('CommunityHome')}
             />
           }
         />
@@ -99,7 +111,7 @@ class RecipeDetail extends Component<Props> {
                 ),
               )}
             </View>
-            <Card.Image source={{ uri: recipeDetail.mainImage }} />
+            <Card.Image source={{ uri: recipeDetail.completeImage[0].image }} />
             <Text h4 style={styles.centerAlign}>
               재료
             </Text>
@@ -111,12 +123,12 @@ class RecipeDetail extends Component<Props> {
             <Text h4 style={styles.centerAlign}>
               양념재료
             </Text>
-            {recipeDetail.sauce.map((s: any, i: number) => (
+            {recipeDetail.sauces.map((s: any, i: number) => (
               <Text key={i} style={styles.centerAlign}>
                 {s.name} : {s.quantity}
               </Text>
             ))}
-            {recipeDetail.context.map((c: any, i: number) => (
+            {recipeDetail.contexts.map((c: any, i: number) => (
               <View key={i}>
                 {c.image ? <Card.Image source={{ uri: c.image }} /> : <View />}
                 <Text style={[{ marginBottom: 10 }, styles.centerAlign]}>
@@ -130,6 +142,18 @@ class RecipeDetail extends Component<Props> {
           <Card.Title h4 style={styles.leftAlign}>
             댓글
           </Card.Title>
+          <Input
+            placeholder="댓글을 입력해주세요."
+            rightIcon={
+              <Button
+                title="확인"
+                buttonStyle={styles.backButton}
+                titleStyle={{ fontSize: 15 }}
+                onPress={this.commentCreate}
+              ></Button>
+            }
+            onChangeText={(value: string) => this.setState({ comment: value })}
+          />
           {recipeDetail.comments.map((comment: any, i: number) => (
             <View key={i}>
               <Card.Divider />
@@ -137,20 +161,22 @@ class RecipeDetail extends Component<Props> {
               <Text style={{ marginBottom: 10 }}>{comment.content}</Text>
             </View>
           ))}
-        </Card> */}
-      </View>
+        </Card>
+      </ScrollView>
     );
-  }
+  };
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     recipeDetail: state.community.recipeDetail,
+    token: state.usersReducer.token,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
+    list: (form: any) => dispatch(list(form)),
     detail: (recipe: Object) => dispatch(detail(recipe)),
   };
 };
