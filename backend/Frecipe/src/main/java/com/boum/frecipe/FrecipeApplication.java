@@ -8,7 +8,7 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
-@SpringBootApplication
+@SpringBootApplication()
 @EnableJpaAuditing
 public class FrecipeApplication {
 
