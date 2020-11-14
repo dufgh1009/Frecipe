@@ -9,7 +9,7 @@ import com.boum.frecipe.dto.ingredient.IngredientDTO;
 public interface FridgeService {
 	
 	// 식품 등록
-	public Ingredient addIng(String username, Ingredient ingredient);
+	public List<Ingredient> addIng(String username, List<Ingredient> ingredient);
 	
 	// 식품 전체 조회
 	public Fridge retrieve(String username);
@@ -21,7 +21,10 @@ public interface FridgeService {
 	public Fridge updateFridgeName(String username, String fridgeName);
 	
 	// 식품 삭제
-	public void deleteIng(String username, IngredientDTO ingredientDto);
+	public void deleteIng(String username, Long ingNo);
+	
+	// 전체 식품 삭제
+	public void deleteAllIng(String username);
 	
 	// 남은 기한 갱신
 	public void updateExp();

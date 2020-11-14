@@ -48,15 +48,22 @@ public class RecipeController {
 	}
 	
 	// 레시피 상세 조회
-	@ApiImplicitParams({
-		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
-	})
 	@ApiOperation(value = "레시피 상세 조회")
 	@GetMapping("/{recipeNo}")
 	public ResponseEntity<Recipe> retrieve(@PathVariable("recipeNo") Long recipeNo) {
+		return new ResponseEntity<Recipe>(service.retrieve(recipeNo), HttpStatus.OK);
+	}
+	
+	// 나의 레시피 상세 조회
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "나의 레시피 상세 조회")
+	@GetMapping("/update/{recipeNo}")
+	public ResponseEntity<Recipe> retrieveMine(@PathVariable("recipeNo") Long recipeNo) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Recipe>(service.retrieve(username, recipeNo), HttpStatus.OK);
+		return new ResponseEntity<Recipe>(service.retrieveMine(username, recipeNo), HttpStatus.OK);
 	}
 	
 	// 전체 레시피 조회
@@ -71,11 +78,11 @@ public class RecipeController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 수정")
-	@PutMapping("/{recipeNo}")
-	public ResponseEntity<Recipe> update(@PathVariable("recipeNo") Long recipeNo, @RequestBody RecipeDTO recipeDto) {
+	@PutMapping()
+	public ResponseEntity<Recipe> update(@RequestBody RecipeDTO recipeDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Recipe>(service.update(username, recipeNo, recipeDto), HttpStatus.OK);
+		return new ResponseEntity<Recipe>(service.update(username, recipeDto), HttpStatus.OK);
 	}
 		
 	// 레시피 삭제
@@ -83,12 +90,12 @@ public class RecipeController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "레시피 삭제")
-	@DeleteMapping("/{recipeNo}")
-	public ResponseEntity<Void> delete(@PathVariable("recipeNo") Long recipeNo) {
+	@DeleteMapping()
+	public ResponseEntity<Void> delete(@RequestBody RecipeDTO recipeDto) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		
-		service.delete(username, recipeNo);
+		service.delete(username, recipeDto.getRecipeNo());
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }

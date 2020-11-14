@@ -3,7 +3,6 @@ package com.boum.frecipe.domain.user;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.persistence.CascadeType;
@@ -23,8 +22,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.boum.frecipe.domain.comment.UserReports;
 import com.boum.frecipe.domain.fridge.Fridge;
-import com.boum.frecipe.domain.recipe.Recipe;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -75,6 +74,12 @@ public class User implements UserDetails{
 	@JoinColumn(name = "fridge_no")
 	private Fridge fridge;
 	
+	// EAGER로 하니까 에러남..
+	// 신고한 댓글
+	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "user_no")
+	private List<UserReports> userReports;
+		
 	// 회원 정보 수정
 	public void update(String nickname, String phone, String img) {
 		this.nickname = nickname;

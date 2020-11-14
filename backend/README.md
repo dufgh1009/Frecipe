@@ -1,6 +1,6 @@
-# :computer: Back-End!~
+# :computer: Back-End!!zdddzzzㅇㅇ
 
-## 20.11.05(수)
+## 20.11.13(금)
 ### Done  
     - API  
         http://k3d204.p.ssafy.io/swagger-ui.html#/
@@ -11,8 +11,6 @@
 ### To Do
     - API 
         프론트 연동 확인
-        식품 수정
-        레시피 이미지 등록
     - Server
         SSL 적용 (letsencrypt, Certbot)
         Jenkins 배포 자동화
@@ -83,21 +81,24 @@ methods|POST
 ### Refrigerator
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/fridges|식품 등록 :heavy_check_mark:|식품 전체 조회 :heavy_check_mark:|냉장고 이름 수정 :heavy_check_mark:|식품 삭제 :heavy_check_mark:
-/fridges/recommands||유통기한 기준 식품 7개 조회  :heavy_check_mark:
+/fridges|식품 등록 :heavy_check_mark:|식품 전체 조회 :heavy_check_mark:|냉장고 이름 수정 :heavy_check_mark:|
+/fridges/recommands||유통기한 기준 식품 7개 조회 :heavy_check_mark:
+/fridges/delete/1||||식품 '1' 삭제 :heavy_check_mark:
+/fridges/delete/all||||전체 식품 삭제 :heavy_check_mark:
 <br>
 
 ### Recipe
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/recipes|레시피 등록 :heavy_check_mark:|레시피 전체 조회 :heavy_check_mark:
-/recipes/1||레시피 '1' 조회 :heavy_check_mark:|레시피 '1' 수정 :heavy_check_mark:|레시피 '1' 삭제 :heavy_check_mark:
+/recipes|레시피 등록 :heavy_check_mark:|레시피 전체 조회 :heavy_check_mark:|레시피 수정 :heavy_check_mark:|레시피 삭제 :heavy_check_mark:
+/recipes/1||레시피 '1' 조회 :heavy_check_mark:
+/recipes/update/1||내가 작성한 레시피 '1' 조회 :heavy_check_mark:
 <br>
 
 ### Comment
 methods|POST|GET|PUT|DELETE
 :---:|:----:|:---:|:---:|:---:
-/comments|댓글 등록|댓글 전체 조회|댓글 신고|댓글 삭제
+/comments|댓글 등록 :heavy_check_mark:|댓글 조회 :heavy_check_mark:|댓글 신고 :heavy_check_mark:|댓글 삭제 :heavy_check_mark:
 <br>
 
 ### Ingredient
