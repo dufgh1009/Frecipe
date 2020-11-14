@@ -11,8 +11,11 @@ import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { RootState } from '../redux/rootReducer';
 
+import djangoApi from '../djangoApi';
 import api from '../api';
 import AWS from 'aws-sdk/dist/aws-sdk-react-native';
+import axios from 'axios';
+
 
 var albumBucketName = 'frecipe-pjt';
 var bucketRegion = 'ap-northeast-2';
@@ -30,11 +33,13 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-interface State {}
+interface State { }
 interface Props {
   navigation: any;
   saveImage: typeof saveImage;
   username: string;
+  status: string;
+  index: number;
 }
 
 class MyCamera extends Component<Props, State> {
@@ -63,6 +68,12 @@ class MyCamera extends Component<Props, State> {
     this.getCameraRollPermission();
   }
 
+  getReceipt = async (url: object) => {
+    const result = await djangoApi.receipt(
+      url
+    );
+    console.log(result);
+  }
   takeSnapshot = async () => {
     if (this.camera) {
       let photo = await this.camera.takePictureAsync();
@@ -82,10 +93,8 @@ class MyCamera extends Component<Props, State> {
           let fileName = `recipe${this.props.username.substring(
             0,
             4,
-          )}${_date.getFullYear()}${
-            _date.getMonth() + 1
-          }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
-
+          )}${_date.getFullYear()}${_date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
           // 업로드 속성 설정
           var params = {
             Bucket: albumBucketName,
@@ -95,21 +104,25 @@ class MyCamera extends Component<Props, State> {
           };
 
           const temp = api.AWS_S3_SERVER + params.Key;
-          console.log('upload url : ' + temp);
 
           // 업로드
           s3.upload(params, function (err: any) {
             if (err) {
+              console.log(err)
               return alert('There was an error uploading your photo');
             }
           });
-          this.props.saveImage(0, 'completeImage', temp);
+          console.log(this.getReceipt({ url: temp }))
+          // if (this.props.status === 'completeImage') {
+          //   this.props.saveImage(this.props.index, 'completeImage', temp);
+          // } else if (this.props.status === 'context') {
+          //   this.props.saveImage(this.props.index, 'context', temp);
+          // }
           this.props.navigation.goBack();
         }
       }
     }
   };
-
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -140,7 +153,37 @@ class MyCamera extends Component<Props, State> {
                   quality: 1,
                 });
                 if (!result.cancelled) {
-                  this.props.saveImage(0, 'completeImage', result.uri);
+                  const response = await fetch(result.uri);
+                  const blob = await response.blob();
+                  let _date = new Date();
+                  let fileName = `recipe${this.props.username.substring(
+                    0,
+                    4,
+                  )}${_date.getFullYear()}${_date.getMonth() + 1
+                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                  // 업로드 속성 설정
+                  var params = {
+                    Bucket: albumBucketName,
+                    Key: `${fileName}.jpeg`,
+                    Body: blob,
+                    ACL: 'public-read',
+                  };
+
+                  const temp = api.AWS_S3_SERVER + params.Key;
+
+                  // 업로드
+                  s3.upload(params, function (err: any) {
+                    if (err) {
+                      console.log(err)
+                      return alert('There was an error uploading your photo');
+                    }
+                  });
+                  console.log(this.getReceipt({ url: temp }))
+                  // if (this.props.status === 'completeImage') {
+                  //   this.props.saveImage(this.props.index, 'completeImage', temp);
+                  // } else if (this.props.status === 'context') {
+                  //   this.props.saveImage(this.props.index, 'context', temp);
+                  // }
                   this.props.navigation.goBack();
                 }
               }}
@@ -159,7 +202,11 @@ class MyCamera extends Component<Props, State> {
 }
 
 const mapStateToProps = (state: RootState) => {
-  return { username: state.usersReducer.username };
+  return {
+    username: state.usersReducer.username,
+    status: state.cameraReducer.status,
+    index: state.cameraReducer.index,
+  };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
@@ -169,4 +216,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(MyCamera);
+export default connect(mapStateToProps, mapDispatchToProps)(MyCamera);

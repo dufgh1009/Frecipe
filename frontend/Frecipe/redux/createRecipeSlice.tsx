@@ -204,6 +204,14 @@ function createRecipe(
           }),
           ...recipeAdd.completeImage.slice(action.payload.index + 1),
         ];
+      } else if (action.payload.category === 'context') {
+        recipeAdd.contexts = [
+          ...recipeAdd.contexts.slice(0, action.payload.index),
+          Object.assign({}, recipeAdd.contexts[action.payload.index], {
+            image: action.payload.uri,
+          }),
+          ...recipeAdd.contexts.slice(action.payload.index + 1),
+        ];
       }
       return Object.assign({}, state, { recipeAdd: recipeAdd });
     case INIT_RECIPE:
