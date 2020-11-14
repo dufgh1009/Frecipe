@@ -23,16 +23,24 @@ public interface IngredientRepository extends JpaRepository<Ingredient, Long>{
 				   , nativeQuery = true)
 	List<Ingredient> findAllByFridgeNo(@Param("fridgeNo")Long fridgeNo);
 	
-	// 냉장고 번호와 식품 이름으로 찾기
-	Optional<Ingredient> findByFridgeNoAndIngName(Long fridgeNo, String ingName);
+	// 식품 조회 (냉장고 번호)
+	List<Ingredient> findByFridgeNo(Long fridgeNo);
+	
+	// 식품 조회 (냉장고 번호, 식품 번호)
+	Optional<Ingredient> findByFridgeNoAndIngNo(Long fridgeNo, Long ingNo);
 	
 	// 식품 삭제
 	@Query(value = "DELETE "
-					+ "FROM INGREDIENT "
+					+ "FROM ingredient "
 					+ "WHERE fridge_no = :fridgeNo "
-					+ "AND ing_name = :ingName "
+					+ "AND ing_no = :ingNo "
 					, nativeQuery = true)
-	void deleteByFridgeNoAndIngName(@Param("fridgeNo")Long fridgeNo, @Param("ingName")String ingName);
+	void deleteByFridgeNoAndIngNo(@Param("fridgeNo")Long fridgeNo, @Param("ingNo")Long ingNo);
 
-
+	// 전체 식품 삭제
+	@Query(value = "DELETE "
+					+ "FROM ingredient "
+					+ "WHERE fridge_no = :fridgeNo "
+					, nativeQuery = true)
+	void deleteByFridgeNo(Long fridgeNo);
 }

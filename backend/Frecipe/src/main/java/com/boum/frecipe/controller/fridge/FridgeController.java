@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,10 +43,10 @@ public class FridgeController {
 	})
 	@ApiOperation(value = "식품 등록")
 	@PostMapping
-	public ResponseEntity<Ingredient> add(@RequestBody Ingredient ingredient) {
+	public ResponseEntity<List<Ingredient>> add(@RequestBody List<Ingredient> ingredients) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
-		return new ResponseEntity<Ingredient>(service.addIng(username, ingredient), HttpStatus.OK);
+		return new ResponseEntity<List<Ingredient>>(service.addIng(username, ingredients), HttpStatus.OK);
 	}
 	
 	// 식품 전체 조회
@@ -89,12 +90,26 @@ public class FridgeController {
 		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
 	})
 	@ApiOperation(value = "식품 삭제")
-	@DeleteMapping
-	public ResponseEntity<Void> delete(@RequestBody IngredientDTO ingredientDto) {
+	@DeleteMapping("/delete/{ingNo}")
+	public ResponseEntity<Void> delete(@PathVariable("ingNo") Long ingNo) {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String username = authentication.getName();
 		
-		service.deleteIng(username, ingredientDto);
+		service.deleteIng(username, ingNo);
+		return new ResponseEntity<Void>(HttpStatus.OK);
+	}
+	
+	// 전체 식품 삭제
+	@ApiImplicitParams({
+		@ApiImplicitParam(name = "X-AUTH-TOKEN", required = true, dataType = "String", paramType = "header")
+	})
+	@ApiOperation(value = "전체 식품 삭제")
+	@DeleteMapping("/delete/all")
+	public ResponseEntity<Void> deleteAll() {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		String username = authentication.getName();
+
+		service.deleteAllIng(username);
 		return new ResponseEntity<Void>(HttpStatus.OK);
 	}
 }
