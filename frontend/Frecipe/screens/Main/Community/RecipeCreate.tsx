@@ -23,7 +23,7 @@ import { changeCamera } from '../../../redux/cameraSlice';
 import api from '../../../api';
 
 interface Props {
-  status: string,
+  status: string;
   onCamera: () => void;
   navigation: any;
   addContext: typeof addContext;
@@ -45,13 +45,10 @@ class RecipeCreate extends Component<Props> {
   }
 
   createRecipe = async () => {
-    console.log('들어오니?');
-    console.log(this.props.recipeAdd);
     const { data } = await api.createRecipe(
       this.props.recipeAdd,
       this.props.token,
     );
-    console.log(data);
   };
 
   render() {
@@ -139,8 +136,7 @@ class RecipeCreate extends Component<Props> {
               onPress={() => {
                 this.props.changeCamera('completeImage', element.id);
                 this.props.onCamera();
-              }
-              }
+              }}
               type="clear"
               icon={<AntDesign name="pluscircleo" size={24} color="black" />}
             ></Button>
@@ -457,7 +453,7 @@ class RecipeCreate extends Component<Props> {
             </View>
           </View>
         </View>
-      </ScrollView >
+      </ScrollView>
     );
   }
 }
@@ -486,7 +482,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     changeContext: (index: number, value: string) =>
       dispatch(changeContext(index, value)),
     initRecipeToAdd: () => dispatch(initRecipeAdd()),
-    changeCamera: (status: string, index: number) => dispatch(changeCamera(status, index))
+    changeCamera: (status: string, index: number) =>
+      dispatch(changeCamera(status, index)),
   };
 };
 

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework import status
 
+import os
 import cv2
 import numpy as np
 import pytesseract
@@ -9,6 +10,8 @@ import re
 import json
 import urllib.request
 import ssl
+import boto3
+import base64
 from pprint import pprint
 
 from rest_framework.views import APIView
@@ -17,6 +20,10 @@ import requests # to get image from the web
 import shutil # to save it locally
 from OCR.serializer import UrlSerializer
 
+AWS_ACCESS_KEY_ID = "AKIAI57OTFAAN6JU7AAA"
+AWS_SECRET_ACCESS_KEY = "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"
+AWS_DEFAULT_REGION = "ap-northeast-2"
+AWS_BUCKET_NAME = "frecipe-pjt"
 
 
 @api_view(['POST'])
@@ -27,16 +34,15 @@ def ocr(request):
     if request.method == 'POST':
         serializer = UrlSerializer(data=request.data)
         if serializer.is_valid():
-            # print(serializer)
-            image_url = serializer.initial_data['url']
-            # image_url = "https://picsum.photos/200/300"
-            filename = "./OCR/data/images/img.jpg"
+            image_bytes = serializer.initial_data['url']
+            temp_filename = serializer.initial_data['filename']
+            imgdata = base64.b64decode(image_bytes)
+            filename = "../ai_server/static/" + temp_filename
 
-            ssl._create_default_https_context = ssl._create_unverified_context
-            urllib.request.urlretrieve(image_url, filename)
+            with open(filename, 'wb') as f:
+                f.write(imgdata)
 
-    
-            img = cv2.imread("./OCR/data/images/img.jpg")
+            img = cv2.imread(filename)
             img = cv2.resize(img, None, fx=1, fy=1)
             
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -67,4 +73,5 @@ def ocr(request):
             data = dict()
             data["food"] = new_text
             json_data = json.dumps(data, indent='\t')
+            print(json_data)
             return Response(json_data, status=status.HTTP_201_CREATED)
