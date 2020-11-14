@@ -457,7 +457,7 @@ class RecipeCreate extends Component<Props> {
             </View>
           </View>
         </View>
-      </ScrollView>
+      </ScrollView >
     );
   }
 }

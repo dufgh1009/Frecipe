@@ -8,8 +8,8 @@ const callApi = async (
   params = {},
 ) => {
   const headers = {
-    // Authorization: `Bearer ${jwt}`,
-    // 'Content-Type': 'application/json',
+    Authorization: `Bearer ${jwt}`,
+    'Content-Type': 'application/json',
     'X-AUTH-TOKEN': jwt,
   };
   const baseUrl = 'http://k3d204.p.ssafy.io:9999';
