@@ -42,7 +42,7 @@ public class FridgeServiceImpl implements FridgeService{
 				System.out.println("now : " + now);
 				System.out.println("exp : " + exp);
 				
-				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
 				
 				i.setFridgeNo(user.getFridge().getFridgeNo());
 				i.setRestExp(diff);
@@ -129,10 +129,10 @@ public class FridgeServiceImpl implements FridgeService{
 				Date now = df.parse(df.format(new Date()));
 				Date exp = df.parse(i.getExp());
 				
-				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)) + 1;
+				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
 
 				if(i.getRestExp() != checkDiff) {
-					if(checkDiff <= 0) {
+					if(checkDiff < 0) {
 						--checkDiff;
 					}
 					i.setRestExp(checkDiff);
