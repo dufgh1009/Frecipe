@@ -6,104 +6,77 @@ import {
   TouchableWithoutFeedback,
   Image,
 } from 'react-native';
-import {
-  Header,
-  Text,
-  ListItem,
-  Button,
-  Card,
-  Icon,
-} from 'react-native-elements';
+import { Header, Text, Button, Card, Input } from 'react-native-elements';
 
 import { AntDesign } from '@expo/vector-icons';
 
 import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 import {
+  list,
   detail,
   Context,
   Ingredient,
-  Sauce,
+  Sauces,
   Img,
 } from '../../../redux/communitySlice';
 
+import api from '../../../api';
+
 interface Props {
   navigation: any;
+  route: any;
   detail: typeof detail;
+  list: typeof list;
   recipeDetail: {
     recipeNo: number;
     mainImage: string;
     title: string;
     nickname: string;
-    context: Array<Context>;
+    contexts: Array<Context>;
     view: number;
     rate: number;
     comments: Array<Comment>;
     mainIngredients: Array<Ingredient>;
     ingredients: Array<Ingredient>;
-    sauce: Array<Sauce>;
+    sauces: Array<Sauces>;
     completeImage: Array<Img>;
   };
+  token: string;
 }
 
-class RecipeDetail extends Component<Props> {
+interface State {
+  comment: string;
+}
+
+class RecipeDetail extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
-  }
-  componentDidMount() {
-    const { detail } = this.props;
-    detail({
-      recipeNo: 1,
-      mainImage:
-        'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
-      title: '간장계란밥',
-      nickname: 'kwonsky',
-      context: [
-        {
-          text: '긴 하루의 끝에서 전해오는~',
-          image:
-            'http://imbbsfile.imbc.com/entertain07/goldfish_photo/201507/goldfish_photo150713135723entertain2.jpg',
-        },
-        {
-          text: '내 마음 속에 꼭 숨겨둔 이야기이이이',
-          image:
-            'https://pds.joins.com/news/component/htmlphoto_mmdata/201905/21/2a82311c-9907-435d-bcaa-579cebafefb1.jpg',
-        },
-        {
-          text: 'ㅋㅋ 먼 훗날 언젠가는',
-          image:
-            'https://post-phinf.pstatic.net/MjAxOTA2MjZfMTg1/MDAxNTYxNTI3MTI4MDU4.6jdvCViU0lmNqVm-z2cEp-LjFuMmb67-KS9erNMkVy4g.l7-fRM8FHbaNb7dU7nebEnCyY3oNrOGVXPkQDDPiCNMg.JPEG/%EC%9C%A0%EB%85%B8%EC%9C%A4%ED%98%B8_2.jpg',
-        },
-      ],
-      view: 9,
-      rate: 4.5,
-      comments: [
-        { nickname: '성중이', content: '맛없겠다.', rate: 5 },
-        { nickname: '성여로', content: '나도 간계밥!!!', rate: 5 },
-        { nickname: '아잉으니야', content: '난 언제 해줌?', rate: 5 },
-        { nickname: '엄...', content: '하늘이 집 가면 돼?', rate: 5 },
-        {
-          nickname: 'kwonsky',
-          content: '다 나가주세요. 혼자 있고 싶으니깐...',
-          rate: 5,
-        },
-      ],
-      mainIngredients: [{ name: '간장' }, { name: '계란' }, { name: '참기름' }],
-      ingredients: [{ name: '밥' }, { name: '숟가락' }, { name: '젓가락' }],
-      sauce: [
-        {
-          name: '지으니',
-          quantity: '10명',
-        },
-      ],
-      completeImage: [{ image: '' }, { image: '' }, { image: '' }],
-    });
+
+    this.state = {
+      comment: '',
+    };
   }
 
-  render() {
-    const { recipeDetail } = this.props;
+  commentCreate = async () => {
+    const commentObject = {
+      content: this.state.comment,
+      recipeNo: this.props.recipeDetail.recipeNo,
+    };
+    await api.createComment(commentObject, this.props.token);
+
+    const recipeDetail = await api.recipeDetail(
+      this.props.recipeDetail.recipeNo,
+    );
+    this.props.detail(recipeDetail.data);
+    const recipe = await api.getRecipe();
+    this.props.list(recipe.data);
+  };
+
+  render = () => {
+    const recipeDetail = this.props.recipeDetail;
     return (
-      <View>
+      <ScrollView>
         <Header
           style={{ flex: 1 }}
           backgroundColor="#00BD75"
@@ -111,7 +84,7 @@ class RecipeDetail extends Component<Props> {
             <Button
               icon={<AntDesign name="back" size={24} color="white" />}
               buttonStyle={styles.backButton}
-              onPress={() => this.props.navigation.goBack()}
+              onPress={() => this.props.navigation.navigate('CommunityHome')}
             />
           }
         />
@@ -138,7 +111,7 @@ class RecipeDetail extends Component<Props> {
                 ),
               )}
             </View>
-            <Card.Image source={{ uri: recipeDetail.mainImage }} />
+            <Card.Image source={{ uri: recipeDetail.completeImage[0].image }} />
             <Text h4 style={styles.centerAlign}>
               재료
             </Text>
@@ -150,12 +123,12 @@ class RecipeDetail extends Component<Props> {
             <Text h4 style={styles.centerAlign}>
               양념재료
             </Text>
-            {recipeDetail.sauce.map((s: any, i: number) => (
+            {recipeDetail.sauces.map((s: any, i: number) => (
               <Text key={i} style={styles.centerAlign}>
                 {s.name} : {s.quantity}
               </Text>
             ))}
-            {recipeDetail.context.map((c: any, i: number) => (
+            {recipeDetail.contexts.map((c: any, i: number) => (
               <View key={i}>
                 {c.image ? <Card.Image source={{ uri: c.image }} /> : <View />}
                 <Text style={[{ marginBottom: 10 }, styles.centerAlign]}>
@@ -169,6 +142,18 @@ class RecipeDetail extends Component<Props> {
           <Card.Title h4 style={styles.leftAlign}>
             댓글
           </Card.Title>
+          <Input
+            placeholder="댓글을 입력해주세요."
+            rightIcon={
+              <Button
+                title="확인"
+                buttonStyle={styles.backButton}
+                titleStyle={{ fontSize: 15 }}
+                onPress={this.commentCreate}
+              ></Button>
+            }
+            onChangeText={(value: string) => this.setState({ comment: value })}
+          />
           {recipeDetail.comments.map((comment: any, i: number) => (
             <View key={i}>
               <Card.Divider />
@@ -177,19 +162,21 @@ class RecipeDetail extends Component<Props> {
             </View>
           ))}
         </Card>
-      </View>
+      </ScrollView>
     );
-  }
+  };
 }
 
 const mapStateToProps = (state: RootState) => {
   return {
     recipeDetail: state.community.recipeDetail,
+    token: state.usersReducer.token,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
+    list: (form: any) => dispatch(list(form)),
     detail: (recipe: Object) => dispatch(detail(recipe)),
   };
 };

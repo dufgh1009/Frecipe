@@ -116,7 +116,6 @@ class Setting extends Component<Props, State> {
   // 앨범 내 사진 선택
   pickImage = async () => {
     const { username, rollGranted } = this.state;
-
     // 앨범 접근 권한
     if (rollGranted === false) {
       const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
@@ -187,6 +186,8 @@ class Setting extends Component<Props, State> {
         phone: data.phone,
         img: data.img,
       });
+
+      alert('회원정보를 수정했습니다.');
     } catch (event) {
       console.log(event);
     }

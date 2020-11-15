@@ -17,6 +17,7 @@ import {
   recipeAdd,
   initRecipeAdd,
 } from '../../../redux/createRecipeSlice';
+import { list } from '../../../redux/communitySlice';
 
 import { changeCamera } from '../../../redux/cameraSlice';
 
@@ -35,6 +36,7 @@ interface Props {
   changeTitle: typeof changeTitle;
   initRecipeToAdd: typeof initRecipeAdd;
   changeCamera: typeof changeCamera;
+  list: typeof list;
   recipeAdd: recipeAdd;
   token: string;
 }
@@ -45,10 +47,11 @@ class RecipeCreate extends Component<Props> {
   }
 
   createRecipe = async () => {
-    const { data } = await api.createRecipe(
-      this.props.recipeAdd,
-      this.props.token,
-    );
+    await api.createRecipe(this.props.recipeAdd, this.props.token);
+    this.props.initRecipeToAdd();
+    const { data } = await api.getRecipe();
+    this.props.list(data);
+    this.props.navigation.navigate('CommunityHome');
   };
 
   render() {
@@ -484,6 +487,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     initRecipeToAdd: () => dispatch(initRecipeAdd()),
     changeCamera: (status: string, index: number) =>
       dispatch(changeCamera(status, index)),
+    list: (form: any) => dispatch(list(form)),
   };
 };
 
