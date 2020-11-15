@@ -36,10 +36,13 @@ public class FridgeServiceImpl implements FridgeService{
 		for(Ingredient i : ingredients) {
 			try {
 				SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-				Date now = new Date();
+				Date now = df.parse(df.format(new Date()));
 				Date exp = df.parse(i.getExp());
+				
+				System.out.println("now : " + now);
+				System.out.println("exp : " + exp);
 				// 현재 날짜를 기준으로 유통기한 날짜 까지 남은 일수
-				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+				int diff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 				
 //				System.out.println("현재 날짜 : " + df.format(now.getTime()));
 //				System.out.println("식품 유통기한 : " + df.format(exp.getTime()));
@@ -127,15 +130,20 @@ public class FridgeServiceImpl implements FridgeService{
 		
 		for(Ingredient i : ingredients) {
 			try {
-				Date now = new Date();
+//				Date now = df.parse(df.format(new Date()));
+				Date now = df.parse("2020-11-18");
 				Date exp = df.parse(i.getExp());
 				
-				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000));
+				int checkDiff = (int) ((exp.getTime() - now.getTime()) / (24 * 60 * 60 * 1000)) + 1;
 				
 //				System.out.println("저장된 남은 기간 : " + i.getRestExp());
 //				System.out.println("현재 남은 기간 : " + checkDiff);
 				
 				if(i.getRestExp() != checkDiff) {
+					if(checkDiff <= 0) {
+						--checkDiff;
+					}
+					
 					i.setRestExp(checkDiff);
 					
 //					System.out.println("남은 기한 갱신 완료");
