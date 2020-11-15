@@ -2,6 +2,7 @@ import React from 'react';
 import CommunityHome from './CommunityHome';
 import RecipeCreate from './RecipeCreate';
 import RecipeDetail from './RecipeDetail';
+import RecipeRecommend from '../RecipeRecommend/RecipeRecommend';
 
 import { enableScreens } from 'react-native-screens';
 import { createNativeStackNavigator } from 'react-native-screens/native-stack';
@@ -30,8 +31,8 @@ export function Community(props: Props) {
           ></RecipeCreate>
         )}
       />
-
       <Stack.Screen name="RecipeDetail" component={RecipeDetail} />
+      <Stack.Screen name="RecipeRecommend" component={RecipeRecommend} />
     </Stack.Navigator>
   );
 }

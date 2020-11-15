@@ -18,6 +18,7 @@ import { RouteProp } from '@react-navigation/native';
 
 import { connect, Dispatch } from 'react-redux';
 import { login } from '../../redux/usersSlice';
+import { list } from '../../redux/communitySlice';
 
 import api from '../../api';
 
@@ -34,6 +35,7 @@ interface Props {
   navigation: StackNavigationProp<AuthStackParamList, 'SignIn'>;
   route: RouteProp<AuthStackParamList, 'SignIn'>;
   login: ({ token, userNo, username, nickname, phone, img }: Login) => void;
+  list: typeof list;
 }
 
 interface State {
@@ -80,6 +82,9 @@ class SignIn extends Component<Props, State> {
     try {
       const { data: token } = await api.login({ username, password });
       const { data } = await api.getUser(token);
+
+      const getRecipe = await api.getRecipe();
+      this.props.list(getRecipe.data);
 
       const { login } = this.props;
       login({
@@ -150,6 +155,7 @@ class SignIn extends Component<Props, State> {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     login: (form: Login) => dispatch(login(form)),
+    list: (form: any) => dispatch(list(form)),
   };
 };
 

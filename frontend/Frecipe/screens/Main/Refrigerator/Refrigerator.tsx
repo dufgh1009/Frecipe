@@ -8,7 +8,7 @@ import {
   FlatList,
   Animated,
   TouchableOpacity,
-  LogBox
+  LogBox,
 } from 'react-native';
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
@@ -33,7 +33,6 @@ import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 
 import api from '../../../api';
-
 
 LogBox.ignoreAllLogs();
 
@@ -83,7 +82,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   addOverlay = () => {
     this.props.deleteIngredientAll();
     this.setState({ addVisible: !this.state.addVisible });
-    this.setState({ addIngredients: [] });
+    // this.setState({ addIngredients: [] });
   };
 
   listIngredients = async () => {
@@ -150,6 +149,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
 
   takePicture() {
     this.props.changeCamera('receipt', 0);
+    this.addOverlay();
     this.props.onCamera();
   }
   render() {
@@ -174,7 +174,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                   style={{
                     backgroundColor: 'red',
                     width: 60,
-                    height: 30,
+                    height: 50,
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}
@@ -292,41 +292,56 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         var statusButton = (
           <View
             key={index}
-            style={{ width: 100, flexDirection: 'row', alignItems: 'center' }}
+            style={{
+              width: 90,
+              marginLeft: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="solid"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{
+                height: 32,
+                width: 40,
+              }}
+              titleStyle={{ fontSize: 15 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="clear"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
+              buttonStyle={{ height: 32, width: 40 }}
               title="냉동"
-              titleStyle={{ fontSize: 10 }}
+              titleStyle={{ fontSize: 15 }}
             ></Button>
           </View>
         );
       } else {
         var statusButton = (
           <View
-            style={{ width: 100, flexDirection: 'row', alignContent: 'center' }}
+            style={{
+              width: 90,
+              marginLeft: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="clear"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{ height: 32, width: 40 }}
+              titleStyle={{ fontSize: 15 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="solid"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{ height: 32, width: 40 }}
+              titleStyle={{ fontSize: 15 }}
               title="냉동"
             ></Button>
           </View>
@@ -335,14 +350,15 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       return (
         <View key={index} style={styles.ingredientInputRow}>
           {statusButton}
-          <View style={{ width: 50 }}>
+          <View style={{ width: 80, marginLeft: 5 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'name')
               }
               value={ingredient.name}
-              style={{ fontSize: 10 }}
+              style={{ fontSize: 15, height: 32, width: 80 }}
               placeholder="이름"
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
           <View style={styles.ingredientInput}>
@@ -350,22 +366,29 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'count')
               }
-              style={{ fontSize: 15 }}
+              style={{ fontSize: 15, height: 32 }}
               placeholder="개수"
               keyboardType={'numeric'}
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
-          <View style={{ width: 60, marginHorizontal: 5 }}>
+          <View style={{ width: 80 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'exp')
               }
-              style={{ fontSize: 10 }}
+              style={{ fontSize: 15, height: 32 }}
               placeholder="2020-11-15"
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
           <View
-            style={{ width: 40, justifyContent: 'center', marginHorizontal: 5 }}
+            style={{
+              width: 40,
+              justifyContent: 'center',
+              height: 32,
+              marginLeft: 3,
+            }}
           >
             <Button
               type="clear"
@@ -476,7 +499,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                   ></Button>
                 </View>
                 <View style={styles.overlayHeaderCenter}>
-                  <Text>제품등록</Text>
+                  <Text style={{ fontSize: 20 }}>제품 등록</Text>
                 </View>
                 <View style={styles.overlayHeaderRight}>
                   <Button
@@ -544,7 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: 10,
+    marginLeft: 2,
   },
   expirationsBarSubBlack: {
     color: 'black',
@@ -590,6 +613,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     marginHorizontal: 10,
+    height: 440,
   },
   overlay: {
     position: 'relative',
@@ -598,7 +622,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   overlayHeader: {
-    height: 30,
+    height: 40,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
@@ -619,12 +643,12 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   overlayAddList: {
-    height: 500,
+    height: 600,
     marginTop: 10,
     flexDirection: 'column',
   },
   ingredientInput: {
-    width: 40,
+    width: 30,
     marginHorizontal: 10,
   },
   ingredientInputRow: {

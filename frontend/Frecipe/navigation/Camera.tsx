@@ -265,7 +265,6 @@ class MyCamera extends Component<Props, State> {
               </View>
             </TouchableOpacity>
           </View>
-          {/* <Button onPress={() => this.takeSnapshot()} title="찰칵"></Button> */}
         </Camera>
       </View>
     );

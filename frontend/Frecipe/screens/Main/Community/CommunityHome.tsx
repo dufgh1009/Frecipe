@@ -4,7 +4,7 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import { Header, ListItem, Image, Button } from 'react-native-elements';
@@ -139,7 +139,7 @@ class Community extends Component<Props> {
         />
         <ScrollView style={styles.recipeList}>
           {searchRecipes.map((recipe: Recipe) => (
-            <TouchableWithoutFeedback
+            <TouchableOpacity
               key={recipe.recipeNo}
               onPress={() => this.recipeDetail(recipe.recipeNo)}
             >
@@ -161,7 +161,7 @@ class Community extends Component<Props> {
                   buttonStyle={styles.commentButton}
                 />
               </ListItem>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
