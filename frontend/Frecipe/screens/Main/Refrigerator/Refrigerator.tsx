@@ -8,6 +8,7 @@ import {
   FlatList,
   Animated,
   TouchableOpacity,
+  LogBox
 } from 'react-native';
 
 
@@ -33,6 +34,9 @@ import { RootState } from '../../../redux/rootReducer';
 import { connect } from 'react-redux';
 
 import api from '../../../api';
+
+
+LogBox.ignoreAllLogs();
 
 interface RefrigeratorProps {
   deleteIngredientAll: typeof deleteIngredientAll;
@@ -318,13 +322,13 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       return (
         <View key={index} style={styles.ingredientInputRow}>
           {statusButton}
-          <View style={styles.ingredientInput}>
+          <View style={{ width: 50 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'name')
               }
               value={ingredient.name}
-              style={{ fontSize: 15 }}
+              style={{ fontSize: 10 }}
               placeholder="이름"
             ></TextInput>
           </View>

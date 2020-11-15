@@ -86,7 +86,7 @@ class MyCamera extends Component<Props, State> {
           quality: 1,
         });
         if (!result.cancelled) {
-          if (this.props.status === 'recipet') {
+          if (this.props.status === 'receipt') {
             const base64 = await FileSystem.readAsStringAsync(result.uri, {
               encoding: 'base64',
             });
@@ -127,8 +127,6 @@ class MyCamera extends Component<Props, State> {
                 return alert('There was an error uploading your photo');
               }
             });
-
-            console.log(temp);
 
             if (this.props.status === 'completeImage') {
               this.props.saveImage(this.props.index, 'completeImage', temp);
