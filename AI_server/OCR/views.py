@@ -39,8 +39,7 @@ def ocr(request):
             imgdata = base64.b64decode(image_bytes)
 
             filename = "../AI_server/static/" + temp_filename
-            with open(filename, 'w') as f:
-                print(1)
+            with open(filename, 'wb') as f:
                 f.write(imgdata)
 
             img = cv2.imread(filename)
