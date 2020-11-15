@@ -1,10 +1,12 @@
 const LIST = 'refregerator/LIST' as const;
-// const ADD = 'refrigerator/ADD' as const;
-// const DELETE = 'refrigerator/DELETE' as const;
-// const DELETEALL = 'refrigerator/DELETEALL' as const;
+const RECIEPT = 'refregerator/RECIEPT' as const;
 const SEARCH = 'refrigerator/SEARCH' as const;
 const MAXID = 'refrigerator/MAXID' as const;
 const ORDER = 'refrigerator/ORDER' as const;
+const ADDINGREDIENT = 'refrigerator/ADDINGREDIENT' as const;
+const DELETEINGREDIENT = 'refrigerator/DELETEINGREDIENT' as const;
+const DELETEINGREDIENTALL = 'refrigerator/DELETEINGREDIENTALL' as const;
+const CHANGEADDINGREDIENT = 'refrigerator/CHANGEADDINGREDIENT' as const;
 
 export interface ingredient {
   id: number;
@@ -19,24 +21,25 @@ export const list = (data: Array<ingredient>) => ({
   type: LIST,
   payload: data,
 });
-// export const add = (newIns: Array<ingredient>) => ({
-//   type: ADD,
-//   payload: newIns,
-// });
-// export const deleteIngredient = (id: number) => ({ type: DELETE, payload: id });
-// export const deleteAll = () => ({ type: DELETEALL });
+export const reciept = (foods: string[]) => ({ type: RECIEPT, payload: foods })
 export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 export const increaseMaxId = () => ({ type: MAXID });
 export const order = (filter: string) => ({ type: ORDER, payload: filter });
+export const addIngredient = () => ({ type: ADDINGREDIENT });
+export const deleteIngredient = (id: number) => ({ type: DELETEINGREDIENT, payload: id })
+export const deleteIngredientAll = () => ({ type: DELETEINGREDIENTALL })
+export const changeAddIngredient = (id: number, data: any, type: string) => ({ type: CHANGEADDINGREDIENT, payload: { id, data, type } })
 
 type Actions =
-  //   | ReturnType<typeof add>
-  //   | ReturnType<typeof deleteIngredient>
-  //   | ReturnType<typeof deleteAll>
   | ReturnType<typeof search>
   | ReturnType<typeof increaseMaxId>
   | ReturnType<typeof order>
-  | ReturnType<typeof list>;
+  | ReturnType<typeof list>
+  | ReturnType<typeof addIngredient>
+  | ReturnType<typeof deleteIngredient>
+  | ReturnType<typeof deleteIngredientAll>
+  | ReturnType<typeof changeAddIngredient>
+  | ReturnType<typeof reciept>;
 
 type RefrigeratorState = {
   ingredients: Array<ingredient>;
@@ -44,8 +47,10 @@ type RefrigeratorState = {
   maxId: number;
   yellowFood: number;
   redFood: number;
+  addIngredients: ingredient[];
 };
 const initialState: RefrigeratorState = {
+  addIngredients: [],
   ingredients: [],
   searchIngredients: [],
   maxId: 0,
@@ -58,7 +63,99 @@ function refrigerator(
   action: Actions,
 ): RefrigeratorState {
   const ingredients = Object.assign([], state.ingredients);
+  const newAddIngredient: ingredient[] = Object.assign([], state.addIngredients)
   switch (action.type) {
+    case CHANGEADDINGREDIENT:
+      let changedIngredient;
+      if (action.payload.type === 'name') {
+        for (let i = 0; i < newAddIngredient.length; i++) {
+          if (newAddIngredient[i].id === action.payload.id) {
+            changedIngredient = [...newAddIngredient.slice(0, i), {
+              id: newAddIngredient[i].id,
+              status: newAddIngredient[i].status,
+              name: action.payload.data,
+              count: newAddIngredient[i].count,
+              date: newAddIngredient[i].date,
+              exp: newAddIngredient[i].exp,
+            }, ...newAddIngredient.slice(i + 1)]
+          }
+        }
+      } else if (action.payload.type === 'status') {
+        for (let i = 0; i < newAddIngredient.length; i++) {
+          console.log(i)
+          if (newAddIngredient[i].id === action.payload.id) {
+            changedIngredient = [...newAddIngredient.slice(0, i), {
+              id: newAddIngredient[i].id,
+              status: action.payload.data,
+              name: newAddIngredient[i].name,
+              count: newAddIngredient[i].count,
+              date: newAddIngredient[i].date,
+              exp: newAddIngredient[i].exp,
+            }, ...newAddIngredient.slice(i + 1)]
+          }
+        }
+      } else if (action.payload.type === 'exp') {
+        for (let i = 0; i < newAddIngredient.length; i++) {
+          if (newAddIngredient[i].id === action.payload.id) {
+            changedIngredient = [...newAddIngredient.slice(0, i), {
+              id: newAddIngredient[i].id,
+              status: newAddIngredient[i].status,
+              name: newAddIngredient[i].name,
+              count: newAddIngredient[i].count,
+              date: newAddIngredient[i].date,
+              exp: action.payload.data,
+            }, ...newAddIngredient.slice(i + 1)]
+          }
+        }
+      }
+      else if (action.payload.type === 'count') {
+        for (let i = 0; i < newAddIngredient.length; i++) {
+          if (newAddIngredient[i].id === action.payload.id) {
+            let count = action.payload.data * 1
+            changedIngredient = [...newAddIngredient.slice(0, i), {
+              id: newAddIngredient[i].id,
+              status: newAddIngredient[i].status,
+              name: newAddIngredient[i].name,
+              count: count,
+              date: newAddIngredient[i].date,
+              exp: newAddIngredient[i].exp,
+            }, ...newAddIngredient.slice(i + 1)]
+          }
+        }
+      }
+      return Object.assign({}, state, { addIngredients: changedIngredient })
+    case RECIEPT:
+      for (var i = state.maxId; i < state.maxId + action.payload.length; i++) {
+        var newIngredient = {
+          id: i,
+          status: '냉장',
+          name: action.payload[i - state.maxId],
+          count: 0,
+          date: 0,
+          exp: '',
+        }
+        newAddIngredient.push(newIngredient)
+      }
+      return Object.assign({}, state, { addIngredients: newAddIngredient, maxId: state.maxId + action.payload.length })
+    case ADDINGREDIENT:
+      var newIngredient = {
+        id: state.maxId,
+        status: '냉장',
+        name: '',
+        count: 0,
+        date: 0,
+        exp: '',
+      }
+      newAddIngredient.push(newIngredient)
+      return Object.assign({}, state, { addIngredients: newAddIngredient, maxId: state.maxId + 1 })
+    case DELETEINGREDIENT:
+      return Object.assign({}, state, {
+        addIngredients: newAddIngredient.filter((element: any) => { return element.id !== action.payload })
+      })
+    case DELETEINGREDIENTALL:
+      return Object.assign({}, state, {
+        addIngredients: []
+      })
     case LIST:
       const ingredient = action.payload;
       const newData: any[] = [];
@@ -95,57 +192,6 @@ function refrigerator(
         ingredients: newData,
         searchIngredients: newData,
       });
-    // case ADD:
-    //   var maxId = 0;
-    //   var yCount = 0;
-    //   var rCount = 0;
-    //   var newIngredients: Array<ingredient> = Object.assign(
-    //     [],
-    //     state.ingredients,
-    //   );
-    //   for (var element of action.payload) {
-    //     if (element.name === '' || element.count === 0 || element.date < 0) {
-    //       continue;
-    //     }
-    //     newIngredients.push(element);
-    //     maxId = element.id;
-    //   }
-    //   newIngredients.map((element: ingredient) => {
-    //     if (element.date <= 3 && element.date >= 1) {
-    //       yCount = yCount + 1;
-    //     } else if (element.date < 1) {
-    //       rCount = rCount + 1;
-    //     }
-    //   });
-    //   return Object.assign({}, state, {
-    //     yellowFood: yCount,
-    //     redFood: rCount,
-    //     maxId: maxId + 1,
-    //     ingredients: newIngredients,
-    //     searchIngredients: newIngredients,
-    //   });
-    // case DELETE:
-    //   var deleteIngredients: ingredient[] = [];
-    //   ingredients.map((element: ingredient) => {
-    //     if (element.id != action.payload) {
-    //       deleteIngredients.push(element);
-    //     }
-    //   });
-    //   var yCount = 0;
-    //   var rCount = 0;
-    //   deleteIngredients.map((element: ingredient) => {
-    //     if (element.date <= 3 && element.date >= 1) {
-    //       yCount = yCount + 1;
-    //     } else if (element.date < 1) {
-    //       rCount = rCount + 1;
-    //     }
-    //   });
-    //   return Object.assign({}, state, {
-    //     ingredients: deleteIngredients,
-    //     yellowFood: yCount,
-    //     redFood: rCount,
-    //     searchIngredients: deleteIngredients,
-    //   });
     case SEARCH:
       var searchIngredient: ingredient[] = [];
       ingredients.map((element: ingredient) => {
@@ -154,14 +200,6 @@ function refrigerator(
         }
       });
       return Object.assign({}, state, { searchIngredients: searchIngredient });
-    // case DELETEALL:
-    //   return Object.assign({}, state, {
-    //     ingredients: [],
-    //     searchIngredients: [],
-    //     yellowFood: 0,
-    //     redFood: 0,
-    //     maxId: 0,
-    //   });
     case MAXID:
       return Object.assign({}, state, { maxId: state.maxId + 1 });
     case ORDER:

@@ -19,13 +19,14 @@ import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   list,
-  // add,
-  // deleteIngredient,
-  // deleteAll,
   search,
   increaseMaxId,
   order,
   ingredient,
+  addIngredient,
+  deleteIngredient,
+  deleteIngredientAll,
+  changeAddIngredient,
 } from '../../../redux/refrigeratorSlice';
 import { changeCamera } from '../../../redux/cameraSlice';
 import { RootState } from '../../../redux/rootReducer';
@@ -34,15 +35,17 @@ import { connect } from 'react-redux';
 import api from '../../../api';
 
 interface RefrigeratorProps {
+  deleteIngredientAll: typeof deleteIngredientAll;
   onCamera: () => void;
   ingredients: Array<ingredient>;
   maxId: number;
   increaseMaxId: typeof increaseMaxId;
   changeCamera: typeof changeCamera;
   list: typeof list;
-  // add: typeof add;
-  // deleteIngredient: typeof deleteIngredient;
-  // deleteAll: typeof deleteAll;
+  addIngredients: Array<ingredient>;
+  addIngredient: typeof addIngredient;
+  changeAddIngredient: typeof changeAddIngredient;
+  deleteIngredient: typeof deleteIngredient;
   search: typeof search;
   order: typeof order;
   yellowFood: number;
@@ -75,6 +78,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
     };
   }
   addOverlay = () => {
+    this.props.deleteIngredientAll()
     this.setState({ addVisible: !this.state.addVisible });
     this.setState({ addIngredients: [] });
   };
@@ -92,19 +96,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   };
 
   addIngredientList = () => {
-    var initList: Array<ingredient> = [];
-    var newIngredient = Object.assign(initList, this.state.addIngredients);
-    var ingredient = {
-      id: this.props.maxId,
-      name: '',
-      count: 0,
-      exp: '',
-      status: '냉장',
-      date: 0,
-    };
-    newIngredient.push(ingredient);
-    this.props.increaseMaxId();
-    this.setState({ addIngredients: newIngredient });
+    this.props.addIngredient()
   };
 
   addIngredient = async (addIngredients: ingredient[]) => {
@@ -133,33 +125,11 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   }
 
   onChangeAddlist(id: number, data: any, type: string) {
-    const newArray = [...this.state.addIngredients];
-    for (let i = 0; i < newArray.length; i++) {
-      if (newArray[i].id === id) {
-        if (type === 'name') {
-          newArray[i].name = data;
-        }
-        if (type === 'count') {
-          data *= 1;
-          newArray[i].count = data;
-        }
-        if (type === 'status') {
-          newArray[i].status = data;
-        }
-        if (type === 'exp') {
-          newArray[i].exp = data;
-        }
-      }
-    }
-    this.setState({
-      addIngredients: newArray,
-    });
+    this.props.changeAddIngredient(id, data, type)
   }
 
   delelteAddIngredient(num: number) {
-    this.setState({
-      addIngredients: this.state.addIngredients.filter((element) => { return element.id !== num })
-    })
+    this.props.deleteIngredient(num)
   }
 
   searchIngredient(keyword: string) {
@@ -182,7 +152,6 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   render() {
     const { redFood, yellowFood, searchIngredients } = this.props;
     const { addVisible, addIngredients } = this.state;
-    console.log(addIngredients)
     var displayIngredient = null;
     if (searchIngredients === []) {
       displayIngredient = <Text>재료 없음</Text>;
@@ -302,7 +271,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       );
     }
 
-    const addList = addIngredients.map((ingredient: ingredient) => {
+    const addList = this.props.addIngredients.map((ingredient: ingredient) => {
       const index = ingredient.id;
       if (ingredient.status === '냉장') {
         var statusButton = (
@@ -347,7 +316,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         );
       }
       return (
-        <View style={styles.ingredientInputRow}>
+        <View key={index} style={styles.ingredientInputRow}>
           {statusButton}
           <View style={styles.ingredientInput}>
             <TextInput
@@ -510,7 +479,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 <Button
                   type="outline"
                   style={{ flex: 4 }}
-                  onPress={() => this.addIngredient(addIngredients)}
+                  onPress={() => this.addIngredient(this.props.addIngredients)}
                   title="저장"
                 ></Button>
               </View>
@@ -684,18 +653,20 @@ const mapStateToProps = (state: RootState) => {
     redFood: state.refrigerator.redFood,
     searchIngredients: state.refrigerator.searchIngredients,
     token: state.usersReducer.token,
+    addIngredients: state.refrigerator.addIngredients
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
+  addIngredient: () => (dispatch(addIngredient())),
+  deleteIngredient: (id: number) => (dispatch(deleteIngredient(id))),
   changeCamera: (status: string, index: number) => (dispatch(changeCamera(status, index))),
   list: (data: ingredient[]) => dispatch(list(data)),
-  // add: (ingredeients: ingredient[]) => dispatch(add(ingredeients)),
-  // deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
-  // deleteAll: () => dispatch(deleteAll()),
   search: (keyword: string) => dispatch(search(keyword)),
   increaseMaxId: () => dispatch(increaseMaxId()),
   order: (filter: string) => dispatch(order(filter)),
+  deleteIngredientAll: () => dispatch(deleteIngredientAll()),
+  changeAddIngredient: (id: number, data: any, type: string) => dispatch(changeAddIngredient(id, data, type))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Refrigerator);
