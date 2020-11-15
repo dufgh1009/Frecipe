@@ -13,8 +13,24 @@ import { Dispatch } from 'redux';
 import { RootState } from '../redux/rootReducer';
 
 import djangoApi from '../djangoApi';
+import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 import api from '../api';
-import axios from 'axios';
+
+var albumBucketName = 'frecipe-pjt';
+var bucketRegion = 'ap-northeast-2';
+var IdentityPoolId = 'ap-northeast-2:43e4aae1-d94d-457e-96f2-69fc999cf72a';
+
+AWS.config.update({
+  region: bucketRegion,
+  credentials: new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: IdentityPoolId,
+  }),
+});
+
+var s3 = new AWS.S3({
+  apiVersion: '2006-03-01',
+  params: { Bucket: albumBucketName },
+});
 
 interface State {}
 interface Props {
@@ -52,7 +68,8 @@ class MyCamera extends Component<Props, State> {
   }
 
   getReceipt = async (url: object) => {
-    const result = await djangoApi.receipt({ url: 'http' });
+    const result = await djangoApi.receipt(url);
+    console.log(result.data);
   };
 
   takeSnapshot = async () => {
@@ -67,22 +84,58 @@ class MyCamera extends Component<Props, State> {
           quality: 1,
         });
         if (!result.cancelled) {
-          const base64 = await FileSystem.readAsStringAsync(result.uri, {
-            encoding: 'base64',
-          });
+          if (this.props.status === 'recipe') {
+            const base64 = await FileSystem.readAsStringAsync(result.uri, {
+              encoding: 'base64',
+            });
+            let _date = new Date();
+            let fileName = `receipt${this.props.username.substring(
+              0,
+              4,
+            )}${_date.getFullYear()}${
+              _date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
-          let _date = new Date();
-          let fileName = `recipe${this.props.username.substring(
-            0,
-            4,
-          )}${_date.getFullYear()}${
-            _date.getMonth() + 1
-          }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            this.getReceipt({
+              url: base64,
+              filename: `${fileName}.jpg`,
+            });
+          } else {
+            const response = await fetch(result.uri);
+            const blob = await response.blob();
+            let _date = new Date();
+            let fileName = `recipe${this.props.username.substring(
+              0,
+              4,
+            )}${_date.getFullYear()}${
+              _date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            // 업로드 속성 설정
+            var params = {
+              Bucket: albumBucketName,
+              Key: `${fileName}.jpeg`,
+              Body: blob,
+              ACL: 'public-read',
+            };
 
-          this.getReceipt({
-            url: base64,
-            filename: `${fileName}.jpg`,
-          });
+            const temp = api.AWS_S3_SERVER + params.Key;
+
+            // 업로드
+            s3.upload(params, function (err: any) {
+              if (err) {
+                console.log(err);
+                return alert('There was an error uploading your photo');
+              }
+            });
+
+            console.log(temp);
+
+            if (this.props.status === 'completeImage') {
+              this.props.saveImage(this.props.index, 'completeImage', temp);
+            } else if (this.props.status === 'context') {
+              this.props.saveImage(this.props.index, 'context', temp);
+            }
+          }
 
           this.props.navigation.goBack();
         }
@@ -119,26 +172,62 @@ class MyCamera extends Component<Props, State> {
                   quality: 1,
                 });
                 if (!result.cancelled) {
-                  const base64 = await FileSystem.readAsStringAsync(
-                    result.uri,
-                    {
-                      encoding: 'base64',
-                    },
-                  );
+                  if (this.props.status === 'recipe') {
+                    const base64 = await FileSystem.readAsStringAsync(
+                      result.uri,
+                      {
+                        encoding: 'base64',
+                      },
+                    );
+                    let _date = new Date();
+                    let fileName = `recipe${this.props.username.substring(
+                      0,
+                      4,
+                    )}${_date.getFullYear()}${
+                      _date.getMonth() + 1
+                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
-                  let _date = new Date();
-                  let fileName = `recipe${this.props.username.substring(
-                    0,
-                    4,
-                  )}${_date.getFullYear()}${
-                    _date.getMonth() + 1
-                  }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    this.getReceipt({
+                      url: base64,
+                      filename: `${fileName}.jpg`,
+                    });
+                  } else {
+                    const response = await fetch(result.uri);
+                    const blob = await response.blob();
+                    let _date = new Date();
+                    let fileName = `recipe${this.props.username.substring(
+                      0,
+                      4,
+                    )}${_date.getFullYear()}${
+                      _date.getMonth() + 1
+                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    // 업로드 속성 설정
+                    var params = {
+                      Bucket: albumBucketName,
+                      Key: `${fileName}.jpeg`,
+                      Body: blob,
+                      ACL: 'public-read',
+                    };
 
-                  this.getReceipt({
-                    url: base64,
-                    filename: `${fileName}.jpg`,
-                  });
+                    const temp = api.AWS_S3_SERVER + params.Key;
+                    // 업로드
+                    s3.upload(params, function (err: any) {
+                      if (err) {
+                        console.log(err);
+                        return alert('There was an error uploading your photo');
+                      }
+                    });
 
+                    if (this.props.status === 'completeImage') {
+                      this.props.saveImage(
+                        this.props.index,
+                        'completeImage',
+                        temp,
+                      );
+                    } else if (this.props.status === 'context') {
+                      this.props.saveImage(this.props.index, 'context', temp);
+                    }
+                  }
                   this.props.navigation.goBack();
                 }
               }}

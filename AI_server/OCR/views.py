@@ -37,14 +37,14 @@ def ocr(request):
             image_bytes = serializer.initial_data['url']
             temp_filename = serializer.initial_data['filename']
             imgdata = base64.b64decode(image_bytes)
-            filename = "../ai_server/static/" + temp_filename
 
+            filename = "../ai_server/static/" + temp_filename
             with open(filename, 'wb') as f:
                 f.write(imgdata)
 
             img = cv2.imread(filename)
             img = cv2.resize(img, None, fx=1, fy=1)
-            
+
             gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
             denoised = cv2.fastNlMeansDenoising(gray, h=10, searchWindowSize=21, templateWindowSize=7)
             adaptive_threshold = cv2.adaptiveThreshold(denoised, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 85, 31)
@@ -71,7 +71,6 @@ def ocr(request):
                         new_text.append(temp)
 
             data = dict()
-            data["food"] = new_text
-            json_data = json.dumps(data, indent='\t')
-            print(json_data)
-            return Response(json_data, status=status.HTTP_201_CREATED)
+            data["foods"] = new_text
+            print(data)
+            return Response(data, status=status.HTTP_201_CREATED)
