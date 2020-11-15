@@ -82,7 +82,6 @@ function refrigerator(
         }
       } else if (action.payload.type === 'status') {
         for (let i = 0; i < newAddIngredient.length; i++) {
-          console.log(i)
           if (newAddIngredient[i].id === action.payload.id) {
             changedIngredient = [...newAddIngredient.slice(0, i), {
               id: newAddIngredient[i].id,
