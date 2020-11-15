@@ -5,6 +5,7 @@ import {
   View,
   ScrollView,
   TouchableWithoutFeedback,
+  Dimensions,
 } from 'react-native';
 import { Header, ListItem, Image, Button } from 'react-native-elements';
 
@@ -25,6 +26,9 @@ import {
 } from '../../../redux/communitySlice';
 
 import api from '../../../api';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 interface Props {
   navigation: any;
@@ -216,6 +220,7 @@ const styles = StyleSheet.create({
   },
   recipeList: {
     marginTop: 10,
+    height: SCREEN_HEIGHT - 310,
   },
   commentButton: {
     backgroundColor: '#00BD75',

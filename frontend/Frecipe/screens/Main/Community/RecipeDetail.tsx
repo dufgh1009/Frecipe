@@ -5,6 +5,8 @@ import {
   ScrollView,
   TouchableWithoutFeedback,
   Image,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { Header, Text, Button, Card, Input } from 'react-native-elements';
 
@@ -22,6 +24,9 @@ import {
 } from '../../../redux/communitySlice';
 
 import api from '../../../api';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 interface Props {
   navigation: any;
@@ -47,6 +52,7 @@ interface Props {
 
 interface State {
   comment: string;
+  rate: number;
 }
 
 class RecipeDetail extends Component<Props, State> {
@@ -55,6 +61,7 @@ class RecipeDetail extends Component<Props, State> {
 
     this.state = {
       comment: '',
+      rate: 0,
     };
   }
 
@@ -62,6 +69,7 @@ class RecipeDetail extends Component<Props, State> {
     const commentObject = {
       content: this.state.comment,
       recipeNo: this.props.recipeDetail.recipeNo,
+      rate: this.state.rate,
     };
     await api.createComment(commentObject, this.props.token);
 
@@ -73,10 +81,14 @@ class RecipeDetail extends Component<Props, State> {
     this.props.list(recipe.data);
   };
 
+  commentRate = (score: number) => {
+    this.setState({ rate: score });
+  };
+
   render = () => {
     const recipeDetail = this.props.recipeDetail;
     return (
-      <ScrollView>
+      <View style={{ marginBottom: 100 }}>
         <Header
           style={{ flex: 1 }}
           backgroundColor="#00BD75"
@@ -88,81 +100,137 @@ class RecipeDetail extends Component<Props, State> {
             />
           }
         />
-        <Card>
-          <Card.Title h3 style={styles.leftAlign}>
-            {recipeDetail.title}
-          </Card.Title>
-          <Card.Title style={styles.leftAlign}>
-            {recipeDetail.nickname}
-            {'\n'}
-            조회수 : {recipeDetail.view} | 평점 : {recipeDetail.rate}
-          </Card.Title>
-          <Card.Divider />
-          <ScrollView>
-            <View style={styles.buttonContainer}>
-              {recipeDetail.mainIngredients.map(
-                (ingredient: any, i: number) => (
-                  <Button
-                    key={i}
-                    title={ingredient.name}
-                    buttonStyle={styles.ingredientButton}
-                    titleStyle={styles.buttonTitle}
-                  />
-                ),
-              )}
+        <ScrollView>
+          <Card>
+            <Card.Title h3 style={styles.leftAlign}>
+              {recipeDetail.title}
+            </Card.Title>
+            <Card.Title style={styles.leftAlign}>
+              {recipeDetail.nickname}
+              {'\n'}
+              조회수 : {recipeDetail.view} | 평점 : {recipeDetail.rate}
+            </Card.Title>
+            <Card.Divider />
+            <View>
+              <View style={styles.buttonContainer}>
+                {recipeDetail.mainIngredients.map(
+                  (ingredient: any, i: number) => (
+                    <Button
+                      key={i}
+                      title={ingredient.name}
+                      buttonStyle={styles.ingredientButton}
+                      titleStyle={styles.buttonTitle}
+                    />
+                  ),
+                )}
+              </View>
+              <Card.Image
+                source={{ uri: recipeDetail.completeImage[0].image }}
+              />
+              <Text h4 style={styles.centerAlign}>
+                재료
+              </Text>
+              {recipeDetail.ingredients.map((ingredient: any, i: number) => (
+                <Text key={i} style={styles.centerAlign}>
+                  {ingredient.name}
+                </Text>
+              ))}
+              <Text h4 style={styles.centerAlign}>
+                양념재료
+              </Text>
+              {recipeDetail.sauces.map((s: any, i: number) => (
+                <Text key={i} style={styles.centerAlign}>
+                  {s.name} : {s.quantity}
+                </Text>
+              ))}
+              {recipeDetail.contexts.map((c: any, i: number) => (
+                <View key={i}>
+                  {c.image ? (
+                    <Card.Image source={{ uri: c.image }} />
+                  ) : (
+                    <View />
+                  )}
+                  <Text style={[{ marginBottom: 10 }, styles.centerAlign]}>
+                    {c.text}
+                  </Text>
+                </View>
+              ))}
             </View>
-            <Card.Image source={{ uri: recipeDetail.completeImage[0].image }} />
-            <Text h4 style={styles.centerAlign}>
-              재료
-            </Text>
-            {recipeDetail.ingredients.map((ingredient: any, i: number) => (
-              <Text key={i} style={styles.centerAlign}>
-                {ingredient.name}
-              </Text>
-            ))}
-            <Text h4 style={styles.centerAlign}>
-              양념재료
-            </Text>
-            {recipeDetail.sauces.map((s: any, i: number) => (
-              <Text key={i} style={styles.centerAlign}>
-                {s.name} : {s.quantity}
-              </Text>
-            ))}
-            {recipeDetail.contexts.map((c: any, i: number) => (
+          </Card>
+          <Card>
+            <Card.Title h4 style={styles.leftAlign}>
+              댓글({recipeDetail.comments.length})
+            </Card.Title>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'flex-end',
+              }}
+            >
+              <Text style={{ fontSize: 18 }}>평점 : </Text>
+              <TouchableOpacity onPress={() => this.commentRate(1)}>
+                {this.state.rate >= 1 ? (
+                  <AntDesign name="star" size={20} color="black" />
+                ) : (
+                  <AntDesign name="staro" size={20} color="black" />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.commentRate(2)}>
+                {this.state.rate >= 2 ? (
+                  <AntDesign name="star" size={20} color="black" />
+                ) : (
+                  <AntDesign name="staro" size={20} color="black" />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.commentRate(3)}>
+                {this.state.rate >= 3 ? (
+                  <AntDesign name="star" size={20} color="black" />
+                ) : (
+                  <AntDesign name="staro" size={20} color="black" />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.commentRate(4)}>
+                {this.state.rate >= 4 ? (
+                  <AntDesign name="star" size={20} color="black" />
+                ) : (
+                  <AntDesign name="staro" size={20} color="black" />
+                )}
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => this.commentRate(5)}>
+                {this.state.rate >= 5 ? (
+                  <AntDesign name="star" size={20} color="black" />
+                ) : (
+                  <AntDesign name="staro" size={20} color="black" />
+                )}
+              </TouchableOpacity>
+            </View>
+            <Input
+              placeholder="댓글을 입력해주세요."
+              rightIcon={
+                <Button
+                  title="확인"
+                  buttonStyle={styles.backButton}
+                  titleStyle={{ fontSize: 15 }}
+                  onPress={this.commentCreate}
+                ></Button>
+              }
+              onChangeText={(value: string) =>
+                this.setState({ comment: value })
+              }
+            />
+            {recipeDetail.comments.map((comment: any, i: number) => (
               <View key={i}>
-                {c.image ? <Card.Image source={{ uri: c.image }} /> : <View />}
-                <Text style={[{ marginBottom: 10 }, styles.centerAlign]}>
-                  {c.text}
+                <Card.Divider />
+                <Text style={{ fontSize: 12 }}>{comment.nickname}</Text>
+                <Text style={{ marginBottom: 10, fontSize: 15 }}>
+                  {comment.content}
                 </Text>
               </View>
             ))}
-          </ScrollView>
-        </Card>
-        <Card>
-          <Card.Title h4 style={styles.leftAlign}>
-            댓글
-          </Card.Title>
-          <Input
-            placeholder="댓글을 입력해주세요."
-            rightIcon={
-              <Button
-                title="확인"
-                buttonStyle={styles.backButton}
-                titleStyle={{ fontSize: 15 }}
-                onPress={this.commentCreate}
-              ></Button>
-            }
-            onChangeText={(value: string) => this.setState({ comment: value })}
-          />
-          {recipeDetail.comments.map((comment: any, i: number) => (
-            <View key={i}>
-              <Card.Divider />
-              <Text>{comment.nickname}</Text>
-              <Text style={{ marginBottom: 10 }}>{comment.content}</Text>
-            </View>
-          ))}
-        </Card>
-      </ScrollView>
+          </Card>
+        </ScrollView>
+      </View>
     );
   };
 }
