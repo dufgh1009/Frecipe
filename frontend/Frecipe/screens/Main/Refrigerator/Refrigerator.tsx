@@ -7,9 +7,10 @@ import {
   TextInput,
   FlatList,
   Animated,
-  Dimensions,
   TouchableOpacity,
 } from 'react-native';
+
+
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Dispatch } from 'redux';
 import { Header, Overlay, Button } from 'react-native-elements';
@@ -51,6 +52,7 @@ interface RefrigeratorProps {
 }
 
 interface RefrigeratorState {
+  forAddId: number
   filter: string;
   addVisible: boolean;
   addIngredients: Array<ingredient>;
@@ -63,6 +65,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   constructor(props: RefrigeratorProps) {
     super(props);
     this.state = {
+      forAddId: 0,
       filter: 'update',
       addVisible: false,
       addIngredients: [],
@@ -99,7 +102,6 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       status: '냉장',
       date: 0,
     };
-
     newIngredient.push(ingredient);
     this.props.increaseMaxId();
     this.setState({ addIngredients: newIngredient });
@@ -154,6 +156,12 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
     });
   }
 
+  delelteAddIngredient(num: number) {
+    this.setState({
+      addIngredients: this.state.addIngredients.filter((element) => { return element.id !== num })
+    })
+  }
+
   searchIngredient(keyword: string) {
     this.props.search(keyword);
   }
@@ -174,6 +182,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   render() {
     const { redFood, yellowFood, searchIngredients } = this.props;
     const { addVisible, addIngredients } = this.state;
+    console.log(addIngredients)
     var displayIngredient = null;
     if (searchIngredients === []) {
       displayIngredient = <Text>재료 없음</Text>;
@@ -184,23 +193,22 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
           renderItem={({ item }: { item: ingredient }) => {
             const rightSwipe = (progress: any, dragX: any) => {
               const scale = dragX.interpolate({
-                inputRange: [0, 100],
-                outputRange: [0, 1],
+                inputRange: [100, 100],
+                outputRange: [1, 0],
                 extrapolate: 'clamp',
               });
               return (
                 <TouchableOpacity
+                  style={{ backgroundColor: 'red', width: 60, height: 30, alignItems: 'center', justifyContent: 'center' }}
                   key={item.id}
                   onPress={() => this.deleteIngredientList(item.id)}
                   activeOpacity={0.6}
                 >
-                  <View style={{ backgroundColor: 'red' }}>
-                    <Animated.Text
-                      style={{ color: 'white', transform: [{ scale: scale }] }}
-                    >
-                      Delete
-                    </Animated.Text>
-                  </View>
+                  <Animated.Text
+                    style={{ width: 40, textAlign: 'center', fontSize: 18, color: 'white', transform: [{ scale: scale }] }}
+                  >
+                    삭제
+                  </Animated.Text>
                 </TouchableOpacity>
               );
             };
@@ -300,35 +308,39 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         var statusButton = (
           <View
             key={index}
-            style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}
+            style={{ width: 100, flexDirection: 'row', alignItems: 'center' }}
           >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="solid"
-              buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }}
+              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
+              titleStyle={{ fontSize: 10 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="clear"
-              buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }}
+              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
               title="냉동"
+              titleStyle={{ fontSize: 10 }}
             ></Button>
           </View>
         );
       } else {
         var statusButton = (
-          <View style={{ flex: 4, flexDirection: 'row', alignItems: 'center' }}>
+          <View style={{ width: 100, flexDirection: 'row', alignContent: 'center' }}>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="clear"
-              buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }}
+              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
+              titleStyle={{ fontSize: 10 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="solid"
-              buttonStyle={{ height: 30, width: 50, marginHorizontal: 3 }}
+              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
+              titleStyle={{ fontSize: 10 }}
               title="냉동"
             ></Button>
           </View>
@@ -342,6 +354,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'name')
               }
+              value={ingredient.name}
               style={{ fontSize: 15 }}
               placeholder="이름"
             ></TextInput>
@@ -356,15 +369,17 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               keyboardType={'numeric'}
             ></TextInput>
           </View>
-          <View style={styles.ingredientInput}>
+          <View style={{ width: 60, marginHorizontal: 5 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'exp')
               }
-              style={{ fontSize: 15 }}
-              placeholder="유통기한"
-              keyboardType={'numeric'}
+              style={{ fontSize: 10 }}
+              placeholder="2020-11-15"
             ></TextInput>
+          </View>
+          <View style={{ width: 40, justifyContent: 'center', marginHorizontal: 5 }}>
+            <Button type='clear' onPress={() => this.delelteAddIngredient(ingredient.id)} icon={<AntDesign name="minuscircleo" size={15} color="black" />}></Button>
           </View>
         </View>
       );
@@ -450,7 +465,6 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               <Text style={{ flex: 2, textAlign: 'center' }}>비고</Text>
             </View>
             <View style={styles.ingredient}>{displayIngredient}</View>
-            <Button title="삭제" onPress={() => this.deleteAllIng()}></Button>
           </View>
 
           <Overlay
@@ -496,14 +510,14 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 <Button
                   type="outline"
                   style={{ flex: 4 }}
-                  onPress={(e) => this.addIngredient(addIngredients)}
+                  onPress={() => this.addIngredient(addIngredients)}
                   title="저장"
                 ></Button>
               </View>
             </View>
           </Overlay>
         </View>
-      </KeyboardAwareScrollView>
+      </KeyboardAwareScrollView >
     );
   }
 }
@@ -619,14 +633,14 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   ingredientInput: {
-    flex: 2,
+    width: 40,
+    marginHorizontal: 10
   },
   ingredientInputRow: {
     marginTop: 20,
     height: 30,
     flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'flex-start',
+    alignItems: 'center',
   },
   filterButton: {
     color: 'grey',
@@ -657,7 +671,7 @@ const styles = StyleSheet.create({
   ingredientsListRow: {
     flex: 1,
     flexDirection: 'row',
-    marginTop: 10,
+    marginVertical: 5,
     alignItems: 'flex-end',
   },
 });
