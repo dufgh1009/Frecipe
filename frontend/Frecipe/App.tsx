@@ -8,6 +8,8 @@ import store, { persistor } from './redux/store';
 
 import Gate from './screens/Gate';
 
+
+
 export default function App() {
   return (
     <Provider store={store}>
