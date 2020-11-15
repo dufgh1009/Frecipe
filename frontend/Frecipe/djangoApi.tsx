@@ -5,23 +5,11 @@ const callApi = async (method: string, path: string, data: object) => {
     'Access-Control-Allow-Origin': '*',
     'Content-Type': 'application/json',
   };
-  const baseUrl = 'http://127.0.0.1:8000';
+  const baseUrl = 'http://k3d204.p.ssafy.io:8000';
   const fullUrl = `${baseUrl}${path}`;
   if (method === 'post') {
     return axios[method](fullUrl, data, { headers });
   }
-  // axios({
-  //   method: 'post',
-  //   url: fullUrl,
-  //   data: data,
-  //   headers: headers,
-  // })
-  //   .then((response) => {
-  //     console.log(response.data);
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
 };
 
 export default {
