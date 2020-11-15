@@ -137,7 +137,6 @@ class Community extends Component<Props> {
           onClearPress={() => this.searchRecipe('')}
           placeholder="레시피를 검색하세요."
         />
-        <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
           {searchRecipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
   },
   recipeList: {
     marginTop: 10,
-    height: SCREEN_HEIGHT - 310,
+    height: SCREEN_HEIGHT - 280,
   },
   commentButton: {
     backgroundColor: '#00BD75',

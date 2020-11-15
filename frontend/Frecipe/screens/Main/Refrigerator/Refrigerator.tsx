@@ -10,7 +10,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Dispatch } from 'redux';
 import { Header, Overlay, Button } from 'react-native-elements';
@@ -55,7 +54,7 @@ interface RefrigeratorProps {
 }
 
 interface RefrigeratorState {
-  forAddId: number
+  forAddId: number;
   filter: string;
   addVisible: boolean;
   addIngredients: Array<ingredient>;
@@ -78,7 +77,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
     };
   }
   addOverlay = () => {
-    this.props.deleteIngredientAll()
+    this.props.deleteIngredientAll();
     this.setState({ addVisible: !this.state.addVisible });
     this.setState({ addIngredients: [] });
   };
@@ -96,7 +95,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   };
 
   addIngredientList = () => {
-    this.props.addIngredient()
+    this.props.addIngredient();
   };
 
   addIngredient = async (addIngredients: ingredient[]) => {
@@ -125,11 +124,11 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   }
 
   onChangeAddlist(id: number, data: any, type: string) {
-    this.props.changeAddIngredient(id, data, type)
+    this.props.changeAddIngredient(id, data, type);
   }
 
   delelteAddIngredient(num: number) {
-    this.props.deleteIngredient(num)
+    this.props.deleteIngredient(num);
   }
 
   searchIngredient(keyword: string) {
@@ -168,13 +167,25 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               });
               return (
                 <TouchableOpacity
-                  style={{ backgroundColor: 'red', width: 60, height: 30, alignItems: 'center', justifyContent: 'center' }}
+                  style={{
+                    backgroundColor: 'red',
+                    width: 60,
+                    height: 30,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                   key={item.id}
                   onPress={() => this.deleteIngredientList(item.id)}
                   activeOpacity={0.6}
                 >
                   <Animated.Text
-                    style={{ width: 40, textAlign: 'center', fontSize: 18, color: 'white', transform: [{ scale: scale }] }}
+                    style={{
+                      width: 40,
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'white',
+                      transform: [{ scale: scale }],
+                    }}
                   >
                     삭제
                   </Animated.Text>
@@ -297,7 +308,9 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
         );
       } else {
         var statusButton = (
-          <View style={{ width: 100, flexDirection: 'row', alignContent: 'center' }}>
+          <View
+            style={{ width: 100, flexDirection: 'row', alignContent: 'center' }}
+          >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="clear"
@@ -347,8 +360,14 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               placeholder="2020-11-15"
             ></TextInput>
           </View>
-          <View style={{ width: 40, justifyContent: 'center', marginHorizontal: 5 }}>
-            <Button type='clear' onPress={() => this.delelteAddIngredient(ingredient.id)} icon={<AntDesign name="minuscircleo" size={15} color="black" />}></Button>
+          <View
+            style={{ width: 40, justifyContent: 'center', marginHorizontal: 5 }}
+          >
+            <Button
+              type="clear"
+              onPress={() => this.delelteAddIngredient(ingredient.id)}
+              icon={<AntDesign name="minuscircleo" size={15} color="black" />}
+            ></Button>
           </View>
         </View>
       );
@@ -458,9 +477,8 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 <View style={styles.overlayHeaderRight}>
                   <Button
                     onPress={() => {
-                      this.takePicture()
-                    }
-                    }
+                      this.takePicture();
+                    }}
                     type="clear"
                     icon={<Entypo name="camera" size={24} color="black" />}
                   ></Button>
@@ -486,7 +504,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
             </View>
           </Overlay>
         </View>
-      </KeyboardAwareScrollView >
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -603,7 +621,7 @@ const styles = StyleSheet.create({
   },
   ingredientInput: {
     width: 40,
-    marginHorizontal: 10
+    marginHorizontal: 10,
   },
   ingredientInputRow: {
     marginTop: 20,
@@ -653,20 +671,22 @@ const mapStateToProps = (state: RootState) => {
     redFood: state.refrigerator.redFood,
     searchIngredients: state.refrigerator.searchIngredients,
     token: state.usersReducer.token,
-    addIngredients: state.refrigerator.addIngredients
+    addIngredients: state.refrigerator.addIngredients,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  addIngredient: () => (dispatch(addIngredient())),
-  deleteIngredient: (id: number) => (dispatch(deleteIngredient(id))),
-  changeCamera: (status: string, index: number) => (dispatch(changeCamera(status, index))),
+  addIngredient: () => dispatch(addIngredient()),
+  deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
+  changeCamera: (status: string, index: number) =>
+    dispatch(changeCamera(status, index)),
   list: (data: ingredient[]) => dispatch(list(data)),
   search: (keyword: string) => dispatch(search(keyword)),
   increaseMaxId: () => dispatch(increaseMaxId()),
   order: (filter: string) => dispatch(order(filter)),
   deleteIngredientAll: () => dispatch(deleteIngredientAll()),
-  changeAddIngredient: (id: number, data: any, type: string) => dispatch(changeAddIngredient(id, data, type))
+  changeAddIngredient: (id: number, data: any, type: string) =>
+    dispatch(changeAddIngredient(id, data, type)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Refrigerator);
