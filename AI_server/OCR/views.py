@@ -36,12 +36,13 @@ def ocr(request):
         print(1111111111)
         if serializer.is_valid():
             image_bytes = serializer.initial_data['url']
-            print(image_bytes)
             temp_filename = serializer.initial_data['filename']
             imgdata = base64.b64decode(image_bytes)
 
             filename = "../ai_server/static/" + temp_filename
+            print(1)
             with open(filename, 'wb') as f:
+                print(2)
                 f.write(imgdata)
 
             img = cv2.imread(filename)
