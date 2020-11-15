@@ -8,8 +8,8 @@ const callApi = async (
   params = {},
 ) => {
   const headers = {
-    // Authorization: `Bearer ${jwt}`,
-    // 'Content-Type': 'application/json',
+    Authorization: `Bearer ${jwt}`,
+    'Content-Type': 'application/json',
     'X-AUTH-TOKEN': jwt,
   };
   const baseUrl = 'http://k3d204.p.ssafy.io:9999';
@@ -35,20 +35,20 @@ export default {
     callApi('put', '/users.', form, token),
   deleteUser: (token: string) => callApi('delete', '/users', null, token),
 
+  // refrigerator
+  addFridges: (form: Array<any>, token: string) =>
+    callApi('post', '/fridges', form, token),
+  getFridges: (token: string) => callApi('get', '/fridges', null, token),
+  delFridge: (id: number, token: string) =>
+    callApi('delete', `/fridges/delete/${id}`, null, token),
+  delFridges: (token: string) =>
+    callApi('delete', '/fridges/delete/all', null, token),
+
   // recipe recommend
   sevenIngredient: (token: string) =>
     callApi('get', '/fridges/recommands', null, token),
 
-  //   createSupplies: (id, token, form) =>
-  //     callApi("post", `/checks/${id}/new/`, form, token),
-  //   myChecklist: (id, token) =>
-  //     callApi("get", `/checks/${id}/checklist/`, null, token),
-  //   searchSupply: (form) => callApi("post", "/checks/search/"),
-
-  //   detect: (form) => callApi("post", "/utilities/detect/", form),
-  //   checkStuff: (id, token, form) =>
-  //     callApi("post", `/checks/${id}/distinction/`, form, token),
-
-  //   dateSend: (form) => callApi("post", "/utilities/date/", form),
-  //   placeSend: (form) => callApi("post", "/utilities/place/", form),
+  // community
+  createRecipe: (form: object, token: string) =>
+    callApi('post', '/recipes', form, token),
 };

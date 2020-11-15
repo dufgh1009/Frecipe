@@ -12,26 +12,33 @@ import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 
 import { AntDesign } from '@expo/vector-icons';
 
-import { connect, Dispatch } from 'react-redux';
+import { Dispatch } from 'redux';
+import { connect } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
-import { list, filter, search } from '../../../redux/communitySlice';
+import {
+  list,
+  filter,
+  search,
+  Recipe,
+  filterType,
+} from '../../../redux/communitySlice';
 
-interface Recipe {
-  recNo: number;
-  title: string;
-  view: number;
-  rate: number;
-  mainImg: string;
-  commentCount: string;
-  comment: Array<Comment>;
-  ingredients: Array<String>;
-  writer: string;
-}
+// interface Recipe {
+//   recNo: number;
+//   title: string;
+//   view: number;
+//   rate: number;
+//   mainImg: string;
+//   commentCount: string;
+//   comment: Array<Comment>;
+//   ingredients: Array<String>;
+//   writer: string;
+// }
 
-interface filterType {
-  selected: string;
-  clickSelect: number;
-}
+// interface filterType {
+//   selected: string;
+//   clickSelect: number;
+// }
 
 interface Props {
   navigation: any;
@@ -52,6 +59,7 @@ class Community extends Component<Props> {
 
   leftFilter = () => {
     const { clickSelect } = this.props;
+
     const { filter } = this.props;
     const selectedList: Array<string> = [
       '업데이트순',
@@ -127,9 +135,9 @@ class Community extends Component<Props> {
         />
         <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
-          {searchRecipes.map((recipe: Recipe) => (
+          {/* {searchRecipes.map((recipe: Recipe) => (
             <TouchableWithoutFeedback
-              key={recipe.recNo}
+              key={recipe.recipeNo}
               onPress={() => this.props.navigation.navigate('RecipeDetail')}
             >
               <ListItem bottomDivider>
@@ -145,13 +153,13 @@ class Community extends Component<Props> {
                   </ListItem.Subtitle>
                 </ListItem.Content>
                 <Button
-                  title={recipe.comment}
+                  title={recipe.commentCount}
                   titleStyle={styles.commentButtonTitle}
                   buttonStyle={styles.commentButton}
                 />
               </ListItem>
             </TouchableWithoutFeedback>
-          ))}
+          ))} */}
         </ScrollView>
       </View>
     );
