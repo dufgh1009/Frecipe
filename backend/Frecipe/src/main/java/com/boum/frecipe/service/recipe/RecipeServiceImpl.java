@@ -1,8 +1,8 @@
 package com.boum.frecipe.service.recipe;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -90,6 +90,8 @@ public class RecipeServiceImpl implements RecipeService {
 			r.setComments(comments);
 			temp.add(r);
 		}
+		
+		Collections.sort(temp);
 		return temp;
 	}
 

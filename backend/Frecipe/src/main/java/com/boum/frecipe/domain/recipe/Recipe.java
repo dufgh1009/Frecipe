@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class Recipe {
+public class Recipe implements Comparable<Recipe>{
 	
 	// 레시피 ID
 	@Id
@@ -76,5 +76,11 @@ public class Recipe {
 	
 	public void updateView(Long view) {
 		this.view = view;
+	}
+	
+	// 레시피 번호 내림차순 정렬
+	@Override
+	public int compareTo(Recipe o) {
+		return (int) (o.getRecipeNo() - getRecipeNo());
 	}
 }
