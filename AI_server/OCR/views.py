@@ -38,7 +38,7 @@ def ocr(request):
             temp_filename = serializer.initial_data['filename']
             imgdata = base64.b64decode(image_bytes)
 
-            filename = "../ai_server/static/" + temp_filename
+            filename = "../ai_server/static/img.jpg"
             with open(filename, 'w') as f:
                 print(1)
                 f.write(imgdata)
