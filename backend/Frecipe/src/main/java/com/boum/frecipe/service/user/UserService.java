@@ -1,5 +1,6 @@
 package com.boum.frecipe.service.user;
 
+import java.sql.Blob;
 import java.util.List;
 
 import com.boum.frecipe.domain.user.User;
@@ -20,7 +21,7 @@ public interface UserService {
 	public User retrieveUser(String username);
 	
 	// 회원 정보 수정
-	public User updateUser(String username, UserDTO userDto);
+	public User updateUser(String username, UserDTO userDto, Blob blob);
 	
 	// 회원 탈퇴
 	public void deleteUser(String userNo);

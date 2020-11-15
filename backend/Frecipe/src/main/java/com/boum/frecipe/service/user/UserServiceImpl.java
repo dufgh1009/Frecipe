@@ -1,5 +1,6 @@
 package com.boum.frecipe.service.user;
 
+import java.sql.Blob;
 import java.util.Collections;
 import java.util.List;
 
@@ -72,18 +73,21 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User retrieveUser(String username) {
 		System.out.println("회원 정보 조회 ID : " + username);
-		return userRepo.findByUsername(username)
+		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
+		System.out.println("img : " + user.getImg());
+		return user;
 	}
 	
 	// 회원 정보 수정
 	@Override
 	@Transactional
-	public User updateUser(String username, UserDTO userDto) {
+	public User updateUser(String username, UserDTO userDto, Blob blob) {
 		System.out.println("회원 정보 수정 ID : " + username);
 		User user = userRepo.findByUsername(username)
 				.orElseThrow(() -> new IllegalArgumentException("아이디를 확인 해주세요."));
-		user.update(userDto.getNickname(), userDto.getPhone(), userDto.getImg());
+		user.updateImg(blob);
+		user.updateNicknameAndPhone(userDto.getNickname(), userDto.getPhone());
 		return user;
 	}
 	

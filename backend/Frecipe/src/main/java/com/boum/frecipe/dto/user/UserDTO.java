@@ -1,6 +1,8 @@
 package com.boum.frecipe.dto.user;
 
 
+import java.sql.Blob;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,5 +16,4 @@ public class UserDTO {
 	private String password;
 	private String nickname;
 	private String phone;
-	private String img;
 }

@@ -1,5 +1,6 @@
 package com.boum.frecipe.domain.user;
 
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -62,7 +63,7 @@ public class User implements UserDetails{
 	private String phone;
 	
 	// 프로필 사진 url
-	private String img;
+	private Blob img;
 	
 	// 회원 권한
 	@ElementCollection(fetch = FetchType.EAGER)
@@ -79,12 +80,16 @@ public class User implements UserDetails{
 	@OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "user_no")
 	private List<UserReports> userReports;
-		
-	// 회원 정보 수정
-	public void update(String nickname, String phone, String img) {
+	
+	// 회원 정보 수정 (닉네임, 전화번호)
+	public void updateImg(Blob img) {
+		this.img = img;
+	}
+
+	// 회원 정보 수정 (닉네임, 전화번호)
+	public void updateNicknameAndPhone(String nickname, String phone) {
 		this.nickname = nickname;
 		this.phone = phone;
-		this.img = img;
 	}
 	
 	// UserDetiails Override
