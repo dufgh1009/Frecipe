@@ -33,8 +33,10 @@ def ocr(request):
     """
     if request.method == 'POST':
         serializer = UrlSerializer(data=request.data)
+        print(1111111111)
         if serializer.is_valid():
             image_bytes = serializer.initial_data['url']
+            print(image_bytes)
             temp_filename = serializer.initial_data['filename']
             imgdata = base64.b64decode(image_bytes)
 
