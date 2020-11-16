@@ -170,21 +170,17 @@ function refrigerator(
       var maxId = 0;
       var yCount = 0;
       var rCount = 0;
-      var expIngredients: Array<ingredient> = [];
-      for (var element of action.payload) {
+      for (var element of newData) {
         if (element.name === '' || element.count === 0 || element.date < 0) {
           continue;
         }
-        expIngredients.push(element);
-        maxId = element.id;
-      }
-      expIngredients.map((element: ingredient) => {
         if (element.date <= 3 && element.date >= 1) {
           yCount = yCount + 1;
         } else if (element.date < 1) {
           rCount = rCount + 1;
         }
-      });
+        maxId = element.id;
+      }
       return Object.assign({}, state, {
         yellowFood: yCount,
         redFood: rCount,

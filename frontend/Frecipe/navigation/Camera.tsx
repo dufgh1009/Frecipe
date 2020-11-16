@@ -34,7 +34,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-interface State {}
+interface State { }
 interface Props {
   navigation: any;
   saveImage: typeof saveImage;
@@ -95,9 +95,8 @@ class MyCamera extends Component<Props, State> {
             let fileName = `receipt${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${
-              _date.getMonth() + 1
-            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${_date.getMonth() + 1
+              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
             this.getReceipt({
               url: base64,
@@ -110,9 +109,8 @@ class MyCamera extends Component<Props, State> {
             let fileName = `recipe${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${
-              _date.getMonth() + 1
-            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${_date.getMonth() + 1
+              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
             // 업로드 속성 설정
             var params = {
               Bucket: albumBucketName,
@@ -185,9 +183,8 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${
-                      _date.getMonth() + 1
-                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${_date.getMonth() + 1
+                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
                     this.getReceipt({
                       url: base64,
@@ -200,9 +197,8 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${
-                      _date.getMonth() + 1
-                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${_date.getMonth() + 1
+                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
                     // 업로드 속성 설정
                     var params = {
                       Bucket: albumBucketName,
@@ -243,7 +239,7 @@ class MyCamera extends Component<Props, State> {
               <View
                 style={{
                   borderWidth: 2,
-                  borderRadius: '50%',
+                  borderRadius: 50,
                   borderColor: 'white',
                   height: 60,
                   width: 60,
@@ -255,7 +251,7 @@ class MyCamera extends Component<Props, State> {
                 <View
                   style={{
                     borderWidth: 2,
-                    borderRadius: '50%',
+                    borderRadius: 50,
                     borderColor: 'white',
                     height: 50,
                     width: 50,
