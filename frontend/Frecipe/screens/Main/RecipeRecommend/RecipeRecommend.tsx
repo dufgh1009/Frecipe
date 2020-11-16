@@ -240,7 +240,7 @@ class RecipeRecommend extends Component<Props, State> {
               >
                 <ListItem bottomDivider>
                   <Image
-                    source={{ uri: recipe.mainImage }}
+                    source={{ uri: recipe.completeImage[0].image }}
                     style={styles.thumbnailImage}
                   />
                   <ListItem.Content>

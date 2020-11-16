@@ -268,7 +268,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                       {item.status}
                     </Text>
                   </View>
-                  <Text style={{ flex: 2, textAlign: 'center' }}>
+                  <Text style={{ flex: 3, textAlign: 'center' }}>
                     {item.name}
                   </Text>
                   <Text style={{ flex: 1, textAlign: 'center' }}>
@@ -474,7 +474,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
             </View>
             <View style={styles.ingredientHeader}>
               <Text style={{ flex: 3, textAlign: 'center' }}>보관방법</Text>
-              <Text style={{ flex: 2, textAlign: 'center' }}>재료</Text>
+              <Text style={{ flex: 3, textAlign: 'center' }}>재료</Text>
               <Text style={{ flex: 1, textAlign: 'center' }}>재고</Text>
               <Text style={{ flex: 2, textAlign: 'center' }}>유통기한</Text>
               <Text style={{ flex: 2, textAlign: 'center' }}>비고</Text>

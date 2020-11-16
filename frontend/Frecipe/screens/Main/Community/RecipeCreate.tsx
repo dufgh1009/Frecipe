@@ -60,19 +60,20 @@ class RecipeCreate extends Component<Props> {
       (element: any) => {
         const index = element.id;
         return (
-          <TextInput
-            key={element.id}
-            onChange={(e) =>
-              this.props.changeMainIngredient(index, e.nativeEvent.text)
-            }
-            style={{
-              marginHorizontal: 20,
-              width: 60,
-              height: 30,
-              borderBottomWidth: 1,
-            }}
-            placeholder="재료"
-          ></TextInput>
+          <View key={element.id} style={{ marginTop: 10, marginBottom: 10 }}>
+            <TextInput
+              onChange={(e) =>
+                this.props.changeMainIngredient(index, e.nativeEvent.text)
+              }
+              style={{
+                marginHorizontal: 20,
+                width: 78,
+                height: 30,
+                borderBottomWidth: 1,
+              }}
+              placeholder="재료"
+            ></TextInput>
+          </View>
         );
       },
     );
@@ -84,7 +85,7 @@ class RecipeCreate extends Component<Props> {
           style={{
             flexDirection: 'row',
             borderColor: 'black',
-            marginHorizontal: 5,
+            marginLeft: 10,
             height: 50,
           }}
         >
@@ -99,7 +100,7 @@ class RecipeCreate extends Component<Props> {
             }
             style={{
               marginHorizontal: 20,
-              width: 80,
+              width: 100,
               height: 40,
               borderBottomWidth: 1,
             }}
@@ -114,7 +115,12 @@ class RecipeCreate extends Component<Props> {
                 'ingredient',
               )
             }
-            style={{ marginHorizontal: 20, height: 40, borderBottomWidth: 1 }}
+            style={{
+              width: 100,
+              marginHorizontal: 20,
+              height: 40,
+              borderBottomWidth: 1,
+            }}
             placeholder="양 ex) 3T, 300g"
           ></TextInput>
         </View>
@@ -181,7 +187,7 @@ class RecipeCreate extends Component<Props> {
           style={{
             flexDirection: 'row',
             borderColor: 'black',
-            marginHorizontal: 5,
+            marginLeft: 10,
             height: 50,
           }}
         >
@@ -196,7 +202,7 @@ class RecipeCreate extends Component<Props> {
             }
             style={{
               marginHorizontal: 20,
-              width: 80,
+              width: 100,
               height: 40,
               borderBottomWidth: 1,
             }}
@@ -211,7 +217,12 @@ class RecipeCreate extends Component<Props> {
                 'sauce',
               )
             }
-            style={{ marginHorizontal: 20, height: 40, borderBottomWidth: 1 }}
+            style={{
+              marginHorizontal: 20,
+              width: 100,
+              height: 40,
+              borderBottomWidth: 1,
+            }}
             placeholder="양 ex) 3T, 300g"
           ></TextInput>
         </View>
@@ -235,6 +246,8 @@ class RecipeCreate extends Component<Props> {
                 textAlignVertical: 'center',
                 textAlign: 'center',
                 width: 40,
+                fontSize: 20,
+                marginRight: 10,
               }}
             >
               {element.id + 1}
@@ -246,16 +259,16 @@ class RecipeCreate extends Component<Props> {
               multiline
               style={{
                 height: 50,
-                width: 200,
+                width: 220,
                 textAlignVertical: 'top',
                 borderWidth: 1,
                 borderColor: 'black',
                 padding: 2,
               }}
-              placeholder="설명...."
+              placeholder="설명..."
             ></TextInput>
             <Button
-              buttonStyle={{ width: 60, marginHorizontal: 20 }}
+              buttonStyle={{ width: 60, marginLeft: 20 }}
               onPress={() => {
                 this.props.changeCamera('context', element.id);
                 this.props.onCamera();
@@ -348,26 +361,34 @@ class RecipeCreate extends Component<Props> {
               ></Button>
             }
           />
-          <View style={{ flex: 9, flexDirection: 'column', marginTop: 20 }}>
+          <View
+            style={{
+              flex: 9,
+              flexDirection: 'column',
+              marginTop: 20,
+            }}
+          >
             <TextInput
               onChange={(e) => this.props.changeTitle(e.nativeEvent.text)}
               style={{
                 fontSize: 20,
-                width: 300,
+                width: 315,
                 borderBottomWidth: 1,
                 borderColor: 'black',
-                marginHorizontal: 10,
-                marginBottom: 10,
+                marginLeft: 29,
+                marginBottom: 20,
               }}
-              placeholder="제목을 입력하세요"
+              placeholder="제목을 입력하세요."
             ></TextInput>
             <View>
               <Text
                 style={{
-                  paddingHorizontal: 10,
                   backgroundColor: '#9FCEB0',
                   height: 40,
                   textAlignVertical: 'center',
+                  fontSize: 20,
+                  paddingTop: 9,
+                  paddingLeft: 20,
                 }}
               >
                 메인재료
@@ -376,7 +397,7 @@ class RecipeCreate extends Component<Props> {
                 style={{
                   flexDirection: 'row',
                   borderColor: 'black',
-                  margin: 5,
+                  marginLeft: 10,
                   height: 50,
                   alignItems: 'center',
                 }}
@@ -394,7 +415,16 @@ class RecipeCreate extends Component<Props> {
                   height: 40,
                 }}
               >
-                <Text style={{ textAlignVertical: 'center' }}>재료</Text>
+                <Text
+                  style={{
+                    textAlignVertical: 'center',
+                    fontSize: 20,
+                    paddingTop: 9,
+                    marginLeft: 10,
+                  }}
+                >
+                  재료
+                </Text>
                 <Button
                   type="clear"
                   onPress={() => this.props.addIngredient()}
@@ -413,7 +443,16 @@ class RecipeCreate extends Component<Props> {
                   height: 40,
                 }}
               >
-                <Text style={{ textAlignVertical: 'center' }}>양념재료</Text>
+                <Text
+                  style={{
+                    textAlignVertical: 'center',
+                    fontSize: 20,
+                    paddingTop: 9,
+                    paddingLeft: 10,
+                  }}
+                >
+                  양념재료
+                </Text>
                 <Button
                   type="clear"
                   onPress={() => this.props.addSauce()}
@@ -432,7 +471,16 @@ class RecipeCreate extends Component<Props> {
                   height: 40,
                 }}
               >
-                <Text style={{ textAlignVertical: 'center' }}>조리과정</Text>
+                <Text
+                  style={{
+                    textAlignVertical: 'center',
+                    fontSize: 20,
+                    paddingTop: 9,
+                    marginLeft: 10,
+                  }}
+                >
+                  조리과정
+                </Text>
                 <Button
                   type="clear"
                   onPress={() => this.props.addContext()}
@@ -444,10 +492,12 @@ class RecipeCreate extends Component<Props> {
             <View style={{ flexDirection: 'column' }}>
               <Text
                 style={{
-                  paddingHorizontal: 10,
                   backgroundColor: '#9FCEB0',
                   height: 40,
                   textAlignVertical: 'center',
+                  fontSize: 20,
+                  paddingTop: 9,
+                  paddingLeft: 20,
                 }}
               >
                 완성사진

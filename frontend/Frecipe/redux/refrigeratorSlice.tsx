@@ -21,14 +21,20 @@ export const list = (data: Array<ingredient>) => ({
   type: LIST,
   payload: data,
 });
-export const reciept = (foods: string[]) => ({ type: RECIEPT, payload: foods })
+export const reciept = (foods: string[]) => ({ type: RECIEPT, payload: foods });
 export const search = (keyword: string) => ({ type: SEARCH, payload: keyword });
 export const increaseMaxId = () => ({ type: MAXID });
 export const order = (filter: string) => ({ type: ORDER, payload: filter });
 export const addIngredient = () => ({ type: ADDINGREDIENT });
-export const deleteIngredient = (id: number) => ({ type: DELETEINGREDIENT, payload: id })
-export const deleteIngredientAll = () => ({ type: DELETEINGREDIENTALL })
-export const changeAddIngredient = (id: number, data: any, type: string) => ({ type: CHANGEADDINGREDIENT, payload: { id, data, type } })
+export const deleteIngredient = (id: number) => ({
+  type: DELETEINGREDIENT,
+  payload: id,
+});
+export const deleteIngredientAll = () => ({ type: DELETEINGREDIENTALL });
+export const changeAddIngredient = (id: number, data: any, type: string) => ({
+  type: CHANGEADDINGREDIENT,
+  payload: { id, data, type },
+});
 
 type Actions =
   | ReturnType<typeof search>
@@ -63,66 +69,84 @@ function refrigerator(
   action: Actions,
 ): RefrigeratorState {
   const ingredients = Object.assign([], state.ingredients);
-  const newAddIngredient: ingredient[] = Object.assign([], state.addIngredients)
+  const newAddIngredient: ingredient[] = Object.assign(
+    [],
+    state.addIngredients,
+  );
   switch (action.type) {
     case CHANGEADDINGREDIENT:
       let changedIngredient;
       if (action.payload.type === 'name') {
         for (let i = 0; i < newAddIngredient.length; i++) {
           if (newAddIngredient[i].id === action.payload.id) {
-            changedIngredient = [...newAddIngredient.slice(0, i), {
-              id: newAddIngredient[i].id,
-              status: newAddIngredient[i].status,
-              name: action.payload.data,
-              count: newAddIngredient[i].count,
-              date: newAddIngredient[i].date,
-              exp: newAddIngredient[i].exp,
-            }, ...newAddIngredient.slice(i + 1)]
+            changedIngredient = [
+              ...newAddIngredient.slice(0, i),
+              {
+                id: newAddIngredient[i].id,
+                status: newAddIngredient[i].status,
+                name: action.payload.data,
+                count: newAddIngredient[i].count,
+                date: newAddIngredient[i].date,
+                exp: newAddIngredient[i].exp,
+              },
+              ...newAddIngredient.slice(i + 1),
+            ];
           }
         }
       } else if (action.payload.type === 'status') {
         for (let i = 0; i < newAddIngredient.length; i++) {
           if (newAddIngredient[i].id === action.payload.id) {
-            changedIngredient = [...newAddIngredient.slice(0, i), {
-              id: newAddIngredient[i].id,
-              status: action.payload.data,
-              name: newAddIngredient[i].name,
-              count: newAddIngredient[i].count,
-              date: newAddIngredient[i].date,
-              exp: newAddIngredient[i].exp,
-            }, ...newAddIngredient.slice(i + 1)]
+            changedIngredient = [
+              ...newAddIngredient.slice(0, i),
+              {
+                id: newAddIngredient[i].id,
+                status: action.payload.data,
+                name: newAddIngredient[i].name,
+                count: newAddIngredient[i].count,
+                date: newAddIngredient[i].date,
+                exp: newAddIngredient[i].exp,
+              },
+              ...newAddIngredient.slice(i + 1),
+            ];
           }
         }
       } else if (action.payload.type === 'exp') {
         for (let i = 0; i < newAddIngredient.length; i++) {
           if (newAddIngredient[i].id === action.payload.id) {
-            changedIngredient = [...newAddIngredient.slice(0, i), {
-              id: newAddIngredient[i].id,
-              status: newAddIngredient[i].status,
-              name: newAddIngredient[i].name,
-              count: newAddIngredient[i].count,
-              date: newAddIngredient[i].date,
-              exp: action.payload.data,
-            }, ...newAddIngredient.slice(i + 1)]
+            changedIngredient = [
+              ...newAddIngredient.slice(0, i),
+              {
+                id: newAddIngredient[i].id,
+                status: newAddIngredient[i].status,
+                name: newAddIngredient[i].name,
+                count: newAddIngredient[i].count,
+                date: newAddIngredient[i].date,
+                exp: action.payload.data,
+              },
+              ...newAddIngredient.slice(i + 1),
+            ];
           }
         }
-      }
-      else if (action.payload.type === 'count') {
+      } else if (action.payload.type === 'count') {
         for (let i = 0; i < newAddIngredient.length; i++) {
           if (newAddIngredient[i].id === action.payload.id) {
-            let count = action.payload.data * 1
-            changedIngredient = [...newAddIngredient.slice(0, i), {
-              id: newAddIngredient[i].id,
-              status: newAddIngredient[i].status,
-              name: newAddIngredient[i].name,
-              count: count,
-              date: newAddIngredient[i].date,
-              exp: newAddIngredient[i].exp,
-            }, ...newAddIngredient.slice(i + 1)]
+            let count = action.payload.data * 1;
+            changedIngredient = [
+              ...newAddIngredient.slice(0, i),
+              {
+                id: newAddIngredient[i].id,
+                status: newAddIngredient[i].status,
+                name: newAddIngredient[i].name,
+                count: count,
+                date: newAddIngredient[i].date,
+                exp: newAddIngredient[i].exp,
+              },
+              ...newAddIngredient.slice(i + 1),
+            ];
           }
         }
       }
-      return Object.assign({}, state, { addIngredients: changedIngredient })
+      return Object.assign({}, state, { addIngredients: changedIngredient });
     case RECIEPT:
       for (var i = state.maxId; i < state.maxId + action.payload.length; i++) {
         var newIngredient = {
@@ -132,10 +156,13 @@ function refrigerator(
           count: 0,
           date: 0,
           exp: '',
-        }
-        newAddIngredient.push(newIngredient)
+        };
+        newAddIngredient.push(newIngredient);
       }
-      return Object.assign({}, state, { addIngredients: newAddIngredient, maxId: state.maxId + action.payload.length })
+      return Object.assign({}, state, {
+        addIngredients: newAddIngredient,
+        maxId: state.maxId + action.payload.length,
+      });
     case ADDINGREDIENT:
       var newIngredient = {
         id: state.maxId,
@@ -144,17 +171,22 @@ function refrigerator(
         count: 0,
         date: 0,
         exp: '',
-      }
-      newAddIngredient.push(newIngredient)
-      return Object.assign({}, state, { addIngredients: newAddIngredient, maxId: state.maxId + 1 })
+      };
+      newAddIngredient.push(newIngredient);
+      return Object.assign({}, state, {
+        addIngredients: newAddIngredient,
+        maxId: state.maxId + 1,
+      });
     case DELETEINGREDIENT:
       return Object.assign({}, state, {
-        addIngredients: newAddIngredient.filter((element: any) => { return element.id !== action.payload })
-      })
+        addIngredients: newAddIngredient.filter((element: any) => {
+          return element.id !== action.payload;
+        }),
+      });
     case DELETEINGREDIENTALL:
       return Object.assign({}, state, {
-        addIngredients: []
-      })
+        addIngredients: [],
+      });
     case LIST:
       const ingredient = action.payload;
       const newData: any[] = [];
@@ -165,6 +197,7 @@ function refrigerator(
           status: i.status,
           count: i.count,
           date: i.restExp,
+          exp: i.exp,
         }),
       );
       var maxId = 0;

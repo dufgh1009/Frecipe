@@ -174,6 +174,7 @@ class RecipeDetail extends Component<Props, State> {
                 flex: 1,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
+                marginRight: 20,
               }}
             >
               <Text style={{ fontSize: 18 }}>평점 : </Text>
