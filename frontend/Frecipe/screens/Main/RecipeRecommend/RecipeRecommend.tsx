@@ -7,6 +7,8 @@ import {
   Linking,
   Alert,
   TouchableWithoutFeedback,
+  TouchableOpacity,
+  Dimensions,
 } from 'react-native';
 import { Header, Button, ListItem, Image } from 'react-native-elements';
 
@@ -15,15 +17,22 @@ import { Feather, MaterialCommunityIcons, Entypo } from '@expo/vector-icons';
 import axios from 'axios';
 import { unescape } from 'lodash';
 
-import { connect } from 'react-redux';
+import { connect, Dispatch } from 'react-redux';
 import { RootState } from '../../../redux/rootReducer';
 
+import { list, detail, Recipe } from '../../../redux/communitySlice';
 import api from '../../../api';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const API_URL = 'https://www.googleapis.com/youtube/v3/search';
 const API_YOUTUBE_KEY = 'AIzaSyBFPXqfcFfZ6jhcDYgdyMSsEaknL1Yl9NM';
 
 interface Props {
+  list: typeof list;
+  detail: typeof detail;
+  navigation: any;
   user: {
     token: string;
     userNo: number;
@@ -38,16 +47,6 @@ interface Video {
   etag: string;
   id: Object;
   snippet: Object;
-}
-
-interface Recipe {
-  recNo: number;
-  title: string;
-  view: number;
-  rate: number;
-  mainImg: string;
-  comment: string;
-  writer: string;
 }
 
 interface Ingredient {
@@ -65,6 +64,7 @@ interface State {
   selectIngredients: Array<string>;
   videos: Array<Video>;
   recipes: Array<Recipe>;
+  totalRecipes: Array<Recipe>;
 }
 
 class RecipeRecommend extends Component<Props, State> {
@@ -74,34 +74,27 @@ class RecipeRecommend extends Component<Props, State> {
       ingredients: [],
       selectIngredients: [],
       videos: [],
-      recipes: [
-        {
-          recNo: 1,
-          mainImg:
-            'https://image.ajunews.com/content/image/2020/08/09/20200809151032760474.jpg',
-          title: '간장계란밥',
-          writer: 'kwonsky',
-          view: 9,
-          rate: 4.5,
-          comment: '5',
-        },
-      ],
+      recipes: [],
+      totalRecipes: [],
     };
   }
 
   componentDidMount = async () => {
     const { data }: any = await api.sevenIngredient(this.props.user.token);
-
     this.setState({ ingredients: data });
 
-    let temp = this.randomIngredients();
+    const getRecipe: any = await api.getRecipe();
+    this.setState({ totalRecipes: getRecipe.data });
 
+    let temp = this.randomIngredients();
+    this.userRecipes();
     this.searchVideo(temp);
   };
 
   refresh = () => {
-    let temp = this.randomIngredients();
+    this.userRecipes();
 
+    let temp = this.randomIngredients();
     this.searchVideo(temp);
   };
 
@@ -123,6 +116,32 @@ class RecipeRecommend extends Component<Props, State> {
     this.setState({ selectIngredients: temp });
 
     return temp;
+  };
+
+  userRecipes = async () => {
+    var newIndex: number[] = new Array();
+    var newRecipe: Recipe[] = new Array();
+
+    for (const d of this.state.totalRecipes) {
+      var tempIngredient: any = new Array();
+      for (const i of d.mainIngredients) {
+        tempIngredient.push(i.name);
+      }
+      var cnt = 0;
+      for (const s of this.state.selectIngredients) {
+        if (tempIngredient.includes(s)) {
+          cnt++;
+        }
+      }
+      if (cnt >= 1) {
+        if (newIndex.includes(d.recipeNo) == false) {
+          newRecipe.push(d);
+          newIndex.push(d.recipeNo);
+        }
+      }
+    }
+
+    this.setState({ recipes: newRecipe });
   };
 
   searchVideo = (temp: Array<string>) => {
@@ -166,6 +185,14 @@ class RecipeRecommend extends Component<Props, State> {
     }
   };
 
+  recipeDetail = async (recipeNo: number) => {
+    const recipeDetail = await api.recipeDetail(recipeNo);
+    this.props.detail(recipeDetail.data);
+    const recipe = await api.getRecipe();
+    this.props.list(recipe.data);
+    this.props.navigation.navigate('RecipeDetail');
+  };
+
   render() {
     const { selectIngredients, recipes, videos } = this.state;
     return (
@@ -205,27 +232,30 @@ class RecipeRecommend extends Component<Props, State> {
             />
             <Text style={styles.title}>사용자 레시피</Text>
           </View>
-          <ScrollView style={styles.recipeList}>
+          <ScrollView style={[styles.recipeList, { height: 235 }]}>
             {recipes.map((recipe) => (
-              <TouchableWithoutFeedback key={recipe.recNo}>
+              <TouchableOpacity
+                key={recipe.recipeNo}
+                onPress={() => this.recipeDetail(recipe.recipeNo)}
+              >
                 <ListItem bottomDivider>
                   <Image
-                    source={{ uri: recipe.mainImg }}
+                    source={{ uri: recipe.completeImage[0].image }}
                     style={styles.thumbnailImage}
                   />
                   <ListItem.Content>
                     <ListItem.Title>{recipe.title}</ListItem.Title>
                     <ListItem.Subtitle style={styles.videoSubtitle}>
-                      {recipe.writer} {'\n'}
+                      {recipe.nickname} {'\n'}
                       조회수 : {recipe.view} | 평점 : {recipe.rate}
                     </ListItem.Subtitle>
                   </ListItem.Content>
                   <Button
-                    title={recipe.comment}
+                    title={String(recipe.comments.length)}
                     buttonStyle={styles.commentButton}
                   />
                 </ListItem>
-              </TouchableWithoutFeedback>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </View>
@@ -234,7 +264,7 @@ class RecipeRecommend extends Component<Props, State> {
             <Entypo name="video" size={30} color="#00BD75" />
             <Text style={styles.title}>유튜브 레시피</Text>
           </View>
-          <ScrollView style={styles.recipeList}>
+          <ScrollView style={[styles.recipeList, { height: 235 }]}>
             {videos.map((video) => (
               <TouchableWithoutFeedback
                 key={video.etag}
@@ -265,7 +295,14 @@ const mapStateToProps = (state: RootState) => {
   return { user: state.usersReducer };
 };
 
-export default connect(mapStateToProps, null)(RecipeRecommend);
+const mapDispatchToProps = (dispatch: Dispatch) => {
+  return {
+    list: (form: Array<Recipe>) => dispatch(list(form)),
+    detail: (form: any) => dispatch(detail(form)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(RecipeRecommend);
 
 const styles = StyleSheet.create({
   buttonContainer: {

@@ -21,7 +21,15 @@ export function Community(props: Props) {
       }}
     >
       <Stack.Screen name="CommunityHome" component={CommunityHome} />
-      <Stack.Screen name="RecipeCreate" component={RecipeCreate} />
+      <Stack.Screen
+        name="RecipeCreate"
+        children={({ navigation }) => (
+          <RecipeCreate
+            navigation={navigation}
+            onCamera={props.onCamera}
+          ></RecipeCreate>
+        )}
+      />
       <Stack.Screen name="RecipeDetail" component={RecipeDetail} />
     </Stack.Navigator>
   );

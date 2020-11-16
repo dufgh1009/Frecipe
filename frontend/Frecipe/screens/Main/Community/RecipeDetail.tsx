@@ -96,7 +96,7 @@ class RecipeDetail extends Component<Props, State> {
             <Button
               icon={<AntDesign name="back" size={24} color="white" />}
               buttonStyle={styles.backButton}
-              onPress={() => this.props.navigation.navigate('CommunityHome')}
+              onPress={() => this.props.navigation.goBack()}
             />
           }
         />
@@ -127,30 +127,38 @@ class RecipeDetail extends Component<Props, State> {
               <Card.Image
                 source={{ uri: recipeDetail.completeImage[0].image }}
               />
-              <Text h4 style={styles.centerAlign}>
+              <Text h4 style={[styles.centerAlign, { marginTop: 10 }]}>
                 재료
               </Text>
               {recipeDetail.ingredients.map((ingredient: any, i: number) => (
-                <Text key={i} style={styles.centerAlign}>
+                <Text
+                  key={i}
+                  style={[styles.centerAlign, { marginTop: 5, fontSize: 15 }]}
+                >
                   {ingredient.name}
                 </Text>
               ))}
-              <Text h4 style={styles.centerAlign}>
+              <Text h4 style={[styles.centerAlign, { marginTop: 5 }]}>
                 양념재료
               </Text>
               {recipeDetail.sauces.map((s: any, i: number) => (
-                <Text key={i} style={styles.centerAlign}>
+                <Text
+                  key={i}
+                  style={[styles.centerAlign, { marginTop: 5, fontSize: 15 }]}
+                >
                   {s.name} : {s.quantity}
                 </Text>
               ))}
               {recipeDetail.contexts.map((c: any, i: number) => (
-                <View key={i}>
+                <View key={i} style={{ marginTop: 10 }}>
                   {c.image ? (
                     <Card.Image source={{ uri: c.image }} />
                   ) : (
                     <View />
                   )}
-                  <Text style={[{ marginBottom: 10 }, styles.centerAlign]}>
+                  <Text
+                    style={[{ marginTop: 5, fontSize: 20 }, styles.centerAlign]}
+                  >
                     {c.text}
                   </Text>
                 </View>
@@ -166,6 +174,7 @@ class RecipeDetail extends Component<Props, State> {
                 flex: 1,
                 flexDirection: 'row',
                 justifyContent: 'flex-end',
+                marginRight: 20,
               }}
             >
               <Text style={{ fontSize: 18 }}>평점 : </Text>

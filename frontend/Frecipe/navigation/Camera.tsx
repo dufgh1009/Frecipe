@@ -7,6 +7,8 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import { saveImage } from '../redux/createRecipeSlice';
+import { reciept } from '../redux/refrigeratorSlice';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
@@ -32,13 +34,14 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-interface State {}
+interface State { }
 interface Props {
   navigation: any;
   saveImage: typeof saveImage;
   username: string;
   status: string;
   index: number;
+  reciept: typeof reciept;
 }
 
 class MyCamera extends Component<Props, State> {
@@ -69,7 +72,7 @@ class MyCamera extends Component<Props, State> {
 
   getReceipt = async (url: object) => {
     const result = await djangoApi.receipt(url);
-    console.log(result.data);
+    this.props.reciept(result?.data.foods);
   };
 
   takeSnapshot = async () => {
@@ -84,7 +87,7 @@ class MyCamera extends Component<Props, State> {
           quality: 1,
         });
         if (!result.cancelled) {
-          if (this.props.status === 'recipe') {
+          if (this.props.status === 'receipt') {
             const base64 = await FileSystem.readAsStringAsync(result.uri, {
               encoding: 'base64',
             });
@@ -92,9 +95,8 @@ class MyCamera extends Component<Props, State> {
             let fileName = `receipt${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${
-              _date.getMonth() + 1
-            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${_date.getMonth() + 1
+              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
             this.getReceipt({
               url: base64,
@@ -107,9 +109,8 @@ class MyCamera extends Component<Props, State> {
             let fileName = `recipe${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${
-              _date.getMonth() + 1
-            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${_date.getMonth() + 1
+              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
             // 업로드 속성 설정
             var params = {
               Bucket: albumBucketName,
@@ -127,8 +128,6 @@ class MyCamera extends Component<Props, State> {
                 return alert('There was an error uploading your photo');
               }
             });
-
-            console.log(temp);
 
             if (this.props.status === 'completeImage') {
               this.props.saveImage(this.props.index, 'completeImage', temp);
@@ -156,13 +155,14 @@ class MyCamera extends Component<Props, State> {
               flex: 1,
               backgroundColor: 'transparent',
               flexDirection: 'row',
+              alignItems: 'flex-end',
+              marginLeft: 30,
+              marginBottom: 80,
             }}
           >
             <TouchableOpacity
               style={{
-                flex: 0.1,
-                alignSelf: 'flex-end',
-                alignItems: 'center',
+                marginBottom: 5,
               }}
               onPress={async () => {
                 let result = await ImagePicker.launchImageLibraryAsync({
@@ -172,7 +172,7 @@ class MyCamera extends Component<Props, State> {
                   quality: 1,
                 });
                 if (!result.cancelled) {
-                  if (this.props.status === 'recipe') {
+                  if (this.props.status === 'receipt') {
                     const base64 = await FileSystem.readAsStringAsync(
                       result.uri,
                       {
@@ -183,9 +183,8 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${
-                      _date.getMonth() + 1
-                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${_date.getMonth() + 1
+                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
                     this.getReceipt({
                       url: base64,
@@ -198,9 +197,8 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${
-                      _date.getMonth() + 1
-                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${_date.getMonth() + 1
+                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
                     // 업로드 속성 설정
                     var params = {
                       Bucket: albumBucketName,
@@ -232,13 +230,37 @@ class MyCamera extends Component<Props, State> {
                 }
               }}
             >
-              <Text style={{ fontSize: 18, marginBottom: 10, color: 'white' }}>
-                {' '}
-                Album{' '}
-              </Text>
+              <MaterialIcons name="photo-album" size={50} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={{ marginLeft: 102 }}
+              onPress={() => this.takeSnapshot()}
+            >
+              <View
+                style={{
+                  borderWidth: 2,
+                  borderRadius: 50,
+                  borderColor: 'white',
+                  height: 60,
+                  width: 60,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    borderWidth: 2,
+                    borderRadius: 50,
+                    borderColor: 'white',
+                    height: 50,
+                    width: 50,
+                    backgroundColor: 'white',
+                  }}
+                ></View>
+              </View>
             </TouchableOpacity>
           </View>
-          <Button onPress={() => this.takeSnapshot()} title="찰칵"></Button>
         </Camera>
       </View>
     );
@@ -257,6 +279,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     saveImage: (index: number, category: string, uri: string) =>
       dispatch(saveImage(index, category, uri)),
+    reciept: (foods: string[]) => dispatch(reciept(foods)),
   };
 };
 

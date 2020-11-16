@@ -4,7 +4,7 @@ import {
   Text,
   View,
   ScrollView,
-  TouchableWithoutFeedback,
+  TouchableOpacity,
   Dimensions,
 } from 'react-native';
 import { Header, ListItem, Image, Button } from 'react-native-elements';
@@ -137,16 +137,15 @@ class Community extends Component<Props> {
           onClearPress={() => this.searchRecipe('')}
           placeholder="레시피를 검색하세요."
         />
-        <Text style={styles.myIngredient}>나의 냉장고 재료로 보기</Text>
         <ScrollView style={styles.recipeList}>
           {searchRecipes.map((recipe: Recipe) => (
-            <TouchableWithoutFeedback
+            <TouchableOpacity
               key={recipe.recipeNo}
               onPress={() => this.recipeDetail(recipe.recipeNo)}
             >
               <ListItem bottomDivider>
                 <Image
-                  source={{ uri: recipe.mainImage }}
+                  source={{ uri: recipe.completeImage[0].image }}
                   style={styles.thumbnailImage}
                 />
                 <ListItem.Content>
@@ -162,7 +161,7 @@ class Community extends Component<Props> {
                   buttonStyle={styles.commentButton}
                 />
               </ListItem>
-            </TouchableWithoutFeedback>
+            </TouchableOpacity>
           ))}
         </ScrollView>
       </View>
@@ -220,7 +219,7 @@ const styles = StyleSheet.create({
   },
   recipeList: {
     marginTop: 10,
-    height: SCREEN_HEIGHT - 310,
+    height: SCREEN_HEIGHT - 280,
   },
   commentButton: {
     backgroundColor: '#00BD75',

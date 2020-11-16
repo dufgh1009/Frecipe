@@ -8,8 +8,8 @@ import {
   FlatList,
   Animated,
   TouchableOpacity,
+  LogBox,
 } from 'react-native';
-
 
 import Swipeable from 'react-native-gesture-handler/Swipeable';
 import { Dispatch } from 'redux';
@@ -19,13 +19,14 @@ import SearchBar from 'react-native-dynamic-search-bar/lib/SearchBar';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import {
   list,
-  // add,
-  // deleteIngredient,
-  // deleteAll,
   search,
   increaseMaxId,
   order,
   ingredient,
+  addIngredient,
+  deleteIngredient,
+  deleteIngredientAll,
+  changeAddIngredient,
 } from '../../../redux/refrigeratorSlice';
 import { changeCamera } from '../../../redux/cameraSlice';
 import { RootState } from '../../../redux/rootReducer';
@@ -33,16 +34,20 @@ import { connect } from 'react-redux';
 
 import api from '../../../api';
 
+LogBox.ignoreAllLogs();
+
 interface RefrigeratorProps {
+  deleteIngredientAll: typeof deleteIngredientAll;
   onCamera: () => void;
   ingredients: Array<ingredient>;
   maxId: number;
   increaseMaxId: typeof increaseMaxId;
   changeCamera: typeof changeCamera;
   list: typeof list;
-  // add: typeof add;
-  // deleteIngredient: typeof deleteIngredient;
-  // deleteAll: typeof deleteAll;
+  addIngredients: Array<ingredient>;
+  addIngredient: typeof addIngredient;
+  changeAddIngredient: typeof changeAddIngredient;
+  deleteIngredient: typeof deleteIngredient;
   search: typeof search;
   order: typeof order;
   yellowFood: number;
@@ -52,7 +57,7 @@ interface RefrigeratorProps {
 }
 
 interface RefrigeratorState {
-  forAddId: number
+  forAddId: number;
   filter: string;
   addVisible: boolean;
   addIngredients: Array<ingredient>;
@@ -75,8 +80,9 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
     };
   }
   addOverlay = () => {
+    this.props.deleteIngredientAll();
     this.setState({ addVisible: !this.state.addVisible });
-    this.setState({ addIngredients: [] });
+    // this.setState({ addIngredients: [] });
   };
 
   listIngredients = async () => {
@@ -92,19 +98,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   };
 
   addIngredientList = () => {
-    var initList: Array<ingredient> = [];
-    var newIngredient = Object.assign(initList, this.state.addIngredients);
-    var ingredient = {
-      id: this.props.maxId,
-      name: '',
-      count: 0,
-      exp: '',
-      status: '냉장',
-      date: 0,
-    };
-    newIngredient.push(ingredient);
-    this.props.increaseMaxId();
-    this.setState({ addIngredients: newIngredient });
+    this.props.addIngredient();
   };
 
   addIngredient = async (addIngredients: ingredient[]) => {
@@ -133,33 +127,11 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
   }
 
   onChangeAddlist(id: number, data: any, type: string) {
-    const newArray = [...this.state.addIngredients];
-    for (let i = 0; i < newArray.length; i++) {
-      if (newArray[i].id === id) {
-        if (type === 'name') {
-          newArray[i].name = data;
-        }
-        if (type === 'count') {
-          data *= 1;
-          newArray[i].count = data;
-        }
-        if (type === 'status') {
-          newArray[i].status = data;
-        }
-        if (type === 'exp') {
-          newArray[i].exp = data;
-        }
-      }
-    }
-    this.setState({
-      addIngredients: newArray,
-    });
+    this.props.changeAddIngredient(id, data, type);
   }
 
   delelteAddIngredient(num: number) {
-    this.setState({
-      addIngredients: this.state.addIngredients.filter((element) => { return element.id !== num })
-    })
+    this.props.deleteIngredient(num);
   }
 
   searchIngredient(keyword: string) {
@@ -177,12 +149,12 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
 
   takePicture() {
     this.props.changeCamera('receipt', 0);
+    this.addOverlay();
     this.props.onCamera();
   }
   render() {
     const { redFood, yellowFood, searchIngredients } = this.props;
     const { addVisible, addIngredients } = this.state;
-    console.log(addIngredients)
     var displayIngredient = null;
     if (searchIngredients === []) {
       displayIngredient = <Text>재료 없음</Text>;
@@ -199,13 +171,25 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               });
               return (
                 <TouchableOpacity
-                  style={{ backgroundColor: 'red', width: 60, height: 30, alignItems: 'center', justifyContent: 'center' }}
+                  style={{
+                    backgroundColor: 'red',
+                    width: 60,
+                    height: 50,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
                   key={item.id}
                   onPress={() => this.deleteIngredientList(item.id)}
                   activeOpacity={0.6}
                 >
                   <Animated.Text
-                    style={{ width: 40, textAlign: 'center', fontSize: 18, color: 'white', transform: [{ scale: scale }] }}
+                    style={{
+                      width: 40,
+                      textAlign: 'center',
+                      fontSize: 18,
+                      color: 'white',
+                      transform: [{ scale: scale }],
+                    }}
                   >
                     삭제
                   </Animated.Text>
@@ -284,7 +268,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                       {item.status}
                     </Text>
                   </View>
-                  <Text style={{ flex: 2, textAlign: 'center' }}>
+                  <Text style={{ flex: 3, textAlign: 'center' }}>
                     {item.name}
                   </Text>
                   <Text style={{ flex: 1, textAlign: 'center' }}>
@@ -302,61 +286,79 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
       );
     }
 
-    const addList = addIngredients.map((ingredient: ingredient) => {
+    const addList = this.props.addIngredients.map((ingredient: ingredient) => {
       const index = ingredient.id;
       if (ingredient.status === '냉장') {
         var statusButton = (
           <View
             key={index}
-            style={{ width: 100, flexDirection: 'row', alignItems: 'center' }}
+            style={{
+              width: 90,
+              marginLeft: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
           >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="solid"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{
+                height: 32,
+                width: 40,
+              }}
+              titleStyle={{ fontSize: 15 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="clear"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
+              buttonStyle={{ height: 32, width: 40 }}
               title="냉동"
-              titleStyle={{ fontSize: 10 }}
+              titleStyle={{ fontSize: 15 }}
             ></Button>
           </View>
         );
       } else {
         var statusButton = (
-          <View style={{ width: 100, flexDirection: 'row', alignContent: 'center' }}>
+          <View
+            style={{
+              width: 90,
+              marginLeft: 5,
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
             <Button
               onPress={() => this.onChangeAddlist(index, '냉장', 'status')}
               type="clear"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{ height: 32, width: 40 }}
+              titleStyle={{ fontSize: 15 }}
               title="냉장"
             ></Button>
             <Button
               onPress={() => this.onChangeAddlist(index, '냉동', 'status')}
               type="solid"
-              buttonStyle={{ height: 20, width: 40, marginHorizontal: 3 }}
-              titleStyle={{ fontSize: 10 }}
+              buttonStyle={{ height: 32, width: 40 }}
+              titleStyle={{ fontSize: 15 }}
               title="냉동"
             ></Button>
           </View>
         );
       }
       return (
-        <View style={styles.ingredientInputRow}>
+        <View key={index} style={styles.ingredientInputRow}>
           {statusButton}
-          <View style={styles.ingredientInput}>
+          <View style={{ width: 80, marginLeft: 5 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'name')
               }
               value={ingredient.name}
-              style={{ fontSize: 15 }}
+              style={{ fontSize: 15, height: 32, width: 80 }}
               placeholder="이름"
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
           <View style={styles.ingredientInput}>
@@ -364,22 +366,35 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'count')
               }
-              style={{ fontSize: 15 }}
+              style={{ fontSize: 15, height: 32 }}
               placeholder="개수"
               keyboardType={'numeric'}
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
-          <View style={{ width: 60, marginHorizontal: 5 }}>
+          <View style={{ width: 80 }}>
             <TextInput
               onChange={(e) =>
                 this.onChangeAddlist(index, e.nativeEvent.text, 'exp')
               }
-              style={{ fontSize: 10 }}
+              style={{ fontSize: 15, height: 32 }}
               placeholder="2020-11-15"
+              placeholderTextColor="gray"
             ></TextInput>
           </View>
-          <View style={{ width: 40, justifyContent: 'center', marginHorizontal: 5 }}>
-            <Button type='clear' onPress={() => this.delelteAddIngredient(ingredient.id)} icon={<AntDesign name="minuscircleo" size={15} color="black" />}></Button>
+          <View
+            style={{
+              width: 40,
+              justifyContent: 'center',
+              height: 32,
+              marginLeft: 3,
+            }}
+          >
+            <Button
+              type="clear"
+              onPress={() => this.delelteAddIngredient(ingredient.id)}
+              icon={<AntDesign name="minuscircleo" size={15} color="black" />}
+            ></Button>
           </View>
         </View>
       );
@@ -459,7 +474,7 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
             </View>
             <View style={styles.ingredientHeader}>
               <Text style={{ flex: 3, textAlign: 'center' }}>보관방법</Text>
-              <Text style={{ flex: 2, textAlign: 'center' }}>재료</Text>
+              <Text style={{ flex: 3, textAlign: 'center' }}>재료</Text>
               <Text style={{ flex: 1, textAlign: 'center' }}>재고</Text>
               <Text style={{ flex: 2, textAlign: 'center' }}>유통기한</Text>
               <Text style={{ flex: 2, textAlign: 'center' }}>비고</Text>
@@ -484,14 +499,13 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                   ></Button>
                 </View>
                 <View style={styles.overlayHeaderCenter}>
-                  <Text>제품등록</Text>
+                  <Text style={{ fontSize: 20 }}>제품 등록</Text>
                 </View>
                 <View style={styles.overlayHeaderRight}>
                   <Button
                     onPress={() => {
-                      this.takePicture()
-                    }
-                    }
+                      this.takePicture();
+                    }}
                     type="clear"
                     icon={<Entypo name="camera" size={24} color="black" />}
                   ></Button>
@@ -510,14 +524,14 @@ class Refrigerator extends Component<RefrigeratorProps, RefrigeratorState> {
                 <Button
                   type="outline"
                   style={{ flex: 4 }}
-                  onPress={() => this.addIngredient(addIngredients)}
+                  onPress={() => this.addIngredient(this.props.addIngredients)}
                   title="저장"
                 ></Button>
               </View>
             </View>
           </Overlay>
         </View>
-      </KeyboardAwareScrollView >
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -553,7 +567,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    marginLeft: 10,
+    marginLeft: 2,
   },
   expirationsBarSubBlack: {
     color: 'black',
@@ -599,6 +613,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     flexDirection: 'column',
     marginHorizontal: 10,
+    height: 440,
   },
   overlay: {
     position: 'relative',
@@ -607,7 +622,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
   },
   overlayHeader: {
-    height: 30,
+    height: 40,
     justifyContent: 'space-around',
     alignItems: 'center',
     flexDirection: 'row',
@@ -628,13 +643,13 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   overlayAddList: {
-    height: 500,
+    height: 600,
     marginTop: 10,
     flexDirection: 'column',
   },
   ingredientInput: {
-    width: 40,
-    marginHorizontal: 10
+    width: 30,
+    marginHorizontal: 10,
   },
   ingredientInputRow: {
     marginTop: 20,
@@ -684,18 +699,22 @@ const mapStateToProps = (state: RootState) => {
     redFood: state.refrigerator.redFood,
     searchIngredients: state.refrigerator.searchIngredients,
     token: state.usersReducer.token,
+    addIngredients: state.refrigerator.addIngredients,
   };
 };
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  changeCamera: (status: string, index: number) => (dispatch(changeCamera(status, index))),
+  addIngredient: () => dispatch(addIngredient()),
+  deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
+  changeCamera: (status: string, index: number) =>
+    dispatch(changeCamera(status, index)),
   list: (data: ingredient[]) => dispatch(list(data)),
-  // add: (ingredeients: ingredient[]) => dispatch(add(ingredeients)),
-  // deleteIngredient: (id: number) => dispatch(deleteIngredient(id)),
-  // deleteAll: () => dispatch(deleteAll()),
   search: (keyword: string) => dispatch(search(keyword)),
   increaseMaxId: () => dispatch(increaseMaxId()),
   order: (filter: string) => dispatch(order(filter)),
+  deleteIngredientAll: () => dispatch(deleteIngredientAll()),
+  changeAddIngredient: (id: number, data: any, type: string) =>
+    dispatch(changeAddIngredient(id, data, type)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Refrigerator);
