@@ -1,20 +1,4 @@
-# :computer: Back-End!!zdddzzzㅇㅇ
-
-## 20.11.13(금)
-### Done  
-    - API  
-        http://k3d204.p.ssafy.io/swagger-ui.html#/
-    - Server
-        Spring Boot 서버 배포 (AWS EC2)
-        Nginx & Tomcat port 연동
-        Jenkins 연동 
-### To Do
-    - API 
-        프론트 연동 확인
-    - Server
-        SSL 적용 (letsencrypt, Certbot)
-        Jenkins 배포 자동화
-<br>
+# :computer: Back-End
 
 ## 기술 스택
 
