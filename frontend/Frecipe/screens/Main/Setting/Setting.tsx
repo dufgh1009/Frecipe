@@ -25,9 +25,9 @@ import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 const screenHeight = Dimensions.get('screen').height;
 
 // 이미지 서버 업로드
-var albumBucketName = 'frecipe-pjt';
-var bucketRegion = 'ap-northeast-2';
-var IdentityPoolId = 'ap-northeast-2:43e4aae1-d94d-457e-96f2-69fc999cf72a';
+var albumBucketName = 's3-bucketname';
+var bucketRegion = 's3-bucketregion';
+var IdentityPoolId = 's3-identitypoolid';
 
 AWS.config.update({
   region: bucketRegion,

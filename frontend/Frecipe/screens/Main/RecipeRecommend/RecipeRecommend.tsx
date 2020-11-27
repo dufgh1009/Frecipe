@@ -27,7 +27,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const API_URL = 'https://www.googleapis.com/youtube/v3/search';
-const API_YOUTUBE_KEY = 'AIzaSyBFPXqfcFfZ6jhcDYgdyMSsEaknL1Yl9NM';
+const API_YOUTUBE_KEY = 'youtube key';
 
 interface Props {
   list: typeof list;

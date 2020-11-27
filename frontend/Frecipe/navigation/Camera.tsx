@@ -18,9 +18,9 @@ import djangoApi from '../djangoApi';
 import AWS from 'aws-sdk/dist/aws-sdk-react-native';
 import api from '../api';
 
-var albumBucketName = 'frecipe-pjt';
-var bucketRegion = 'ap-northeast-2';
-var IdentityPoolId = 'ap-northeast-2:43e4aae1-d94d-457e-96f2-69fc999cf72a';
+var albumBucketName = 's3-bucketname';
+var bucketRegion = 's3-bucketregion';
+var IdentityPoolId = 's3-identitypoolid';
 
 AWS.config.update({
   region: bucketRegion,
@@ -34,7 +34,7 @@ var s3 = new AWS.S3({
   params: { Bucket: albumBucketName },
 });
 
-interface State { }
+interface State {}
 interface Props {
   navigation: any;
   saveImage: typeof saveImage;
@@ -95,8 +95,9 @@ class MyCamera extends Component<Props, State> {
             let fileName = `receipt${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${_date.getMonth() + 1
-              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${
+              _date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
             this.getReceipt({
               url: base64,
@@ -109,8 +110,9 @@ class MyCamera extends Component<Props, State> {
             let fileName = `recipe${this.props.username.substring(
               0,
               4,
-            )}${_date.getFullYear()}${_date.getMonth() + 1
-              }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+            )}${_date.getFullYear()}${
+              _date.getMonth() + 1
+            }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
             // 업로드 속성 설정
             var params = {
               Bucket: albumBucketName,
@@ -183,8 +185,9 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${_date.getMonth() + 1
-                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${
+                      _date.getMonth() + 1
+                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
 
                     this.getReceipt({
                       url: base64,
@@ -197,8 +200,9 @@ class MyCamera extends Component<Props, State> {
                     let fileName = `recipe${this.props.username.substring(
                       0,
                       4,
-                    )}${_date.getFullYear()}${_date.getMonth() + 1
-                      }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
+                    )}${_date.getFullYear()}${
+                      _date.getMonth() + 1
+                    }${_date.getDate()}${_date.getHours()}${_date.getMinutes()}${_date.getSeconds()}`;
                     // 업로드 속성 설정
                     var params = {
                       Bucket: albumBucketName,
